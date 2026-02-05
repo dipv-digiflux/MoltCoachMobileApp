@@ -1,7 +1,8 @@
 import React, { type ReactElement } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import type { HomeStackNavigationProp } from '../../navigation/types';
+
+import type { HomeStackNavigationProp } from '@navigation/types';
 
 export const TaskCompletionScreen = (): ReactElement => {
   const navigation = useNavigation<HomeStackNavigationProp>();

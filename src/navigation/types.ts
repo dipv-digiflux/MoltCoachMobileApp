@@ -13,6 +13,7 @@ export type OnboardingStackParamList = {
 
 export type HomeStackParamList = {
   HomeDashboard: undefined;
+  ExampleForm: undefined;
   TaskDetails: { taskId?: string } | undefined;
   TaskProgress: { taskId?: string } | undefined;
   TaskCompletion: { taskId?: string } | undefined;

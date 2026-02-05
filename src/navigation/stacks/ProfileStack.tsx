@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { type ReactElement } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import type { ProfileStackParamList } from '../types';
-import { ProfileHomeScreen } from '../../screens/profile/ProfileHomeScreen';
+
+import { ProfileHomeScreen } from '@screens/profile/ProfileHomeScreen';
+
+import type { ProfileStackParamList } from '@navigation/types';
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
-export function ProfileStackNavigator() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="ProfileHome"
-        component={ProfileHomeScreen}
-        options={{ title: 'Profile' }}
-      />
-    </Stack.Navigator>
-  );
-}
+export const ProfileStackNavigator = (): ReactElement => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="ProfileHome"
+      component={ProfileHomeScreen}
+      options={{ title: 'Profile' }}
+    />
+  </Stack.Navigator>
+);

@@ -1,7 +1,8 @@
 import React, { type ReactElement } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import type { AppStackNavigationProp } from '../../navigation/types';
+
+import type { AppStackNavigationProp } from '@navigation/types';
 
 export const EditTaskScreen = (): ReactElement => {
   const navigation = useNavigation<AppStackNavigationProp>();

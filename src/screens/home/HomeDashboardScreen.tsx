@@ -1,14 +1,21 @@
 import React, { type ReactElement } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import type { AppStackNavigationProp } from '../../navigation/types';
+
+import type { AppStackNavigationProp } from '@navigation/types';
+import type { HomeStackNavigationProp } from '@navigation/types';
 
 export const HomeDashboardScreen = (): ReactElement => {
   const rootNavigation = useNavigation<AppStackNavigationProp>();
+  const navigation = useNavigation<HomeStackNavigationProp>();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Home Dashboard</Text>
+      <Button
+        title="Example Form (RHF + Zod)"
+        onPress={() => navigation.navigate('ExampleForm')}
+      />
       <Button
         title="Start Create Task Flow"
         onPress={() => rootNavigation.navigate('CreateTask')}

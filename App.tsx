@@ -5,15 +5,14 @@
  * @format
  */
 
+import React, { type ReactElement } from 'react';
 import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { RootNavigator } from './src/navigation/RootNavigator';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-function App() {
+import { RootNavigator } from '@navigation/RootNavigator';
+
+const App = (): ReactElement => {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
@@ -22,11 +21,9 @@ function App() {
       <AppContent />
     </SafeAreaProvider>
   );
-}
+};
 
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
+const AppContent = (): ReactElement => {
   return (
     <View style={styles.container}>
       <NavigationContainer>
@@ -34,7 +31,7 @@ function AppContent() {
       </NavigationContainer>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

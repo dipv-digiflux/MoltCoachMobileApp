@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { type ReactElement } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import type { RootStackParamList } from './types';
-import { OnboardingNavigator } from './OnboardingNavigator';
-import { AppNavigator } from './AppNavigator';
+
+import { AppNavigator } from '@navigation/AppNavigator';
+import { OnboardingNavigator } from '@navigation/OnboardingNavigator';
+
+import type { RootStackParamList } from '@navigation/types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -15,16 +17,14 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
  * No business logic or API calls should live here.
  * The initial route can later be driven by external state.
  */
-export function RootNavigator() {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-      initialRouteName="OnboardingStack"
-    >
-      <Stack.Screen name="OnboardingStack" component={OnboardingNavigator} />
-      <Stack.Screen name="AppStack" component={AppNavigator} />
-    </Stack.Navigator>
-  );
-}
+export const RootNavigator = (): ReactElement => (
+  <Stack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}
+    initialRouteName="OnboardingStack"
+  >
+    <Stack.Screen name="OnboardingStack" component={OnboardingNavigator} />
+    <Stack.Screen name="AppStack" component={AppNavigator} />
+  </Stack.Navigator>
+);

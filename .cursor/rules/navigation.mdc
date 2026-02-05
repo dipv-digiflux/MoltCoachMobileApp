@@ -147,6 +147,14 @@ ProfileStack (tabs ALWAYS visible):
 
 ---
 
+## IMPORT ALIASES (REQUIRED)
+
+- Imports from **navigation** MUST use alias only: `@navigation/...` (e.g. `@navigation/types`, `@navigation/RootNavigator`, `@navigation/stacks/HomeStack`).
+- Imports from **screens** MUST use alias only: `@screens/...` (e.g. `@screens/home/HomeDashboardScreen`, `@screens/onboarding/SplashScreen`).
+- Relative paths like `../screens/...` or `../../navigation/...` are FORBIDDEN for navigation and screens.
+
+---
+
 ## NAVIGATION FILE STRUCTURE (ENFORCED)
 
 src/navigation/

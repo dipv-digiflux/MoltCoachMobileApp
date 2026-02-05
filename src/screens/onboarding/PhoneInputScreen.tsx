@@ -1,7 +1,8 @@
 import React, { type ReactElement } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import type { OnboardingNavigationProp } from '../../navigation/types';
+
+import type { OnboardingNavigationProp } from '@navigation/types';
 
 export const PhoneInputScreen = (): ReactElement => {
   const navigation = useNavigation<OnboardingNavigationProp>();
