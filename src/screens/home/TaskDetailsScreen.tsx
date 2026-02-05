@@ -1,0 +1,31 @@
+import React, { type ReactElement } from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { HomeStackNavigationProp } from '../../navigation/types';
+
+export const TaskDetailsScreen = (): ReactElement => {
+  const navigation = useNavigation<HomeStackNavigationProp>();
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Task Details</Text>
+      <Button
+        title="View Task Progress"
+        onPress={() => navigation.navigate('TaskProgress')}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '600',
+    marginBottom: 16,
+  },
+});

@@ -1,0 +1,379 @@
+---
+alwaysApply: true
+---
+
+# CURSOR RULES — TYPESCRIPT
+
+This file is authoritative.
+Cursor MUST follow these rules exactly.
+
+# TypeScript Safety, Performance & Quality Standards
+
+==================================================
+PURPOSE & SCOPE
+==================================================
+
+This document defines the STRICT TypeScript rules for this repository.
+
+Audience:
+- All developers
+- Cursor / Antigravity / AI coding assistants
+
+Goals:
+- Maximum type safety
+- Predictable runtime behavior
+- High TypeScript compiler performance
+- Zero unsafe shortcuts
+- Production-grade TypeScript only
+
+==================================================
+0) GOLDEN RULE
+==================================================
+
+TypeScript exists to expose bugs early.
+
+If TypeScript reports an error:
+- The design is wrong
+- The data flow is unsafe
+- Or the type definition is incomplete
+
+NEVER silence TypeScript.
+ALWAYS fix the root cause.
+
+==================================================
+1) NON-NEGOTIABLE RULES (HARD FAIL)
+==================================================
+
+The following are STRICTLY FORBIDDEN:
+
+- any
+- as any
+- unknown as X
+- @ts-ignore
+- @ts-nocheck
+- Type assertions used to bypass errors
+
+Allowed ONLY for third-party library typing bugs:
+
+// TODO: remove when library types are fixed
+
+==================================================
+2) STRICT COMPILER EXPECTATIONS
+==================================================
+
+All code MUST compile with:
+
+- strict: true
+- noImplicitAny: true
+- strictNullChecks: true
+- noUncheckedIndexedAccess: true
+
+Never weaken tsconfig.json locally or per file.
+
+==================================================
+3) CONTROLLED USE OF `extends` IN TYPES & INTERFACES
+==================================================
+
+Inheritance in TypeScript types is **DISCOURAGED by default**,  
+but **ALLOWED in limited, well-defined cases only**.
+
+`extends` MUST NOT be used casually or for every type.
+
+--------------------------------------------------
+3.1 When `extends` IS NOT ALLOWED (Default Rule)
+--------------------------------------------------
+
+Do NOT use `extends` for:
+- Domain models (User, Institute, Batch, Order, etc.)
+- API response shapes
+- Feature-level data types
+- UI props and state
+- Business logic entities
+
+Forbidden examples:
+
+interface Admin extends User {}
+type ApiResponse<T> extends BaseResponse {}
+
+Why this restriction exists:
+- Creates hidden coupling between types
+- Slows TypeScript in large codebases
+- Makes refactors risky
+- Encourages deep and fragile hierarchies
+
+--------------------------------------------------
+3.2 When `extends` IS ALLOWED (Exceptions)
+--------------------------------------------------
+
+`extends` MAY be used **ONLY** when ALL of the following are true:
+
+- The base type is:
+  - very small
+  - stable
+  - unlikely to change
+- The relationship is:
+  - purely structural
+  - not domain/business-driven
+- The extension depth is:
+  - single-level only
+  - no chains (A → B → C)
+
+Allowed examples:
+
+interface WithId {
+  id: string;
+}
+
+interface User extends WithId {
+  name: string;
+}
+
+-----------------------------------------------
+
+interface BaseProps {
+  testId?: string;
+}
+
+interface ButtonProps extends BaseProps {
+  label: string;
+  onPress(): void;
+}
+
+--------------------------------------------------
+3.3 Rules for Allowed `extends`
+--------------------------------------------------
+
+When using `extends`, you MUST follow these rules:
+
+- Only 1 base type
+- No multi-level inheritance
+- No conditional logic in base types
+- No generics in base types unless unavoidable
+- Base types must not import feature/domain logic
+
+If any rule is violated → use composition instead.
+
+--------------------------------------------------
+3.4 Preferred Alternative (Still Recommended)
+--------------------------------------------------
+
+Even when `extends` is allowed, **composition is preferred**:
+
+type WithId = {
+  id: string;
+};
+
+type User = {
+  id: string;
+  name: string;
+};
+
+Use `extends` only when it clearly improves readability
+and reduces duplication without hiding logic.
+
+==================================================
+RULE SUMMARY
+==================================================
+
+- `extends` is NOT forbidden
+- `extends` is NOT the default
+- `extends` is for small, stable, shared shapes only
+- Composition remains the primary pattern
+
+
+==================================================
+4) APPROVED ALTERNATIVES TO `extends`
+==================================================
+
+4.1 Explicit Composition (Preferred)
+
+type User = {
+  id: string;
+  name: string;
+};
+
+type Admin = {
+  id: string;
+  name: string;
+  permissions: string[];
+};
+
+-----------------------------------------------
+
+4.2 Controlled Intersection Types
+
+type WithId = {
+  id: string;
+};
+
+type WithTimestamps = {
+  createdAt: string;
+  updatedAt: string;
+};
+
+type Entity = WithId & WithTimestamps;
+
+Rules:
+- Max 2–3 intersections
+- Must be shallow
+- No recursive or nested intersections
+
+==================================================
+5) FUNCTION TYPING RULES
+==================================================
+
+All functions MUST have:
+- Explicit parameter types
+- Explicit return types
+
+BAD:
+
+function save(data) {
+  return api.post(data);
+}
+
+GOOD:
+
+function save(data: SavePayload): Promise<SaveResult> {
+  return api.post(data);
+}
+
+==================================================
+6) ASYNC & PROMISE SAFETY
+==================================================
+
+Rules:
+- Never return Promise<any>
+- Never ignore promises
+- Always await or return
+
+BAD:
+
+async function load() {}
+
+GOOD:
+
+async function load(): Promise<void> {}
+
+==================================================
+7) NULL & UNDEFINED SAFETY
+==================================================
+
+Never assume a value exists.
+
+BAD:
+
+user.name.toUpperCase();
+
+GOOD:
+
+user?.name?.toUpperCase();
+
+If a value MUST exist:
+- Validate explicitly
+- Throw or handle gracefully
+
+==================================================
+8) TYPE NARROWING IS MANDATORY
+==================================================
+
+Use:
+- typeof
+- in
+- instanceof
+- custom type guards
+
+Example:
+
+function isUser(value: unknown): value is User {
+  return typeof value === "object" && value !== null && "id" in value;
+}
+
+==================================================
+9) UNION TYPES OVER ENUMS
+==================================================
+
+Avoid enums.
+
+BAD:
+
+enum Status {
+  Active,
+  Inactive
+}
+
+GOOD:
+
+type Status = "active" | "inactive";
+
+==================================================
+10) GENERICS — STRICT DISCIPLINE
+==================================================
+
+Rules:
+- Use generics ONLY when reused
+- Never default generics to any
+- Never constrain generics using extends object
+
+BAD:
+
+type Box<T extends object> = { value: T };
+
+GOOD:
+
+type Box<T> = { value: T };
+
+==================================================
+11) API & DATA CONTRACT RULES
+==================================================
+
+Rules:
+- Every API response must be typed
+- Never trust backend blindly
+- Always model error states
+
+Example pattern:
+
+type ApiResult<T> =
+  | { success: true; data: T }
+  | { success: false; message: string };
+
+==================================================
+12) PERFORMANCE-AWARE TYPING
+==================================================
+
+Avoid:
+- Conditional types
+- Recursive types
+- Deep mapped types
+- Over-generic helpers
+
+Prefer:
+- Flat explicit types
+- Readable shapes
+- Maintainability over cleverness
+
+==================================================
+13) CURSOR / AI ENFORCEMENT RULES
+==================================================
+
+AI MUST:
+- Avoid any
+- Avoid extends
+- Prefer composition
+- Explicitly type everything
+- Mark uncertainty clearly
+
+AI MUST NOT:
+- Silence TypeScript
+- Cast away errors
+- Introduce inheritance chains
+- Add complex types without justification
+
+==================================================
+14) FINAL LAW
+==================================================
+
+If a type is hard to read, it is wrong.
+If TypeScript is slow, the types are too clever.
+Simple types scale. Complex types break teams.
