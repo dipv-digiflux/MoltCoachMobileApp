@@ -416,13 +416,156 @@ type ApiResult<T> =
 
 ---
 
-## 13) CURSOR / AI ENFORCEMENT RULES
+## 13) UTILITY TYPES — WHEN TO USE
+
+Use built-in utility types to derive types from existing ones. Prefer utilities over redefining properties. Keep usage shallow; avoid nesting many utilities.
+
+**Note:** All code blocks in this section are **examples only** (e.g. `User`, `UserFormFields`, `Colors`). They illustrate the pattern; apply the same utility to your own domain types in the codebase.
+
+### 13.1 Object subset and shape
+
+**Pick\<Obj, Keys\>** — Object type with only the specified keys. Use when the type is a subset of an existing object.
+
+```typescript
+type User = { id: number; name: string; age: number };
+type UserFormFields = Pick<User, 'name' | 'age'>;
+// ^= { name: string; age: number; }
+```
+
+**Omit\<Obj, Keys\>** — Object type with all keys except the specified ones. Opposite of Pick.
+
+```typescript
+type User = { id: number; name: string; age: number };
+type UserWithoutAgeOrName = Omit<User, 'age' | 'name'>;
+// ^= { id: number; }
+```
+
+**Record\<Keys, Values\>** — Object type with specific keys and a single value type. Use for configs, maps, lookup tables.
+
+```typescript
+type UserRole = 'admin' | 'user' | 'guest';
+type Permissions = Record<UserRole, string[]>;
+// ^= { admin: string[]; user: string[]; guest: string[]; }
+```
+
+### 13.2 Optional and required
+
+**Partial\<Obj\>** — All properties optional. Use for updates, forms, patch payloads.
+
+```typescript
+type User = { id: number; name: string; age: number };
+type PartialUser = Partial<User>;
+// ^= { id?: number; name?: string; age?: number; }
+```
+
+**Required\<Obj\>** — All properties required. Opposite of Partial. Use for inserts or when every field must be defined.
+
+```typescript
+type PartialUser = { id?: number; name?: string; age?: number };
+type RequiredUser = Required<PartialUser>;
+// ^= { id: number; name: string; age: number; }
+```
+
+**Readonly\<Obj\>** — All properties readonly. Use for immutable data or frozen structures.
+
+```typescript
+type User = { id: number; name: string };
+type ReadonlyUser = Readonly<User>;
+// ^= { readonly id: number; readonly name: string; }
+```
+
+### 13.3 Function and constructor types
+
+**Parameters\<Func\>** — Parameter types as a tuple. Use for wrappers, currying, or when the library does not expose param types.
+
+```typescript
+type GreetFunction = (name: string, age: number) => string;
+type GreetParams = Parameters<GreetFunction>;
+// ^= [string, number]
+```
+
+**ReturnType\<Func\>** — Return type of a function. Use when the function has implicit return types or the library does not export them.
+
+```typescript
+function getUser(id: number) {
+  return { id, name: 'John' };
+}
+type User = ReturnType<typeof getUser>;
+// ^= { id: number; name: string; }
+```
+
+**ConstructorParameters\<Class\>** — Constructor parameter types as a tuple. Use for factories or DI.
+
+```typescript
+class Database {
+  constructor(host: string, port: number, ssl: boolean) {}
+}
+type DatabaseParams = ConstructorParameters<typeof Database>;
+// ^= [string, number, boolean]
+```
+
+**InstanceType\<Class\>** — Instance type of a constructor. Prefer using the class type directly when possible.
+
+### 13.4 Union subset and nullability
+
+**Extract\<Union, Members\>** — Union containing only the specified members. Use when the union is derived from an existing one.
+
+```typescript
+type Colors = 'red' | 'green' | 'blue' | 'yellow' | 'orange';
+type WarmColors = Extract<Colors, 'red' | 'yellow' | 'orange'>;
+// ^= 'red' | 'yellow' | 'orange'
+```
+
+**Exclude\<Union, Members\>** — Union with specified members removed. Opposite of Extract.
+
+```typescript
+type Colors = 'red' | 'green' | 'blue' | 'yellow' | 'orange';
+type CoolColors = Exclude<Colors, 'red' | 'yellow' | 'orange'>;
+// ^= 'green' | 'blue'
+```
+
+**NonNullable\<T\>** — Remove `null` and `undefined` from T. Use after narrowing or when a value is guaranteed defined.
+
+```typescript
+type MaybeString = string | null | undefined;
+type DefiniteString = NonNullable<MaybeString>;
+// ^= string
+```
+
+### 13.5 Promise and string literal types
+
+**Awaited\<PromiseType\>** — Resolved type of a Promise (unwraps nested Promises). Use for async return types.
+
+```typescript
+type NestedPromise = Promise<Promise<number>>;
+type UnwrappedNumber = Awaited<NestedPromise>;
+// ^= number
+```
+
+**Uppercase\<StringType\>** / **Lowercase\<StringType\>** — All characters upper/lower. Use for API or config casing.
+
+**Capitalize\<StringType\>** / **Uncapitalize\<StringType\>** — First character upper/lower. Use for PascalCase ↔ camelCase.
+
+### 13.6 Rules for utility types
+
+- Use **Pick** / **Omit** when the type is clearly derived from one object; do not redefine the same keys by hand.
+- Use **Partial** for update/patch shapes; use **Required** when all fields must be present.
+- Use **Parameters** / **ReturnType** when the source is a function and you need its shape; avoid deep nesting.
+- Use **Extract** / **Exclude** for union subsets; keep unions small and readable.
+- Use **Record** for fixed-key maps; avoid recursive or conditional value types.
+- Do not chain many utilities (e.g. `Partial<Pick<Omit<…>>>`); prefer one or two steps and named type aliases.
+- Prefer flat, explicit types when a utility does not add clarity.
+
+---
+
+## 14) CURSOR / AI ENFORCEMENT RULES
 
 **AI MUST:**
 
 - Avoid `any`
 - Avoid `extends`
 - Prefer composition
+- Use utility types (Pick, Omit, Partial, ReturnType, etc.) when deriving from existing types
 - Explicitly type everything
 - Mark uncertainty clearly
 
@@ -432,10 +575,11 @@ type ApiResult<T> =
 - Cast away errors
 - Introduce inheritance chains
 - Add complex types without justification
+- Chain many utility types; prefer one or two steps and named aliases
 
 ---
 
-## 14) FINAL LAW
+## 15) FINAL LAW
 
 > **If a type is hard to read, it is wrong.**  
 > **If TypeScript is slow, the types are too clever.**  

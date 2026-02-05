@@ -1,0 +1,115 @@
+---
+description: Jest test structure and patterns — use when writing or suggesting tests
+alwaysApply: false
+globs: '**/*.test.{ts,tsx},**/*.spec.{ts,tsx},**/__tests__/**'
+---
+
+# Testing (Jest) — How AI Writes Tests
+
+Cursor MUST follow these patterns when writing or suggesting test cases.
+
+## Test File Location and Naming
+
+- **Option A:** Colocated: `ComponentName.test.tsx` next to the source (e.g. `HomeDashboardScreen.test.tsx` next to `HomeDashboardScreen.tsx`).
+- **Option B:** Centralized: `__tests__/FeatureName.test.tsx` or `src/feature/__tests__/FeatureName.test.tsx`.
+- File name must end in `.test.tsx` or `.test.ts` (or `.spec.tsx` / `.spec.ts`).
+
+## Structure: describe / it
+
+- Use **describe** for the unit under test (component, module, or function name).
+- Use **it** (or **test**) for one behavior per test.
+- One assertion focus per **it** when possible; multiple related assertions in one **it** are fine.
+
+```typescript
+describe('ComponentName', () => {
+  it('does something specific', () => { ... });
+  it('does another thing', () => { ... });
+});
+```
+
+## React Components (Screens / UI)
+
+1. **Mock navigation** when the component uses `useNavigation`:
+   ```typescript
+   const mockNavigate = jest.fn();
+   jest.mock('@react-navigation/native', () => ({
+     useNavigation: () => ({ navigate: mockNavigate }),
+   }));
+   ```
+2. **Wrap render and state updates in act()** to avoid "not wrapped in act" warnings:
+   ```typescript
+   let tree: TestRenderer.ReactTestRenderer;
+   TestRenderer.act(() => {
+     tree = TestRenderer.create(<MyScreen />);
+   });
+   expect(tree!.root.findByType(Text).props.children).toBe('Expected');
+   ```
+3. **Wrap user actions (onPress, etc.) in act()**:
+   ```typescript
+   TestRenderer.act(() => {
+     buttons[0].props.onPress();
+   });
+   expect(mockNavigate).toHaveBeenCalledWith('RouteName');
+   ```
+4. **Assert**:
+   - Rendered content: `findByType(Text)`, `findAllByType(Button)`, `props.children`, etc.
+   - Navigation: `expect(mockNavigate).toHaveBeenCalledWith('RouteName')`.
+   - Snapshot only if the team uses them: `expect(tree.toJSON()).toMatchSnapshot()`.
+
+## Pure Functions and Utils
+
+- No mocks needed unless the function calls external deps.
+- One **describe** per module or function, **it** per behavior.
+- Use **expect(result).toBe(expected)** or **expect(result).toEqual(expected)**.
+
+```typescript
+describe('myUtil', () => {
+  it('returns correct value for valid input', () => {
+    expect(myUtil(validInput)).toBe(expected);
+  });
+  it('throws or returns safe value for invalid input', () => {
+    expect(() => myUtil(bad)).toThrow();
+    // or
+    expect(myUtil(bad)).toEqual(safeDefault);
+  });
+});
+```
+
+## Hooks (e.g. custom hooks)
+
+- Use **@testing-library/react-hooks** (renderHook) if the project uses it; otherwise test via a small component that uses the hook and assert on behavior.
+
+## Path Aliases in Tests
+
+- Jest is configured with **moduleNameMapper** for `@`, `@navigation`, `@screens`, `@utils`.
+- Import using aliases: `@/...` (src root), `@navigation/...`, `@screens/...`, `@utils/...` (e.g. `import { X } from '@screens/home/...'`, `import type { Y } from '@/navigation/types'`).
+
+## What to Test (Priorities)
+
+1. **Rendering:** Component mounts and shows expected text/elements.
+2. **User actions:** Buttons/presses call navigation or callbacks (mock and assert).
+3. **Utils / pure logic:** Correct output for given input; error or edge cases.
+4. **Forms (e.g. RHF + Zod):** Validation errors shown, submit calls handler with correct payload (mock submit, assert args).
+
+## What Not to Do
+
+- Do not test implementation details (e.g. state variable names).
+- Do not leave tests with only `expect(true).toBe(true)`.
+- Do not forget to **mock** `@react-navigation/native` (or other heavy deps) when testing components that use them.
+- Do not forget **act()** around render and user actions in component tests.
+
+## TypeScript and ESLint
+
+- Tests must pass **TypeScript** and **ESLint** (same as app code).
+- Use explicit types where required (e.g. `let tree: TestRenderer.ReactTestRenderer`).
+- No `any`; use typed mocks.
+
+## Summary for AI
+
+When writing tests:
+
+1. Place file: colocated `*.test.tsx` or in `__tests__`.
+2. Structure: `describe('Unit', () => { it('behavior', () => { ... }); });`
+3. Components: mock navigation (and other deps), wrap render and actions in `TestRenderer.act()`, assert on output and `mockNavigate` calls.
+4. Utils: no mocks unless needed; assert return values or thrown errors.
+5. Use path aliases; follow project TypeScript and ESLint rules.

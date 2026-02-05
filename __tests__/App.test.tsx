@@ -1,13 +1,19 @@
 /**
+ * App root component test.
  * @format
  */
 
 import React from 'react';
-import ReactTestRenderer from 'react-test-renderer';
+import TestRenderer from 'react-test-renderer';
+
 import App from '../App';
 
-test('renders correctly', async () => {
-  await ReactTestRenderer.act(() => {
-    ReactTestRenderer.create(<App />);
+describe('App', () => {
+  it('renders without crashing', () => {
+    let root: TestRenderer.ReactTestRenderer;
+    TestRenderer.act(() => {
+      root = TestRenderer.create(<App />);
+    });
+    expect(root!).toBeDefined();
   });
 });

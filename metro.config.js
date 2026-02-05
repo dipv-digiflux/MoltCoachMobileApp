@@ -10,6 +10,7 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const config = {
   resolver: {
     extraNodeModules: {
+      '@': path.resolve(__dirname, 'src'),
       '@navigation': path.resolve(__dirname, 'src/navigation'),
       '@screens': path.resolve(__dirname, 'src/screens'),
       '@utils': path.resolve(__dirname, 'src/utils'),
