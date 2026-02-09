@@ -91,7 +91,7 @@ export const typographyTokens = {
   },
   bodySmall2: {
     fontSize: fontScale(12),
-    lineHeight: lineHeightScale(14),
+    lineHeight: lineHeightScale(16),
     letterSpacing: 0,
   },
   bodySmall3: {
