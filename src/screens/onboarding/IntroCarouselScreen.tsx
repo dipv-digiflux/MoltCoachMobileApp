@@ -4,6 +4,7 @@ import React, {
   useRef,
   useCallback,
   useEffect,
+  useLayoutEffect,
 } from 'react';
 import {
   View,
@@ -35,9 +36,14 @@ import { Device } from '@assets/images';
 
 import type { OnboardingNavigationProp } from '@navigation/types';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const SLIDE_DURATION = 5000;
-const CONTENT_ANIMATION_DURATION = 350;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const SLIDE_DURATION = 3000;
+const CONTENT_ANIMATION_DURATION = 520;
+const CONTENT_ANIMATION_EASING = Easing.bezier(0.25, 0.1, 0.25, 1);
+const ENTRANCE_DURATION = 580;
+const ENTRANCE_EASING = Easing.bezier(0.25, 0.1, 0.25, 1);
+const TOP_ENTRANCE_OFFSET = SCREEN_HEIGHT * 0.12;
+const BOTTOM_ENTRANCE_OFFSET = SCREEN_HEIGHT * 0.1;
 
 type SlideData = {
   title: string;
@@ -101,11 +107,21 @@ export const IntroCarouselScreen = (): ReactElement => {
   const insets = useSafeAreaInsets();
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [hasCompletedInitialEntrance, setHasCompletedInitialEntrance] =
+    useState(false);
 
   const progressAnim = useRef(new Animated.Value(0)).current;
   const contentTranslateX = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(1)).current;
   const isFirstRender = useRef(true);
+  const topSectionTranslateY = useRef(
+    new Animated.Value(-TOP_ENTRANCE_OFFSET),
+  ).current;
+  const topSectionOpacity = useRef(new Animated.Value(0)).current;
+  const bottomSectionTranslateY = useRef(
+    new Animated.Value(BOTTOM_ENTRANCE_OFFSET),
+  ).current;
+  const bottomSectionOpacity = useRef(new Animated.Value(0)).current;
 
   const handleNavigateToGetStarted = useCallback((): void => {
     navigation.navigate('GetStarted');
@@ -136,7 +152,50 @@ export const IntroCarouselScreen = (): ReactElement => {
     };
   }, [currentIndex, progressAnim, handleNavigateToGetStarted]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    topSectionTranslateY.setValue(-TOP_ENTRANCE_OFFSET);
+    topSectionOpacity.setValue(0);
+    bottomSectionTranslateY.setValue(BOTTOM_ENTRANCE_OFFSET);
+    bottomSectionOpacity.setValue(0);
+
+    Animated.parallel([
+      Animated.timing(topSectionTranslateY, {
+        toValue: 0,
+        duration: ENTRANCE_DURATION,
+        easing: ENTRANCE_EASING,
+        useNativeDriver: true,
+      }),
+      Animated.timing(topSectionOpacity, {
+        toValue: 1,
+        duration: ENTRANCE_DURATION,
+        easing: ENTRANCE_EASING,
+        useNativeDriver: true,
+      }),
+      Animated.timing(bottomSectionTranslateY, {
+        toValue: 0,
+        duration: ENTRANCE_DURATION,
+        easing: ENTRANCE_EASING,
+        useNativeDriver: true,
+      }),
+      Animated.timing(bottomSectionOpacity, {
+        toValue: 1,
+        duration: ENTRANCE_DURATION,
+        easing: ENTRANCE_EASING,
+        useNativeDriver: true,
+      }),
+    ]).start(({ finished }) => {
+      if (finished) {
+        setHasCompletedInitialEntrance(true);
+      }
+    });
+  }, [
+    topSectionTranslateY,
+    topSectionOpacity,
+    bottomSectionTranslateY,
+    bottomSectionOpacity,
+  ]);
+
+  useLayoutEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
@@ -149,13 +208,13 @@ export const IntroCarouselScreen = (): ReactElement => {
       Animated.timing(contentTranslateX, {
         toValue: 0,
         duration: CONTENT_ANIMATION_DURATION,
-        easing: Easing.out(Easing.cubic),
+        easing: CONTENT_ANIMATION_EASING,
         useNativeDriver: true,
       }),
       Animated.timing(contentOpacity, {
         toValue: 1,
         duration: CONTENT_ANIMATION_DURATION,
-        easing: Easing.out(Easing.cubic),
+        easing: CONTENT_ANIMATION_EASING,
         useNativeDriver: true,
       }),
     ]).start();
@@ -166,6 +225,16 @@ export const IntroCarouselScreen = (): ReactElement => {
   const slideAnimStyle = {
     transform: [{ translateX: contentTranslateX }],
     opacity: contentOpacity,
+  };
+
+  const topSectionAnimStyle = {
+    transform: [{ translateY: topSectionTranslateY }],
+    opacity: topSectionOpacity,
+  };
+
+  const bottomSectionAnimStyle = {
+    transform: [{ translateY: bottomSectionTranslateY }],
+    opacity: bottomSectionOpacity,
   };
 
   return (
@@ -180,36 +249,64 @@ export const IntroCarouselScreen = (): ReactElement => {
         <Text style={styles.skipText}>Skip</Text>
       </TouchableOpacity>
 
-      {/* ── Device image — animated; phone sits just below Skip ── */}
-      <Animated.View style={[styles.imageContainer, slideAnimStyle]}>
-        <Image
-          source={Device}
-          style={styles.deviceImage}
-          resizeMode="contain"
-        />
-      </Animated.View>
+      {hasCompletedInitialEntrance ? (
+        <>
+          <Animated.View style={[styles.imageWrapper, slideAnimStyle]}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={Device}
+                style={styles.deviceImage}
+                resizeMode="contain"
+              />
+            </View>
+          </Animated.View>
+          <View style={styles.progressBarContainer}>
+            {SLIDES.map((_, index) => (
+              <ProgressSegment
+                key={`progress-${String(index)}`}
+                index={index}
+                currentIndex={currentIndex}
+                progressAnim={progressAnim}
+              />
+            ))}
+          </View>
+        </>
+      ) : (
+        <Animated.View style={[styles.topSectionWrapper, topSectionAnimStyle]}>
+          <View style={styles.imageContainer}>
+            <Image
+              source={Device}
+              style={styles.deviceImage}
+              resizeMode="contain"
+            />
+          </View>
+          <View style={styles.progressBarContainer}>
+            {SLIDES.map((_, index) => (
+              <ProgressSegment
+                key={`progress-${String(index)}`}
+                index={index}
+                currentIndex={currentIndex}
+                progressAnim={progressAnim}
+              />
+            ))}
+          </View>
+        </Animated.View>
+      )}
 
-      {/* ── Progress bar — directly under phone, no top gap ── */}
-      <View style={styles.progressBarContainer}>
-        {SLIDES.map((_, index) => (
-          <ProgressSegment
-            key={`progress-${String(index)}`}
-            index={index}
-            currentIndex={currentIndex}
-            progressAnim={progressAnim}
-          />
-        ))}
-      </View>
-
-      {/* ── White section — title, subtitle, button ── */}
       <View
         style={[
           styles.bottomSection,
           { paddingBottom: Math.max(insets.bottom, spacingScale(24)) },
         ]}
       >
-        {/* Title, subtitle, button — animated, slides from right */}
-        <Animated.View style={[styles.textContentWrapper, slideAnimStyle]}>
+        <Animated.View
+          style={[
+            styles.textContentWrapper,
+            hasCompletedInitialEntrance
+              ? slideAnimStyle
+              : bottomSectionAnimStyle,
+          ]}
+        >
           <Text style={styles.title}>{currentSlide?.title}</Text>
           <Text style={styles.subtitle}>{currentSlide?.subtitle}</Text>
 
@@ -232,6 +329,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.StatesWhite,
+    overflow: 'hidden',
   },
 
   // ── Skip — absolute top-right pill ──
@@ -250,8 +348,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  imageContainer: {
+  topSectionWrapper: {
     flex: 1.7,
+    overflow: 'hidden',
+  },
+  imageWrapper: {
+    flex: 1.7,
+    overflow: 'hidden',
+  },
+  imageContainer: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
     overflow: 'hidden',
@@ -267,6 +373,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.StatesWhite,
     flex: 1,
     justifyContent: 'flex-end',
+    overflow: 'hidden',
   },
 
   progressBarContainer: {
@@ -302,13 +409,14 @@ const styles = StyleSheet.create({
     gap: spacing['Spacing-3xl'],
   },
   title: {
-    ...typography.h6SemiBold,
+    ...typography.h4SemiBold,
     color: colors.TextPrimaryDefault,
   },
   subtitle: {
     ...typography.bodySmall1Regular,
     lineHeight: lineHeightScale(16),
     color: colors.PrimarySecondary,
+    marginBottom: spacing['Spacing-5xl'],
   },
   button: {
     width: '100%',
