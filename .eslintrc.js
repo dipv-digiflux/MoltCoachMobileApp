@@ -35,6 +35,7 @@ module.exports = {
     'node_modules/',
     'Pods/',
     '*.config.js',
+    '.eslintrc.js',
     'babel.config.js',
     'metro.config.js',
     'index.js',
@@ -134,6 +135,19 @@ module.exports = {
             allowExpressions: true,
             allowTypedFunctionExpressions: true,
             allowHigherOrderFunctions: true,
+          },
+        ],
+      },
+    },
+    {
+      files: ['__tests__/**/*.ts', '__tests__/**/*.tsx'],
+      rules: {
+        // Allow object literal assertions for test mocks (e.g. synthetic events)
+        '@typescript-eslint/consistent-type-assertions': [
+          'error',
+          {
+            assertionStyle: 'as',
+            objectLiteralTypeAssertions: 'allow',
           },
         ],
       },

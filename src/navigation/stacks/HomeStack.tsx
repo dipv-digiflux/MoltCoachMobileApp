@@ -16,7 +16,7 @@ export const HomeStackNavigator = (): ReactElement => (
     <Stack.Screen
       name="HomeDashboard"
       component={HomeDashboardScreen}
-      options={{ title: 'Home' }}
+      options={{ headerShown: false }}
     />
     <Stack.Screen
       name="ExampleForm"

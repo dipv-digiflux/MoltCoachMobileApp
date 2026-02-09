@@ -5,11 +5,12 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
+      "@assets/*": ["src/assets/*"],
       "@navigation/*": ["src/navigation/*"],
       "@screens/*": ["src/screens/*"],
       "@utils/*": ["src/utils/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts"],
   "exclude": ["**/node_modules", "**/Pods"]
 }

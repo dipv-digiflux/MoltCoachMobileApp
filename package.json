@@ -5,8 +5,11 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "link-assets": "react-native-asset",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "eslint .",
-    "lint:strict": "eslint App.tsx src --max-warnings 0",
+    "lint:strict": "eslint . --max-warnings 0",
     "start": "react-native start --reset-cache",
     "test": "jest",
     "prepare": "husky"
@@ -26,6 +29,8 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
     "@babel/core": "^7.25.2",
     "@babel/plugin-transform-export-namespace-from": "^7.27.1",
     "@babel/preset-env": "^7.25.3",
@@ -48,12 +53,22 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-unused-imports": "^4.3.0",
     "husky": "^9.1.7",
+    "lint-staged": "^15.2.10",
     "jest": "^29.6.3",
+    "react-native-asset": "^2.0.0",
     "prettier": "2.8.8",
     "react-test-renderer": "19.2.0",
     "typescript": "^5.8.3"
   },
   "engines": {
     "node": ">=20"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,md}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "eslint --fix"
+    ]
   }
 }

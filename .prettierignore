@@ -1,0 +1,35 @@
+# Dependencies and build
+node_modules/
+Pods/
+*.lock
+package-lock.json
+
+# Build / native
+android/build/
+android/app/build/
+android/app/.cxx/
+ios/build/
+*.xcworkspace
+*.xcodeproj
+
+# Metro / coverage
+coverage/
+.metro-health-check*
+
+# Assets (binary or generated)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.webp
+*.otf
+*.ttf
+*.woff
+*.woff2
+
+# Config that may not be Prettier-friendly
+*.config.js
+babel.config.js
+metro.config.js
+react-native.config.js
