@@ -7,15 +7,15 @@
  *
  * @example
  * // Variants: H1-Bold, H1-SemiBold, H1-Medium, H1-Regular
- * <Text style={typographyByWeight.h1.bold}>H1 Bold</Text>
- * <Text style={typographyByWeight.h1.semiBold}>H1 SemiBold</Text>
- * <Text style={typographyByWeight.h1.medium}>H1 Medium</Text>
- * <Text style={typographyByWeight.h1.regular}>H1 Regular</Text>
+ * <Text style={typography.h1Bold}>H1 Bold</Text>
+ * <Text style={typography.h1SemiBold}>H1 SemiBold</Text>
+ * <Text style={typography.h1Medium}>H1 Medium</Text>
+ * <Text style={typography.h1Regular}>H1 Regular</Text>
  *
  * @example
  * // Body and small body
- * <Text style={typographyByWeight.b1.regular}>Body 16px</Text>
- * <Text style={typographyByWeight.bodySmall1.regular}>Body small 1</Text>
+ * <Text style={typography.b1Regular}>Body 16px</Text>
+ * <Text style={typography.bodySmall1Regular}>Body small 1</Text>
  */
 import { fontScale, lineHeightScale } from './scaling';
 

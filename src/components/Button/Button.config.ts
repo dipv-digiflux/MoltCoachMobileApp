@@ -1,12 +1,6 @@
 import { type TextStyle } from 'react-native';
 
-import {
-  colors,
-  iconScale,
-  moderateScale,
-  spacingScale,
-  typographyByWeight,
-} from '@/theme';
+import { colors, iconScale, moderateScale, spacing, typography } from '@/theme';
 
 import {
   type ButtonVariant,
@@ -241,30 +235,30 @@ export type ButtonSizeConfig = {
 export const SIZE_CONFIG: Record<ButtonSize, ButtonSizeConfig> = {
   small: {
     height: moderateScale(32),
-    paddingHorizontal: spacingScale(10),
+    paddingHorizontal: spacing['Spacing-2xl'],
     iconSize: iconScale(16),
-    gap: spacingScale(4),
+    gap: spacing['Spacing-m'],
     borderRadius: moderateScale(2),
     iconOnlySize: moderateScale(32),
-    labelStyle: typographyByWeight.bodySmall1.semiBold,
+    labelStyle: typography.bodySmall1SemiBold,
   },
   default: {
     height: moderateScale(44),
-    paddingHorizontal: spacingScale(12),
+    paddingHorizontal: spacing['Spacing-3xl'],
     iconSize: iconScale(20),
-    gap: spacingScale(4),
+    gap: spacing['Spacing-m'],
     borderRadius: moderateScale(2),
     iconOnlySize: moderateScale(40),
-    labelStyle: typographyByWeight.bodySmall1.semiBold,
+    labelStyle: typography.bodySmall1SemiBold,
   },
   large: {
     height: moderateScale(52),
-    paddingHorizontal: spacingScale(12),
+    paddingHorizontal: spacing['Spacing-3xl'],
     iconSize: iconScale(24),
-    gap: spacingScale(4),
+    gap: spacing['Spacing-m'],
     borderRadius: moderateScale(2),
     iconOnlySize: moderateScale(48),
-    labelStyle: typographyByWeight.b1.semiBold,
+    labelStyle: typography.b1SemiBold,
   },
 };
 

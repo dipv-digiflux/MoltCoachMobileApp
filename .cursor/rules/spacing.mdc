@@ -1,0 +1,224 @@
+---
+description: Spacing tokens — MUST use spacing tokens from @src/theme/spacing.ts for all padding, margin, and gap values
+---
+
+# SPACING RULES (STRICT)
+
+**Source:** `src/theme/spacing.ts`, re-exported via `@/theme`.
+
+---
+
+## GOLDEN RULE
+
+**NEVER use `spacingScale()` directly in components.**  
+**ALWAYS use spacing tokens from `@/theme` for padding, margin, and gap.**
+
+---
+
+## Available Spacing Tokens
+
+All spacing tokens are pre-scaled via `spacingScale` internally.
+
+```typescript
+import { spacing } from '@/theme';
+
+// Available tokens:
+spacing['Spacing-xs']      // 0
+spacing['Spacing-sm']      // 2px (scaled)
+spacing['Spacing-m']       // 4px (scaled)
+spacing['Spacing-l']       // 6px (scaled)
+spacing['Spacing-xl']      // 8px (scaled)
+spacing['Spacing-2xl']     // 10px (scaled)
+spacing['Spacing-3xl']     // 12px (scaled)
+spacing['Spacing-4xl']     // 14px (scaled)
+spacing['Spacing-5xl']     // 16px (scaled)
+spacing['Spacing-6xl']     // 18px (scaled)
+spacing['Spacing-7xl']     // 20px (scaled)
+spacing['Spacing-8xl']     // 22px (scaled)
+spacing['Spacing-10xl']    // 24px (scaled)
+spacing['Spacing-11xl']    // 32px (scaled)
+spacing['Spacing-12xl']    // 36px (scaled)
+spacing['Spacing-13xl']    // 40px (scaled)
+spacing['Spacing-14xl']    // 44px (scaled)
+spacing['Spacing-15xl']    // 48px (scaled)
+spacing['Spacing-16xl']    // 52px (scaled)
+```
+
+---
+
+## Usage Guide
+
+### ✅ CORRECT — Use Spacing Tokens
+
+```typescript
+import { spacing } from '@/theme';
+
+const styles = StyleSheet.create({
+  container: {
+    padding: spacing['Spacing-5xl'],           // ✅ 16px
+    paddingHorizontal: spacing['Spacing-3xl'], // ✅ 12px
+    paddingVertical: spacing['Spacing-xl'],     // ✅ 8px
+    margin: spacing['Spacing-xl'],              // ✅ 8px
+    marginTop: spacing['Spacing-2xl'],          // ✅ 10px
+    gap: spacing['Spacing-m'],                  // ✅ 4px
+  },
+});
+```
+
+### ❌ WRONG — Direct spacingScale() Calls
+
+```typescript
+import { spacingScale } from '@/theme';
+
+// ❌ FORBIDDEN: Direct spacingScale() calls
+const styles = StyleSheet.create({
+  container: {
+    padding: spacingScale(16),        // ❌ Use spacing['Spacing-5xl']
+    paddingHorizontal: spacingScale(12), // ❌ Use spacing['Spacing-3xl']
+    gap: spacingScale(4),             // ❌ Use spacing['Spacing-m']
+  },
+});
+```
+
+---
+
+## When to Use Spacing Tokens
+
+**MUST use spacing tokens for:**
+
+- ✅ `padding` / `paddingTop` / `paddingBottom` / `paddingLeft` / `paddingRight`
+- ✅ `paddingHorizontal` / `paddingVertical`
+- ✅ `margin` / `marginTop` / `marginBottom` / `marginLeft` / `marginRight`
+- ✅ `marginHorizontal` / `marginVertical`
+- ✅ `gap` (flexbox gap)
+- ✅ `hitSlop` (Pressable hitSlop object values)
+
+**DO NOT use spacing tokens for:**
+
+- ❌ `height` / `width` / `minHeight` / `maxHeight` / `minWidth` / `maxWidth` (use `moderateScale()`)
+- ❌ `borderRadius` (use `moderateScale()`)
+- ❌ `fontSize` / `lineHeight` (use typography tokens)
+- ❌ `borderWidth: 1` or `StyleSheet.hairlineWidth` (physical pixels)
+- ❌ `0` (zero doesn't need scaling)
+
+---
+
+## Token Mapping Reference
+
+| Design Value | Use Token |
+|---|---|
+| 0px | `spacing['Spacing-xs']` or `0` |
+| 2px | `spacing['Spacing-sm']` |
+| 4px | `spacing['Spacing-m']` |
+| 6px | `spacing['Spacing-l']` |
+| 8px | `spacing['Spacing-xl']` |
+| 10px | `spacing['Spacing-2xl']` |
+| 12px | `spacing['Spacing-3xl']` |
+| 14px | `spacing['Spacing-4xl']` |
+| 16px | `spacing['Spacing-5xl']` |
+| 18px | `spacing['Spacing-6xl']` |
+| 20px | `spacing['Spacing-7xl']` |
+| 22px | `spacing['Spacing-8xl']` |
+| 24px | `spacing['Spacing-10xl']` |
+| 32px | `spacing['Spacing-11xl']` |
+| 36px | `spacing['Spacing-12xl']` |
+| 40px | `spacing['Spacing-13xl']` |
+| 44px | `spacing['Spacing-14xl']` |
+| 48px | `spacing['Spacing-15xl']` |
+| 52px | `spacing['Spacing-16xl']` |
+
+---
+
+## If Token Doesn't Exist
+
+**If you need a spacing value that doesn't exist in the tokens:**
+
+1. **First:** Check if a close token works (e.g., use `Spacing-5xl` for 16px instead of 15px)
+2. **If no close match:** Ask the user to add the token to `src/theme/spacing.ts`
+3. **NEVER** use `spacingScale()` directly as a workaround
+
+---
+
+## Examples
+
+### Component StyleSheet
+
+```typescript
+import { spacing, colors } from '@/theme';
+
+const styles = StyleSheet.create({
+  wrapper: {
+    gap: spacing['Spacing-xl'],              // ✅ 8px gap
+  },
+  container: {
+    paddingHorizontal: spacing['Spacing-5xl'], // ✅ 16px
+    paddingVertical: spacing['Spacing-4xl'],    // ✅ 14px
+  },
+  labelRow: {
+    gap: spacing['Spacing-m'],                 // ✅ 4px gap
+  },
+  iconWrap: {
+    marginLeft: spacing['Spacing-m'],          // ✅ 4px margin
+  },
+});
+```
+
+### Inline Styles
+
+```typescript
+import { spacing } from '@/theme';
+
+<View style={{ padding: spacing['Spacing-5xl'] }}>
+  <Text>Content</Text>
+</View>
+```
+
+### Pressable hitSlop
+
+```typescript
+import { spacing } from '@/theme';
+
+<Pressable
+  hitSlop={spacing['Spacing-xl']}  // ✅ 8px hitSlop
+  onPress={handlePress}
+>
+  <Icon />
+</Pressable>
+```
+
+---
+
+## Rules Summary
+
+1. **NEVER** use `spacingScale()` directly in component files
+2. **ALWAYS** import `spacing` from `@/theme`
+3. **ALWAYS** use spacing tokens for padding, margin, gap, and hitSlop
+4. **IF** a token doesn't exist, ask the user to add it — don't use `spacingScale()` as a workaround
+5. **DO NOT** double-scale — spacing tokens are already scaled
+6. **ZERO** doesn't need a token — use `0` directly
+
+---
+
+## Cursor / AI Enforcement
+
+**AI MUST:**
+
+- ✅ Import `spacing` from `@/theme` (not `spacingScale`)
+- ✅ Use `spacing['Spacing-*']` for all padding, margin, gap values
+- ✅ Check token mapping table before choosing a token
+- ✅ Ask user to add token if needed value doesn't exist
+
+**AI MUST NOT:**
+
+- ❌ Use `spacingScale()` in component files
+- ❌ Import `spacingScale` from `@/theme` in components
+- ❌ Use raw pixel numbers for spacing
+- ❌ Create workarounds with `spacingScale()` when token is missing
+
+---
+
+## Final Law
+
+> **If it's padding, margin, or gap → use spacing tokens.**  
+> **If the token doesn't exist → ask the user to add it.**  
+> **Never use `spacingScale()` directly in components.**

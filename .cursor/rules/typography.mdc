@@ -1,0 +1,360 @@
+---
+description: Typography tokens — MUST use typography tokens from @src/theme/typography.ts for all text styling (fontSize, lineHeight, fontWeight, fontFamily)
+---
+
+# TYPOGRAPHY RULES (STRICT)
+
+**Source:** `src/theme/typography.ts`, re-exported via `@/theme`.
+
+---
+
+## GOLDEN RULE
+
+**NEVER use direct `fontSize`, `lineHeight`, `fontWeight`, or `fontFamily` in components.**  
+**ALWAYS use `typography` tokens from `@/theme` for all text styling.**  
+**NEVER use `typographyByWeight` — use flat `typography` tokens only.**
+
+---
+
+## Available Typography Tokens
+
+All typography tokens are pre-scaled via `fontScale` and `lineHeightScale` internally.
+
+### Typography Tokens (REQUIRED)
+
+```typescript
+import { typography } from '@/theme';
+
+// Available tokens (flat structure):
+typography.h1Bold, typography.h1SemiBold, typography.h1Medium, typography.h1Regular
+typography.h2Bold, typography.h2SemiBold, typography.h2Medium, typography.h2Regular
+typography.h3Bold, typography.h3SemiBold, typography.h3Medium, typography.h3Regular
+typography.h4Bold, typography.h4SemiBold, typography.h4Medium, typography.h4Regular
+typography.h5Bold, typography.h5SemiBold, typography.h5Medium, typography.h5Regular
+typography.h6Bold, typography.h6SemiBold, typography.h6Medium, typography.h6Regular
+typography.h7Bold, typography.h7SemiBold, typography.h7Medium, typography.h7Regular
+typography.h8Bold, typography.h8SemiBold, typography.h8Medium, typography.h8Regular
+typography.h0Bold, typography.h0SemiBold, typography.h0Medium, typography.h0Regular
+typography.h10Bold, typography.h10SemiBold, typography.h10Medium, typography.h10Regular
+typography.b1Bold, typography.b1SemiBold, typography.b1Medium, typography.b1Regular
+typography.bodySmall1Bold, typography.bodySmall1SemiBold, typography.bodySmall1Medium, typography.bodySmall1Regular
+typography.bodySmall2Bold, typography.bodySmall2SemiBold, typography.bodySmall2Medium, typography.bodySmall2Regular
+typography.bodySmall3Bold, typography.bodySmall3SemiBold, typography.bodySmall3Medium, typography.bodySmall3Regular
+```
+
+---
+
+## Typography Token Sizes
+
+| Token | Font Size | Line Height | Use Case |
+|---|---|---|---|
+| `h1*` | 40px | 48px | Main page titles |
+| `h2*` | 38px | 46px | Section headers |
+| `h3*` | 36px | 42px | Subsection headers |
+| `h4*` | 32px | 38px | Card titles |
+| `h5*` | 30px | 36px | Large headings |
+| `h6*` | 28px | 34px | Medium headings |
+| `h7*` | 24px | 28px | Small headings |
+| `h8*` | 22px | 26px | Tiny headings |
+| `h0*` | 20px | 24px | Smallest headings |
+| `h10*` | 18px | 22px | Micro headings |
+| `b1*` | 16px | 20px | Body text |
+| `bodySmall1*` | 14px | 16px | Small body, labels |
+| `bodySmall2*` | 12px | 14px | Tiny text, captions |
+| `bodySmall3*` | 10px | 12px | Micro text, icons |
+
+*Each token has 4 weight variants: Bold, SemiBold, Medium, Regular
+
+---
+
+## Usage Guide
+
+### ✅ CORRECT — Use Typography Tokens
+
+```typescript
+import { typography, colors } from '@/theme';
+
+// In StyleSheet
+const styles = StyleSheet.create({
+  title: {
+    ...typography.h1Bold,
+    color: colors.PrimaryMain,
+  },
+  label: {
+    ...typography.bodySmall1Medium,
+    color: colors.TextSecondaryDefault,
+  },
+  caption: {
+    ...typography.bodySmall2Regular,
+    color: colors.TextSecondaryHover,
+  },
+});
+
+// In JSX
+<Text style={typography.b1Regular}>Body text</Text>
+<Text style={[typography.h7SemiBold, { color: colors.PrimaryMain }]}>
+  Heading
+</Text>
+```
+
+### ❌ WRONG — Direct Font Styling
+
+```typescript
+import { fontScale, lineHeightScale, moderateScale } from '@/theme';
+
+// ❌ FORBIDDEN: Direct fontSize, lineHeight, fontWeight, fontFamily
+const styles = StyleSheet.create({
+  title: {
+    fontSize: fontScale(24),           // ❌ Use typography.h7SemiBold
+    lineHeight: lineHeightScale(28),    // ❌ Use typography.h7SemiBold
+    fontWeight: '600',                  // ❌ Use typography.h7SemiBold
+    fontFamily: 'Inter-SemiBold',       // ❌ Use typography.h7SemiBold
+  },
+  label: {
+    fontSize: moderateScale(14),       // ❌ Use typography.bodySmall1Medium
+    lineHeight: moderateScale(16),      // ❌ Use typography.bodySmall1Medium
+  },
+});
+```
+
+### ❌ WRONG — Using typographyByWeight
+
+```typescript
+import { typographyByWeight } from '@/theme';
+
+// ❌ FORBIDDEN: Do NOT use typographyByWeight
+const styles = StyleSheet.create({
+  title: {
+    ...typographyByWeight.h1.bold,  // ❌ Use typography.h1Bold instead
+  },
+  label: {
+    ...typographyByWeight.bodySmall1.medium,  // ❌ Use typography.bodySmall1Medium instead
+  },
+});
+```
+
+---
+
+## When to Use Typography Tokens
+
+**MUST use typography tokens for:**
+
+- ✅ `fontSize` — always use a typography token
+- ✅ `lineHeight` — always use a typography token
+- ✅ `fontWeight` — always use a typography token (via weight variant)
+- ✅ `fontFamily` — always use a typography token (via weight variant)
+- ✅ Any text styling that includes font properties
+
+**DO NOT use typography tokens for:**
+
+- ❌ `color` — use color tokens from `@/theme`
+- ❌ `letterSpacing` — can be customized if needed (typography tokens have `letterSpacing: 0`)
+- ❌ `textAlign`, `textDecorationLine`, etc. — these are layout/styling, not typography
+
+---
+
+## Spreading Typography Tokens
+
+**Always spread the token** to include all properties:
+
+```typescript
+// ✅ CORRECT: Spread the token
+const styles = StyleSheet.create({
+  title: {
+    ...typography.h1Bold,
+    color: colors.PrimaryMain,
+  },
+});
+
+// ❌ WRONG: Don't pick individual properties
+const styles = StyleSheet.create({
+  title: {
+    fontSize: typography.h1Bold.fontSize,  // ❌ Spread the whole token
+    lineHeight: typography.h1Bold.lineHeight,
+  },
+});
+```
+
+---
+
+## Combining Typography with Other Styles
+
+```typescript
+import { typography, colors, spacing } from '@/theme';
+
+// ✅ CORRECT: Spread typography, add other styles
+const styles = StyleSheet.create({
+  container: {
+    ...typography.b1Regular,
+    color: colors.PrimaryMain,
+    marginBottom: spacing['Spacing-xl'],
+  },
+});
+
+// ✅ CORRECT: Inline with array
+<Text style={[typography.h7SemiBold, { color: colors.PrimaryMain }]}>
+  Title
+</Text>
+```
+
+---
+
+## If Token Doesn't Exist
+
+**If you need a typography style that doesn't exist in the tokens:**
+
+1. **First:** Check if a close token works (e.g., use `bodySmall1Medium` for 14px instead of 13px)
+2. **If no close match:** Ask the user to add the token to `src/theme/typography.ts`
+3. **NEVER** use `fontScale()`, `lineHeightScale()`, or direct font properties as a workaround
+4. **NEVER** use `typographyByWeight` as a workaround
+
+---
+
+## Examples
+
+### Component StyleSheet
+
+```typescript
+import { typography, colors, spacing } from '@/theme';
+
+const styles = StyleSheet.create({
+  title: {
+    ...typography.h7SemiBold,
+    color: colors.PrimaryMain,
+    marginBottom: spacing['Spacing-xl'],
+  },
+  label: {
+    ...typography.bodySmall1Medium,
+    color: colors.TextSecondaryDefault,
+  },
+  body: {
+    ...typography.b1Regular,
+    color: colors.PrimaryMain,
+  },
+  caption: {
+    ...typography.bodySmall2Regular,
+    color: colors.TextSecondaryHover,
+  },
+});
+```
+
+### Inline Styles
+
+```typescript
+import { typography, colors } from '@/theme';
+
+<Text style={typography.h1Bold}>Main Title</Text>
+<Text style={[typography.b1Regular, { color: colors.PrimaryMain }]}>
+  Body text
+</Text>
+```
+
+### Custom Text Components
+
+```typescript
+import { typography, colors } from '@/theme';
+
+const InfoLetter = (): React.ReactElement => (
+  <Text style={[typography.bodySmall3SemiBold, { color: colors.TextSecondaryDefault }]}>
+    i
+  </Text>
+);
+```
+
+### Conditional Typography
+
+```typescript
+import { typography } from '@/theme';
+
+const labelStyle = size === 'default'
+  ? typography.b1Regular
+  : typography.bodySmall2Regular;
+```
+
+---
+
+## Rules Summary
+
+1. **NEVER** use `fontSize`, `lineHeight`, `fontWeight`, or `fontFamily` directly
+2. **NEVER** use `fontScale()`, `lineHeightScale()`, or `moderateScale()` for typography
+3. **ALWAYS** import `typography` from `@/theme` (NOT `typographyByWeight`)
+4. **ALWAYS** use flat `typography` tokens (e.g., `typography.h1Bold`, NOT `typographyByWeight.h1.bold`)
+5. **ALWAYS** spread typography tokens (`...typography.*`)
+6. **ALWAYS** use typography tokens for all text styling
+7. **IF** a token doesn't exist, ask the user to add it — don't use direct font properties or `typographyByWeight` as a workaround
+8. **DO NOT** double-scale — typography tokens are already scaled
+
+---
+
+## Cursor / AI Enforcement
+
+**AI MUST:**
+
+- ✅ Import `typography` from `@/theme` (NOT `typographyByWeight`)
+- ✅ Use flat `typography` tokens (e.g., `typography.h1Bold`)
+- ✅ Use typography tokens for all text styling
+- ✅ Spread typography tokens (`...typography.*`)
+- ✅ Check token size table before choosing a token
+- ✅ Ask user to add token if needed value doesn't exist
+
+**AI MUST NOT:**
+
+- ❌ Use `fontSize`, `lineHeight`, `fontWeight`, `fontFamily` directly
+- ❌ Use `fontScale()`, `lineHeightScale()`, or `moderateScale()` for typography
+- ❌ Use `typographyByWeight` — always use flat `typography` tokens
+- ❌ Pick individual properties from typography tokens (always spread)
+- ❌ Create workarounds with direct font properties or `typographyByWeight` when token is missing
+
+---
+
+## Common Patterns
+
+### Label Text
+```typescript
+...typography.bodySmall1Medium  // 14px, medium weight
+```
+
+### Body Text
+```typescript
+...typography.b1Regular         // 16px, regular weight
+```
+
+### Headings
+```typescript
+...typography.h7SemiBold        // 24px, semiBold weight
+...typography.h1Bold            // 40px, bold weight
+```
+
+### Small Text / Captions
+```typescript
+...typography.bodySmall2Regular  // 12px, regular weight
+```
+
+### Micro Text / Icons
+```typescript
+...typography.bodySmall3SemiBold // 10px, semiBold weight
+```
+
+---
+
+## Token Naming Convention
+
+Typography tokens follow this pattern:
+- `{size}{Weight}` (e.g., `h1Bold`, `b1Regular`, `bodySmall1Medium`)
+
+Where:
+- **Size**: `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `h7`, `h8`, `h0`, `h10`, `b1`, `bodySmall1`, `bodySmall2`, `bodySmall3`
+- **Weight**: `Bold`, `SemiBold`, `Medium`, `Regular`
+
+Examples:
+- `typography.h1Bold` (not `typographyByWeight.h1.bold`)
+- `typography.bodySmall1Medium` (not `typographyByWeight.bodySmall1.medium`)
+- `typography.b1Regular` (not `typographyByWeight.b1.regular`)
+
+---
+
+## Final Law
+
+> **If it's text → use `typography` tokens (flat structure).**  
+> **If the token doesn't exist → ask the user to add it.**  
+> **Never use direct font properties or `typographyByWeight` in components.**

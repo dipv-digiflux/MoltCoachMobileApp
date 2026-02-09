@@ -7,12 +7,7 @@ import React, {
 } from 'react';
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import {
-  colors,
-  moderateScale,
-  spacingScale,
-  typographyByWeight,
-} from '@/theme';
+import { colors, moderateScale, spacing, typography } from '@/theme';
 
 import { type SwitchProps, type SwitchSize } from './Switch.types';
 
@@ -148,14 +143,12 @@ export const Switch = ({
   );
 
   const labelTextStyle =
-    size === 'default'
-      ? typographyByWeight.b1.regular
-      : typographyByWeight.bodySmall2.regular;
+    size === 'default' ? typography.b1Regular : typography.bodySmall2Regular;
 
   const descTextStyle =
     size === 'default'
-      ? typographyByWeight.bodySmall1.regular
-      : typographyByWeight.bodySmall2.regular;
+      ? typography.bodySmall1Regular
+      : typography.bodySmall2Regular;
 
   const hasLabel = label !== undefined;
   const ringOffset = FOCUS_RING_WIDTH + FOCUS_RING_GAP;
@@ -223,14 +216,14 @@ const styles = StyleSheet.create({
   wrapperWithLabel: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: spacingScale(8),
+    gap: spacing['Spacing-xl'],
   },
   controlWrapper: {
-    paddingTop: spacingScale(2),
+    paddingTop: spacing['Spacing-sm'],
   },
   labelColumn: {
     flexShrink: 1,
-    gap: spacingScale(1),
+    gap: spacing['Spacing-xs'],
   },
   focusRing: {
     position: 'absolute',

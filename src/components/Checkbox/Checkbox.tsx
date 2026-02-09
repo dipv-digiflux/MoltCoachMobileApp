@@ -1,12 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import {
-  colors,
-  moderateScale,
-  spacingScale,
-  typographyByWeight,
-} from '@/theme';
+import { colors, moderateScale, spacing, typography } from '@/theme';
 
 import { type CheckboxProps, type CheckboxSize } from './Checkbox.types';
 
@@ -125,14 +120,12 @@ export const Checkbox = ({
   );
 
   const labelStyle =
-    size === 'default'
-      ? typographyByWeight.b1.regular
-      : typographyByWeight.bodySmall2.regular;
+    size === 'default' ? typography.b1Regular : typography.bodySmall2Regular;
 
   const descStyle =
     size === 'default'
-      ? typographyByWeight.bodySmall1.regular
-      : typographyByWeight.bodySmall2.regular;
+      ? typography.bodySmall1Regular
+      : typography.bodySmall2Regular;
 
   const hasLabel = label !== undefined;
   const ringOffset = FOCUS_RING_WIDTH + FOCUS_RING_GAP;
@@ -221,14 +214,14 @@ const styles = StyleSheet.create({
   wrapperWithLabel: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: spacingScale(8),
+    gap: spacing['Spacing-xl'],
   },
   controlWrapper: {
-    paddingTop: spacingScale(2),
+    paddingTop: spacing['Spacing-sm'],
   },
   labelColumn: {
     flexShrink: 1,
-    gap: spacingScale(2),
+    gap: spacing['Spacing-sm'],
   },
   focusRing: {
     position: 'absolute',
