@@ -2,6 +2,9 @@
  * Typography theme: headings H0–H10, H1–H8, body B1, Body small 1–3.
  * Every token has four weights: regular (400), medium (500), semiBold (600), bold (700).
  *
+ * Font sizes and line heights are pre-scaled via `fontScale` / `lineHeightScale`
+ * — consumers do NOT need to call any scaling function for typography.
+ *
  * @example
  * // Variants: H1-Bold, H1-SemiBold, H1-Medium, H1-Regular
  * <Text style={typographyByWeight.h1.bold}>H1 Bold</Text>
@@ -14,6 +17,8 @@
  * <Text style={typographyByWeight.b1.regular}>Body 16px</Text>
  * <Text style={typographyByWeight.bodySmall1.regular}>Body small 1</Text>
  */
+import { fontScale, lineHeightScale } from './scaling';
+
 export const fontFamily = {
   inter: 'Inter',
   interRegular: 'Inter-Regular',
@@ -24,20 +29,76 @@ export const fontFamily = {
 } as const;
 
 export const typographyTokens = {
-  h1: { fontSize: 40, lineHeight: 48, letterSpacing: 0 },
-  h2: { fontSize: 38, lineHeight: 46, letterSpacing: 0 },
-  h3: { fontSize: 36, lineHeight: 42, letterSpacing: 0 },
-  h4: { fontSize: 32, lineHeight: 38, letterSpacing: 0 },
-  h5: { fontSize: 30, lineHeight: 36, letterSpacing: 0 },
-  h6: { fontSize: 28, lineHeight: 34, letterSpacing: 0 },
-  h7: { fontSize: 24, lineHeight: 28, letterSpacing: 0 },
-  h8: { fontSize: 22, lineHeight: 26, letterSpacing: 0 },
-  h0: { fontSize: 20, lineHeight: 24, letterSpacing: 0 },
-  h10: { fontSize: 18, lineHeight: 22, letterSpacing: 0 },
-  b1: { fontSize: 16, lineHeight: 20, letterSpacing: 0 },
-  bodySmall1: { fontSize: 14, lineHeight: 16, letterSpacing: 0 },
-  bodySmall2: { fontSize: 12, lineHeight: 14, letterSpacing: 0 },
-  bodySmall3: { fontSize: 10, lineHeight: 12, letterSpacing: 0 },
+  h1: {
+    fontSize: fontScale(40),
+    lineHeight: lineHeightScale(48),
+    letterSpacing: 0,
+  },
+  h2: {
+    fontSize: fontScale(38),
+    lineHeight: lineHeightScale(46),
+    letterSpacing: 0,
+  },
+  h3: {
+    fontSize: fontScale(36),
+    lineHeight: lineHeightScale(42),
+    letterSpacing: 0,
+  },
+  h4: {
+    fontSize: fontScale(32),
+    lineHeight: lineHeightScale(38),
+    letterSpacing: 0,
+  },
+  h5: {
+    fontSize: fontScale(30),
+    lineHeight: lineHeightScale(36),
+    letterSpacing: 0,
+  },
+  h6: {
+    fontSize: fontScale(28),
+    lineHeight: lineHeightScale(34),
+    letterSpacing: 0,
+  },
+  h7: {
+    fontSize: fontScale(24),
+    lineHeight: lineHeightScale(28),
+    letterSpacing: 0,
+  },
+  h8: {
+    fontSize: fontScale(22),
+    lineHeight: lineHeightScale(26),
+    letterSpacing: 0,
+  },
+  h0: {
+    fontSize: fontScale(20),
+    lineHeight: lineHeightScale(24),
+    letterSpacing: 0,
+  },
+  h10: {
+    fontSize: fontScale(18),
+    lineHeight: lineHeightScale(22),
+    letterSpacing: 0,
+  },
+  b1: {
+    fontSize: fontScale(16),
+    lineHeight: lineHeightScale(20),
+    letterSpacing: 0,
+  },
+  bodySmall1: {
+    fontSize: fontScale(14),
+    lineHeight: lineHeightScale(16),
+    letterSpacing: 0,
+  },
+  bodySmall2: {
+    fontSize: fontScale(12),
+    lineHeight: lineHeightScale(14),
+    letterSpacing: 0,
+  },
+  bodySmall3: {
+    fontSize: fontScale(10),
+    lineHeight: lineHeightScale(12),
+    letterSpacing: 0,
+  },
 } as const;
 
 const withWeights = (

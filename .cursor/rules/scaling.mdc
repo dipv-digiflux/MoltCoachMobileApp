@@ -1,0 +1,115 @@
+---
+description: Responsive scaling utilities — use when creating or modifying component dimensions, spacing, typography, or any pixel-based values
+---
+
+# SCALING RULES (STRICT)
+
+**Base design:** 390 × 844 (iPhone 12 / 13).
+**Source:** `src/theme/scaling.ts`, re-exported via `@/theme`.
+
+---
+
+## Available Functions
+
+| Function | Use for | Default factor | Rounding |
+|---|---|---|---|
+| `scale(size)` | Full width-ratio scaling | 1.0 (linear) | No |
+| `verticalScale(size)` | Full height-ratio scaling | 1.0 (linear) | No |
+| `moderateScale(size, factor?)` | General dimensions (height, width, border-radius) | 0.5 | No |
+| `fontScale(size)` | Font sizes (platform-adjusted) | 0.5 | Pixel-rounded |
+| `lineHeightScale(size)` | Line heights | 0.5 | Pixel-rounded |
+| `spacingScale(value, factor?)` | Padding, margin, gap | 0.3 | Pixel-rounded |
+| `iconScale(size)` | Icon dimensions | 0.5 | Pixel-rounded |
+
+---
+
+## Usage Guide
+
+### Which function for which property
+
+```typescript
+// Font size / line height
+fontSize: fontScale(16)
+lineHeight: lineHeightScale(20)
+
+// Padding, margin, gap
+padding: spacingScale(16)
+marginBottom: spacingScale(8)
+gap: spacingScale(4)
+
+// Component height, width, fixed dimensions
+height: moderateScale(52)
+width: moderateScale(120)
+minHeight: moderateScale(56)
+
+// Border radius
+borderRadius: moderateScale(12)
+
+// Icon size
+width: iconScale(24)
+height: iconScale(24)
+
+// Full-screen proportional width
+width: scale(200)
+
+// Full-screen proportional height
+height: verticalScale(100)
+```
+
+---
+
+## Pre-scaled Theme Tokens (DO NOT double-scale)
+
+The following tokens already call scaling functions internally:
+
+- **`spacing`** tokens — pre-scaled with `spacingScale`
+- **`typography`** / `typographyByWeight` — pre-scaled with `fontScale` + `lineHeightScale`
+- **`radius`** tokens — pre-scaled with `moderateScale`
+- **`colors`** — colors are NOT scaled (they are hex strings)
+
+### Correct
+
+```typescript
+import { spacing, typography, moderateScale } from '@/theme';
+
+const styles = StyleSheet.create({
+  container: {
+    padding: spacing['Spacing-5xl'],       // already scaled
+    borderRadius: moderateScale(8),        // custom value — scale it
+  },
+  title: {
+    ...typography.h7Bold,                  // already scaled
+  },
+});
+```
+
+### Wrong — double-scaled
+
+```typescript
+// BAD: spacing tokens are already scaled
+padding: spacingScale(spacing['Spacing-5xl'])
+
+// BAD: typography tokens are already scaled
+fontSize: fontScale(typography.b1Regular.fontSize)
+```
+
+---
+
+## Rules
+
+1. **NEVER** use raw pixel numbers for dimensions in component styles.
+   - BAD: `padding: 16`
+   - GOOD: `padding: spacingScale(16)` or `padding: spacing['Spacing-5xl']`
+
+2. **ALWAYS** use the correct domain function (see table above).
+
+3. **DO NOT** double-scale theme tokens — they are already scaled.
+
+4. **Import** scaling functions from `@/theme`, not from `@/theme/scaling` directly.
+
+5. `0` does not need scaling — `spacingScale(0)` === `0`.
+
+6. Opacity, flex values, and colour strings are **NOT** scaled.
+
+7. `borderWidth: 1` and `StyleSheet.hairlineWidth` are **NOT** scaled
+   (they map to physical pixels).

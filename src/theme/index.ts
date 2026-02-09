@@ -1,5 +1,5 @@
 /**
- * Theme: colors, typography, spacing, radius.
+ * Theme: colors, typography, spacing, radius, scaling.
  * Re-exports from individual token files.
  */
 
@@ -16,3 +16,13 @@ export {
 } from './typography';
 export { spacing, type SpacingToken } from './spacing';
 export { radius, type RadiusToken } from './radius';
+export {
+  fontScale,
+  getScreenDimensions,
+  iconScale,
+  lineHeightScale,
+  moderateScale,
+  scale,
+  spacingScale,
+  verticalScale,
+} from './scaling';
