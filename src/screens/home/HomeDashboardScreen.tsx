@@ -46,12 +46,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.xl5,
-    paddingVertical: spacing.xl3,
+    paddingHorizontal: spacing['Spacing-5xl'],
+    paddingVertical: spacing['Spacing-3xl'],
   },
   backTouch: {
-    padding: spacing.xl,
-    marginLeft: -spacing.xl,
+    padding: spacing['Spacing-xl'],
+    marginLeft: -spacing['Spacing-xl'],
   },
   backTouchPressed: {
     opacity: 0.7,
@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
   skipButton: {
-    paddingHorizontal: spacing.xl5,
-    paddingVertical: spacing.xl2,
+    paddingHorizontal: spacing['Spacing-5xl'],
+    paddingVertical: spacing['Spacing-2xl'],
     borderRadius: 20,
     backgroundColor: colors.StatesFill2,
   },
@@ -76,18 +76,18 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: spacing.xl5,
-    paddingTop: spacing.xl11,
+    paddingHorizontal: spacing['Spacing-5xl'],
+    paddingTop: spacing['Spacing-11xl'],
   },
   logoWrap: {
-    marginBottom: spacing.xl6,
+    marginBottom: spacing['Spacing-6xl'],
   },
   logo: {
     width: 120,
     height: 40,
   },
   actions: {
-    marginTop: spacing.xl10,
-    gap: spacing.xl,
+    marginTop: spacing['Spacing-10xl'],
+    gap: spacing['Spacing-xl'],
   },
 });

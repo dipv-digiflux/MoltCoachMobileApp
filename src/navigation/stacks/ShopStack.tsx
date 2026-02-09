@@ -12,7 +12,7 @@ export const ShopStackNavigator = (): ReactElement => (
     <Stack.Screen
       name="MealsHome"
       component={MealsHomeScreen}
-      options={{ title: 'Meals' }}
+      options={{ headerShown: false }}
     />
   </Stack.Navigator>
 );
