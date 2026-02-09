@@ -3,11 +3,15 @@
  * Example: mock navigation, wrap render in act(), assert output and navigation calls.
  */
 
-import React from 'react';
+import React, { type ComponentProps } from 'react';
 import { Button, Text } from 'react-native';
 import TestRenderer from 'react-test-renderer';
 
 import { HomeDashboardScreen } from '@screens/home/HomeDashboardScreen';
+
+type ButtonPressEvent = Parameters<
+  NonNullable<ComponentProps<typeof Button>['onPress']>
+>[0];
 
 const mockNavigate = jest.fn();
 
@@ -42,8 +46,10 @@ describe('HomeDashboardScreen', () => {
       tree = TestRenderer.create(<HomeDashboardScreen />);
     });
     const buttons = tree!.root.findAllByType(Button);
+    const firstButtonProps = buttons[0].props as ComponentProps<typeof Button>;
+    const event: ButtonPressEvent = {} as ButtonPressEvent;
     TestRenderer.act(() => {
-      buttons[0].props.onPress();
+      firstButtonProps.onPress?.(event);
     });
     expect(mockNavigate).toHaveBeenCalledWith('ExampleForm');
   });
@@ -54,8 +60,10 @@ describe('HomeDashboardScreen', () => {
       tree = TestRenderer.create(<HomeDashboardScreen />);
     });
     const buttons = tree!.root.findAllByType(Button);
+    const secondButtonProps = buttons[1].props as ComponentProps<typeof Button>;
+    const event: ButtonPressEvent = {} as ButtonPressEvent;
     TestRenderer.act(() => {
-      buttons[1].props.onPress();
+      secondButtonProps.onPress?.(event);
     });
     expect(mockNavigate).toHaveBeenCalledWith('CreateTask');
   });

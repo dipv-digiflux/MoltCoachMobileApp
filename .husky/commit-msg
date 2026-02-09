@@ -1,0 +1,30 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run commitlint
+npx commitlint --edit "$1" || {
+  echo ""
+  echo "❌ Commit message does not follow the Conventional Commit standard."
+  echo ""
+  echo "📖 Example format: 'feat: add user login functionality'"
+  echo "Allowed types and their usage:"
+  echo "  feat     - A new feature or enhancement. Example: 'feat: add user login'"
+  echo "  fix      - A bug fix. Example: 'fix: correct signup form issue'"
+  echo "  docs     - Documentation changes. Example: 'docs: update readme for API'"
+  echo "  style    - Changes that do not affect code functionality (e.g., formatting). Example: 'style: format code with prettier'"
+  echo "  refactor - Code changes that neither fix a bug nor add a feature. Example: 'refactor: clean up helper functions'"
+  echo "  test     - Adding or updating tests. Example: 'test: add unit tests for login'"
+  echo "  chore    - Maintenance tasks or build process changes. Example: 'chore: update dependencies'"
+  echo "  perf     - Performance improvements. Example: 'perf: optimize image loading'"
+  echo "  ci       - Changes to CI/CD config. Example: 'ci: update GitHub Actions for tests'"
+  echo "  build    - Changes to the build process. Example: 'build: add build step for Sass'"
+  echo "  revert   - Revert a previous commit. Example: 'revert: undo commit abc123'"
+  echo "  hotfix   - Critical fixes. Example: 'hotfix: fix production issue with API'"
+  echo "  dep      - Dependency updates. Example: 'dep: upgrade lodash version'"
+  echo "  infra    - Infrastructure-related changes. Example: 'infra: update server config'"
+  echo "  security - Security fixes. Example: 'security: patch SQL injection vulnerability'"
+  echo "  ui       - Changes to UI. Example: 'ui: improve navbar responsiveness'"
+  echo "  ops      - Operational or deployment-related changes. Example: 'ops: deploy to staging environment'"
+  echo ""
+  exit 1
+}
