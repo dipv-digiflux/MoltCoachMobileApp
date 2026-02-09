@@ -8,7 +8,11 @@ import type { ShopStackParamList } from '@navigation/types';
 const Stack = createNativeStackNavigator<ShopStackParamList>();
 
 export const ShopStackNavigator = (): ReactElement => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      animation: 'slide_from_right',
+    }}
+  >
     <Stack.Screen
       name="MealsHome"
       component={MealsHomeScreen}

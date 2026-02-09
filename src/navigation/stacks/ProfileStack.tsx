@@ -8,7 +8,11 @@ import type { ProfileStackParamList } from '@navigation/types';
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
 export const ProfileStackNavigator = (): ReactElement => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      animation: 'slide_from_right',
+    }}
+  >
     <Stack.Screen
       name="ProfileHome"
       component={ProfileHomeScreen}

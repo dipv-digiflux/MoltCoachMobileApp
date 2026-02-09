@@ -12,7 +12,11 @@ import type { HomeStackParamList } from '@navigation/types';
 const Stack = createNativeStackNavigator<HomeStackParamList>();
 
 export const HomeStackNavigator = (): ReactElement => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      animation: 'slide_from_right',
+    }}
+  >
     <Stack.Screen
       name="HomeDashboard"
       component={HomeDashboardScreen}

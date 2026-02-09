@@ -1,4 +1,6 @@
 // Re-export shared UI components from here
+export { CurvedHeader, CURVED_HEADER_DEFAULT_HEIGHT } from './CurvedHeader';
+
 export { Button } from './Button';
 export type {
   ButtonDefaultIconName,
