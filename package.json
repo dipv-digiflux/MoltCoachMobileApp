@@ -8,6 +8,7 @@
     "build:apk": "cd android && ./gradlew assembleRelease",
     "build:apk:debug": "cd android && ./gradlew assembleDebug",
     "link-assets": "react-native-asset",
+    "generate:android-icons": "node scripts/generate-android-icons.cjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
@@ -62,6 +63,7 @@
     "prettier": "2.8.8",
     "react-native-asset": "^2.0.0",
     "react-test-renderer": "19.2.0",
+    "sharp": "^0.34.5",
     "typescript": "^5.8.3"
   },
   "engines": {
