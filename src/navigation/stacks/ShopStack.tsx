@@ -11,6 +11,7 @@ export const ShopStackNavigator = (): ReactElement => (
   <Stack.Navigator
     screenOptions={{
       animation: 'slide_from_right',
+      headerShown: false,
     }}
   >
     <Stack.Screen

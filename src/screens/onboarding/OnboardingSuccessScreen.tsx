@@ -8,7 +8,8 @@ export const OnboardingSuccessScreen = (): ReactElement => {
   const navigation = useNavigation<OnboardingNavigationProp>();
 
   const goToApp = (): void => {
-    navigation.dispatch(
+    const root = navigation.getParent();
+    root?.dispatch(
       CommonActions.reset({
         index: 0,
         routes: [

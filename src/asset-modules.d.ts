@@ -4,6 +4,9 @@ declare module '*.png' {
 }
 
 declare module '*.svg' {
-  const value: number;
-  export default value;
+  import type { ComponentType } from 'react';
+
+  import type { SvgProps } from 'react-native-svg';
+  const ReactComponent: ComponentType<SvgProps>;
+  export default ReactComponent;
 }

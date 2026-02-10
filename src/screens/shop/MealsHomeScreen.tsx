@@ -1,13 +1,127 @@
 import React, { type ReactElement } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { Button } from '@/components/Button';
+import { CurvedHeader } from '@/components/CurvedHeader';
+import { moderateScale, colors, spacing, typography } from '@/theme';
+
+const TAB_BAR_HEIGHT = moderateScale(72);
 
 export const MealsHomeScreen = (): ReactElement => {
   const insets = useSafeAreaInsets();
+  const scrollPaddingBottom =
+    insets.bottom + spacing['Spacing-15xl'] + TAB_BAR_HEIGHT;
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      <Text style={styles.title}>Meals Home</Text>
+    <View style={styles.container}>
+      <CurvedHeader>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={[
+            styles.scrollContent,
+            { paddingBottom: scrollPaddingBottom },
+          ]}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.title}>Buttons</Text>
+
+          <Text style={styles.sectionLabel}>1. Primary (default)</Text>
+          <Button
+            label="Primary"
+            onPress={() => {}}
+            style={styles.fullWidthButton}
+          />
+
+          <Text style={styles.sectionLabel}>2. Secondary</Text>
+          <Button
+            label="Secondary"
+            variant="secondary"
+            onPress={() => {}}
+            style={styles.fullWidthButton}
+          />
+
+          <Text style={styles.sectionLabel}>3. Minimal</Text>
+          <Button
+            label="Minimal"
+            variant="minimal"
+            onPress={() => {}}
+            style={styles.fullWidthButton}
+          />
+
+          <Text style={styles.sectionLabel}>4. Destructive</Text>
+          <Button
+            label="Delete"
+            variant="destructive"
+            onPress={() => {}}
+            style={styles.fullWidthButton}
+          />
+
+          <Text style={styles.sectionLabel}>5. Small size</Text>
+          <Button
+            label="Small"
+            size="small"
+            onPress={() => {}}
+            style={styles.fullWidthButton}
+          />
+
+          <Text style={styles.sectionLabel}>6. Large size</Text>
+          <Button
+            label="Large"
+            size="large"
+            onPress={() => {}}
+            style={styles.fullWidthButton}
+          />
+
+          <Text style={styles.sectionLabel}>7. Loading</Text>
+          <Button
+            label="Saving…"
+            loading
+            onPress={() => {}}
+            style={styles.fullWidthButton}
+          />
+
+          <Text style={styles.sectionLabel}>8. Disabled</Text>
+          <Button
+            label="Disabled"
+            disabled
+            onPress={() => {}}
+            style={styles.fullWidthButton}
+          />
+
+          <Text style={styles.sectionLabel}>9. With left icon</Text>
+          <Button
+            label="Add"
+            iconLeft="plus"
+            onPress={() => {}}
+            style={styles.fullWidthButton}
+          />
+
+          <Text style={styles.sectionLabel}>10. With right icon</Text>
+          <Button
+            label="Next"
+            iconRight="arrow-right"
+            onPress={() => {}}
+            style={styles.fullWidthButton}
+          />
+
+          <Text style={styles.sectionLabel}>11. With both icons</Text>
+          <Button
+            label="Go"
+            iconLeft="arrow-left"
+            iconRight="arrow-right"
+            onPress={() => {}}
+            style={styles.fullWidthButton}
+          />
+
+          <Text style={styles.sectionLabel}>12. Icon only</Text>
+          <Button
+            iconLeft="plus"
+            onPress={() => {}}
+            style={styles.fullWidthButton}
+          />
+        </ScrollView>
+      </CurvedHeader>
     </View>
   );
 };
@@ -16,5 +130,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  title: {},
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: spacing['Spacing-5xl'],
+    gap: spacing['Spacing-3xl'],
+  },
+  title: {
+    ...typography.h6Bold,
+    color: colors.TextPrimaryDefault,
+    marginBottom: spacing['Spacing-3xl'],
+  },
+  sectionLabel: {
+    ...typography.bodySmall2Medium,
+    color: colors.TextSecondaryHover,
+    marginTop: spacing['Spacing-11xl'],
+    marginBottom: spacing['Spacing-xl'],
+  },
+  fullWidthButton: {
+    alignSelf: 'stretch',
+  },
 });

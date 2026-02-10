@@ -1,6 +1,6 @@
 import React, { type ReactElement } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import type { OnboardingNavigationProp } from '@navigation/types';
 
@@ -12,7 +12,26 @@ export const PlanPreviewScreen = (): ReactElement => {
       <Text style={styles.title}>Plan Preview</Text>
       <Button
         title="Continue to App"
-        onPress={() => navigation.getParent()?.navigate('AppStack')}
+        onPress={() => {
+          const root = navigation.getParent();
+          root?.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'AppStack',
+                  params: {
+                    screen: 'BottomTabs',
+                    params: {
+                      screen: 'HomeTab',
+                      params: { screen: 'HomeDashboard' },
+                    },
+                  },
+                },
+              ],
+            }),
+          );
+        }}
       />
     </View>
   );

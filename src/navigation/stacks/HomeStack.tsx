@@ -15,13 +15,10 @@ export const HomeStackNavigator = (): ReactElement => (
   <Stack.Navigator
     screenOptions={{
       animation: 'slide_from_right',
+      headerShown: false,
     }}
   >
-    <Stack.Screen
-      name="HomeDashboard"
-      component={HomeDashboardScreen}
-      options={{ headerShown: false }}
-    />
+    <Stack.Screen name="HomeDashboard" component={HomeDashboardScreen} />
     <Stack.Screen
       name="ExampleForm"
       component={ExampleFormScreen}

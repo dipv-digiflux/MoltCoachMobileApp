@@ -13,7 +13,6 @@ import { type InputProps } from './Input.types';
 
 // ─── Design tokens (from Figma) ────────────────────────────────────
 
-const INPUT_HEIGHT = moderateScale(48);
 const INPUT_BORDER_RADIUS = moderateScale(2);
 const ICON_SIZE = moderateScale(24);
 
@@ -38,6 +37,8 @@ export const Input = ({
   value,
   placeholder,
   onChangeText,
+  onFocus: onFocusProp,
+  onBlur: onBlurProp,
   label,
   labelHint,
   required = false,
@@ -104,11 +105,13 @@ export const Input = ({
   // ── Handlers ───────────────────────────────────────────────────
   const handleFocus = useCallback((): void => {
     setFocused(true);
-  }, []);
+    onFocusProp?.();
+  }, [onFocusProp]);
 
   const handleBlur = useCallback((): void => {
     setFocused(false);
-  }, []);
+    onBlurProp?.();
+  }, [onBlurProp]);
 
   const handleContainerPress = useCallback((): void => {
     inputRef.current?.focus();
@@ -312,7 +315,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: INPUT_HEIGHT,
+    // height: INPUT_HEIGHT,
     borderWidth: 1,
     borderRadius: INPUT_BORDER_RADIUS,
     overflow: 'hidden',
@@ -346,8 +349,9 @@ const styles = StyleSheet.create({
   // ── TextInput ─────────────────────────────────────────────────
   textInput: {
     flex: 1,
-    paddingHorizontal: spacing['Spacing-xl'],
-    paddingVertical: 0,
+    paddingHorizontal: spacing['Spacing-2xl'],
+    paddingVertical: spacing['Spacing-5xl'],
+    // verticalAlign: 'middle',
   },
 
   // ── Right text add-on ─────────────────────────────────────────
