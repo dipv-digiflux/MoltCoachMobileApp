@@ -107,13 +107,11 @@ export const IntroCarouselScreen = (): ReactElement => {
   const insets = useSafeAreaInsets();
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [hasCompletedInitialEntrance, setHasCompletedInitialEntrance] =
-    useState(false);
 
   const progressAnim = useRef(new Animated.Value(0)).current;
+
   const contentTranslateX = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(1)).current;
-  const isFirstRender = useRef(true);
   const topSectionTranslateY = useRef(
     new Animated.Value(-TOP_ENTRANCE_OFFSET),
   ).current;
@@ -153,11 +151,6 @@ export const IntroCarouselScreen = (): ReactElement => {
   }, [currentIndex, progressAnim, handleNavigateToGetStarted]);
 
   useLayoutEffect(() => {
-    topSectionTranslateY.setValue(-TOP_ENTRANCE_OFFSET);
-    topSectionOpacity.setValue(0);
-    bottomSectionTranslateY.setValue(BOTTOM_ENTRANCE_OFFSET);
-    bottomSectionOpacity.setValue(0);
-
     Animated.parallel([
       Animated.timing(topSectionTranslateY, {
         toValue: 0,
@@ -183,11 +176,7 @@ export const IntroCarouselScreen = (): ReactElement => {
         easing: ENTRANCE_EASING,
         useNativeDriver: true,
       }),
-    ]).start(({ finished }) => {
-      if (finished) {
-        setHasCompletedInitialEntrance(true);
-      }
-    });
+    ]).start();
   }, [
     topSectionTranslateY,
     topSectionOpacity,
@@ -196,8 +185,7 @@ export const IntroCarouselScreen = (): ReactElement => {
   ]);
 
   useLayoutEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
+    if (currentIndex === 0) {
       return;
     }
 
@@ -222,19 +210,25 @@ export const IntroCarouselScreen = (): ReactElement => {
 
   const currentSlide = SLIDES[currentIndex];
 
-  const slideAnimStyle = {
-    transform: [{ translateX: contentTranslateX }],
-    opacity: contentOpacity,
+  const imageAnimatedStyle = {
+    transform: [
+      { translateY: topSectionTranslateY },
+      { translateX: contentTranslateX },
+    ],
+    opacity: Animated.multiply(topSectionOpacity, contentOpacity),
   };
 
-  const topSectionAnimStyle = {
+  const progressBarAnimatedStyle = {
     transform: [{ translateY: topSectionTranslateY }],
     opacity: topSectionOpacity,
   };
 
-  const bottomSectionAnimStyle = {
-    transform: [{ translateY: bottomSectionTranslateY }],
-    opacity: bottomSectionOpacity,
+  const textAnimatedStyle = {
+    transform: [
+      { translateY: bottomSectionTranslateY },
+      { translateX: contentTranslateX },
+    ],
+    opacity: Animated.multiply(bottomSectionOpacity, contentOpacity),
   };
 
   return (
@@ -249,49 +243,27 @@ export const IntroCarouselScreen = (): ReactElement => {
         <Text style={styles.skipText}>Skip</Text>
       </TouchableOpacity>
 
-      {hasCompletedInitialEntrance ? (
-        <>
-          <Animated.View style={[styles.imageWrapper, slideAnimStyle]}>
-            <View style={styles.imageContainer}>
-              <Image
-                source={Device}
-                style={styles.deviceImage}
-                resizeMode="contain"
-              />
-            </View>
-          </Animated.View>
-          <View style={styles.progressBarContainer}>
-            {SLIDES.map((_, index) => (
-              <ProgressSegment
-                key={`progress-${String(index)}`}
-                index={index}
-                currentIndex={currentIndex}
-                progressAnim={progressAnim}
-              />
-            ))}
-          </View>
-        </>
-      ) : (
-        <Animated.View style={[styles.topSectionWrapper, topSectionAnimStyle]}>
-          <View style={styles.imageContainer}>
-            <Image
-              source={Device}
-              style={styles.deviceImage}
-              resizeMode="contain"
-            />
-          </View>
-          <View style={styles.progressBarContainer}>
-            {SLIDES.map((_, index) => (
-              <ProgressSegment
-                key={`progress-${String(index)}`}
-                index={index}
-                currentIndex={currentIndex}
-                progressAnim={progressAnim}
-              />
-            ))}
-          </View>
-        </Animated.View>
-      )}
+      <Animated.View style={[styles.imageWrapper, imageAnimatedStyle]}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={Device}
+            style={styles.deviceImage}
+            resizeMode="contain"
+          />
+        </View>
+      </Animated.View>
+      <Animated.View
+        style={[styles.progressBarContainer, progressBarAnimatedStyle]}
+      >
+        {SLIDES.map((_, index) => (
+          <ProgressSegment
+            key={`progress-${String(index)}`}
+            index={index}
+            currentIndex={currentIndex}
+            progressAnim={progressAnim}
+          />
+        ))}
+      </Animated.View>
 
       <View
         style={[
@@ -299,14 +271,7 @@ export const IntroCarouselScreen = (): ReactElement => {
           { paddingBottom: Math.max(insets.bottom, spacingScale(24)) },
         ]}
       >
-        <Animated.View
-          style={[
-            styles.textContentWrapper,
-            hasCompletedInitialEntrance
-              ? slideAnimStyle
-              : bottomSectionAnimStyle,
-          ]}
-        >
+        <Animated.View style={[styles.textContentWrapper, textAnimatedStyle]}>
           <Text style={styles.title}>{currentSlide?.title}</Text>
           <Text style={styles.subtitle}>{currentSlide?.subtitle}</Text>
 
@@ -348,10 +313,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  topSectionWrapper: {
-    flex: 1.7,
-    overflow: 'hidden',
-  },
   imageWrapper: {
     flex: 1.7,
     overflow: 'hidden',
