@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { BottomSheet, Button } from '@/components';
 import { CurvedHeader } from '@/components/CurvedHeader';
 import { Input } from '@/components/Input';
 import { moderateScale, spacing, typography, colors } from '@/theme';
@@ -27,6 +28,7 @@ const SCROLL_TO_INPUT_OFFSET = 100;
 const ANDROID_SCROLL_DELAY_MS = 100;
 
 export const HomeDashboardScreen = (): ReactElement => {
+  const [isOpen, setIsOpen] = useState(false);
   const [filledValue, setFilledValue] = useState('Filled value');
   const [androidKeyboardHeight, setAndroidKeyboardHeight] = useState(0);
   const insets = useSafeAreaInsets();
@@ -271,7 +273,12 @@ export const HomeDashboardScreen = (): ReactElement => {
           onFocus={() => scrollToFocusedInput(12)}
         />
       </View>
-
+      <Button
+        label=" Bottom sheet"
+        onPress={() => {
+          setIsOpen(true);
+        }}
+      />
       {/* <Text style={styles.sectionLabel}>14. With left icon</Text>
             <Input
               label="Search"
@@ -315,6 +322,90 @@ export const HomeDashboardScreen = (): ReactElement => {
           <View style={styles.keyboardAvoid}>{scrollView}</View>
         )}
       </CurvedHeader>
+      <BottomSheet
+        stickyFooter={true}
+        dismissOnDragDown
+        dismissOnOverlayTap
+        dismissOnBackButton
+        visible={isOpen}
+        onClose={() => setIsOpen(false)}
+        header={{ title: 'Select Item', subtitle: 'Choose one' }}
+        footer={{ primaryLabel: 'Confirm', onPrimaryPress: () => null }}
+        variant="default"
+      >
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Input />
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Input />
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Input />
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Input />
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Input />
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Input />
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Input />
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+        <Input />
+        <Text>
+          Sync your daily steps, workouts, and energy data to get personalized
+          insights and accurate progress tracking.
+        </Text>
+      </BottomSheet>
     </View>
   );
 };
