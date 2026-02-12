@@ -1,7 +1,7 @@
 import React, {
   useCallback,
   useEffect,
-  useRef,
+  useMemo,
   useState,
   type ReactElement,
 } from 'react';
@@ -10,13 +10,13 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
+  Keyboard,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Button, CurvedHeader, OnboardingHeader } from '@/components';
-import { colors, spacing, typography, moderateScale } from '@/theme';
+import { Button, CurvedHeader, OTPInput, OnboardingHeader } from '@/components';
+import { colors, spacing, typography } from '@/theme';
 
 import type { OnboardingNavigationProp } from '@navigation/types';
 
@@ -30,7 +30,20 @@ export const OTPVerificationScreen = (): ReactElement => {
 
   const [code, setCode] = useState('');
   const [secondsLeft, setSecondsLeft] = useState(RESEND_SECONDS_START);
-  const inputRef = useRef<TextInput | null>(null);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener('keyboardDidShow', e => {
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+    const hideSub = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardHeight(0);
+    });
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   useEffect(() => {
     if (secondsLeft === 0) {
@@ -53,26 +66,45 @@ export const OTPVerificationScreen = (): ReactElement => {
   }, [code.length, navigation]);
 
   const handleChangePress = useCallback((): void => {
-    navigation.navigate('GetStarted');
+    navigation.goBack();
   }, [navigation]);
 
-  const handleCodeChange = useCallback((value: string): void => {
-    const numericOnly = value.replace(/[^0-9]/g, '');
-    setCode(numericOnly.slice(0, OTP_LENGTH));
-  }, []);
+  const handleResendPress = useCallback((): void => {
+    if (secondsLeft > 0) return;
 
-  const handleOtpPress = useCallback((): void => {
-    inputRef.current?.focus();
-  }, []);
+    setSecondsLeft(RESEND_SECONDS_START);
+  }, [secondsLeft]);
 
   const canVerify = code.length === OTP_LENGTH;
+  const canResend = secondsLeft === 0;
   const bottomInset = insets.bottom;
-  const footerBottomOffset = Math.max(bottomInset, spacing['Spacing-10xl']);
 
-  const formattedCountdown =
-    secondsLeft > 0
-      ? `Resend in 0:${secondsLeft.toString().padStart(2, '0')}`
-      : 'Resend code';
+  const footerBottom = useMemo((): number => {
+    const offset = Math.max(bottomInset, spacing['Spacing-10xl']);
+    const keyboardGap = spacing['Spacing-5xl'];
+    return offset + keyboardHeight + (keyboardHeight > 0 ? keyboardGap : 0);
+  }, [bottomInset, keyboardHeight]);
+
+  const footerStyle = useMemo(
+    () => [styles.footer, { bottom: footerBottom }],
+    [footerBottom],
+  );
+
+  const formattedCountdown = useMemo(
+    () =>
+      secondsLeft > 0
+        ? `Resend in 0:${secondsLeft.toString().padStart(2, '0')}`
+        : 'Resend code',
+    [secondsLeft],
+  );
+
+  const resendTextStyle = useMemo(
+    () =>
+      canResend
+        ? styles.resendText
+        : [styles.resendText, styles.resendTextDisabled],
+    [canResend],
+  );
 
   return (
     <View style={styles.container}>
@@ -90,37 +122,27 @@ export const OTPVerificationScreen = (): ReactElement => {
             </View>
           </View>
 
-          <TouchableOpacity
-            activeOpacity={0.9}
-            style={styles.otpWrapper}
-            onPress={handleOtpPress}
-          >
-            <View style={styles.otpRow}>
-              {Array.from({ length: OTP_LENGTH }).map((_, index) => {
-                const char = code[index] ?? '';
+          <OTPInput
+            value={code}
+            onChangeText={setCode}
+            length={OTP_LENGTH}
+            autoFocus
+            style={styles.otpInput}
+          />
 
-                return (
-                  <View style={styles.otpCell} key={String(index)}>
-                    <Text style={styles.otpCellText}>{char || '-'}</Text>
-                  </View>
-                );
-              })}
-            </View>
-            <TextInput
-              ref={inputRef}
-              value={code}
-              onChangeText={handleCodeChange}
-              keyboardType="number-pad"
-              maxLength={OTP_LENGTH}
-              style={styles.hiddenInput}
-              autoFocus
-            />
-          </TouchableOpacity>
-
-          <Text style={styles.resendText}>{formattedCountdown}</Text>
+          <View style={styles.resendRow}>
+            <TouchableOpacity
+              onPress={handleResendPress}
+              disabled={!canResend}
+              activeOpacity={canResend ? 0.7 : 1}
+              style={styles.resendTouchable}
+            >
+              <Text style={resendTextStyle}>{formattedCountdown}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
-        <View style={[styles.footer, { bottom: footerBottomOffset }]}>
+        <View style={footerStyle}>
           <Button
             label="Verify"
             variant="primary"
@@ -164,37 +186,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   changeText: {
-    ...typography.bodySmall1Medium,
+    ...typography.bodySmall1Regular,
     color: colors.PrimaryMain,
+    textDecorationLine: 'underline',
   },
-  otpWrapper: {
-    borderWidth: 1,
-    borderColor: colors.StatesDivider,
-    borderRadius: moderateScale(2),
-    paddingHorizontal: spacing['Spacing-5xl'],
-    paddingVertical: spacing['Spacing-5xl'],
+  otpInput: {
     marginBottom: spacing['Spacing-3xl'],
   },
-  otpRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  otpCell: {
-    flex: 1,
+  resendRow: {
     alignItems: 'center',
+    marginTop: spacing['Spacing-3xl'],
   },
-  otpCellText: {
-    ...typography.h6SemiBold,
-    color: colors.TextPrimaryDefault,
-  },
-  hiddenInput: {
-    position: 'absolute',
-    opacity: 0,
+  resendTouchable: {
+    alignSelf: 'center',
   },
   resendText: {
-    ...typography.bodySmall2Regular,
+    ...typography.bodySmall1Regular,
+    color: colors.PrimaryMain,
+  },
+  resendTextDisabled: {
     color: colors.TextSecondaryDefault,
-    marginTop: spacing['Spacing-3xl'],
   },
   footer: {
     position: 'absolute',

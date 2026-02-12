@@ -23,6 +23,9 @@ export type { SwitchProps, SwitchSize } from './Switch';
 export { Input } from './Input';
 export type { InputProps } from './Input';
 
+export { OTPInput } from './OTPInput';
+export type { OTPInputProps } from './OTPInput';
+
 export { TextArea } from './TextArea';
 export type { TextAreaProps } from './TextArea';
 

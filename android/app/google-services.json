@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "526241206528",
+    "project_id": "molt-user-app-a8870",
+    "storage_bucket": "molt-user-app-a8870.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526241206528:android:4464c45c5136b26692a3e5",
+        "android_client_info": {
+          "package_name": "com.molt.user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzY_SnwWzhfsik1UYKZyHP8LjIY5EK0nw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

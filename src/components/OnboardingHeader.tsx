@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     paddingHorizontal: spacing['Spacing-5xl'],
-    paddingTop: spacing['Spacing-11xl'],
+    paddingTop: spacing['Spacing-10xl'],
     paddingBottom: spacing['Spacing-3xl'],
   },
   backButton: {
