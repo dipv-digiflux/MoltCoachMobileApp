@@ -37,9 +37,9 @@ import { Device } from '@assets/images';
 import type { OnboardingNavigationProp } from '@navigation/types';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-const SLIDE_DURATION = 3000;
-const CONTENT_ANIMATION_DURATION = 520;
-const CONTENT_ANIMATION_EASING = Easing.bezier(0.25, 0.1, 0.25, 1);
+const SLIDE_DURATION = 3500;
+const CONTENT_ANIMATION_DURATION = 850;
+const CONTENT_ANIMATION_EASING = Easing.bezier(0.33, 1, 0.68, 1);
 const ENTRANCE_DURATION = 580;
 const ENTRANCE_EASING = Easing.bezier(0.25, 0.1, 0.25, 1);
 const TOP_ENTRANCE_OFFSET = SCREEN_HEIGHT * 0.12;
@@ -274,7 +274,8 @@ export const IntroCarouselScreen = (): ReactElement => {
         <Animated.View style={[styles.textContentWrapper, textAnimatedStyle]}>
           <Text style={styles.title}>{currentSlide?.title}</Text>
           <Text style={styles.subtitle}>{currentSlide?.subtitle}</Text>
-
+        </Animated.View>
+        <View style={styles.buttonWrapper}>
           <Button
             label="Get Started"
             variant="primary"
@@ -282,7 +283,7 @@ export const IntroCarouselScreen = (): ReactElement => {
             onPress={handleNavigateToGetStarted}
             style={styles.button}
           />
-        </Animated.View>
+        </View>
       </View>
     </View>
   );
@@ -363,11 +364,15 @@ const styles = StyleSheet.create({
     borderRadius: radius.full,
   },
 
-  // ── Text + Button — animated wrapper ──
+  // ── Text — animated wrapper (button is outside, stable) ──
   textContentWrapper: {
     paddingHorizontal: spacing['Spacing-5xl'],
     paddingTop: spacing['Spacing-11xl'],
     gap: spacing['Spacing-3xl'],
+  },
+  buttonWrapper: {
+    paddingHorizontal: spacing['Spacing-5xl'],
+    paddingTop: spacing['Spacing-5xl'],
   },
   title: {
     ...typography.h4SemiBold,
@@ -377,11 +382,9 @@ const styles = StyleSheet.create({
     ...typography.bodySmall1Regular,
     lineHeight: lineHeightScale(16),
     color: colors.PrimarySecondary,
-    marginBottom: spacing['Spacing-5xl'],
   },
   button: {
     width: '100%',
-    marginTop: spacing['Spacing-5xl'],
     borderRadius: moderateScale(2),
   },
 });

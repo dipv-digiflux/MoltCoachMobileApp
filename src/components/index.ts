@@ -28,3 +28,5 @@ export type { TextAreaProps } from './TextArea';
 
 export { Accordion } from './Accordion';
 export type { AccordionProps, AccordionSize } from './Accordion';
+
+export { OnboardingHeader } from './OnboardingHeader';

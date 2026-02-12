@@ -17,11 +17,15 @@ export const OnboardingNavigator = (): ReactElement => (
   <Stack.Navigator
     screenOptions={{
       headerShown: false,
-      //  animation: 'slide_from_right',
+      animation: 'slide_from_right',
     }}
   >
     <Stack.Screen name="Splash" component={SplashScreen} />
-    <Stack.Screen name="IntroCarousel" component={IntroCarouselScreen} />
+    <Stack.Screen
+      name="IntroCarousel"
+      component={IntroCarouselScreen}
+      options={{ animation: 'fade' }}
+    />
     <Stack.Screen name="GetStarted" component={GetStartedScreen} />
     <Stack.Screen
       name="OTPVerification"

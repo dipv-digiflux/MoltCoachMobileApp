@@ -112,7 +112,7 @@ export const CustomTabBar = ({
         </View>
 
         <TouchableOpacity style={styles.logButton}>
-          <PlusIcon width={24} height={24} />
+          <PlusIcon width={iconScale(24)} height={iconScale(24)} />
           <Text style={styles.logButtonText}>Log</Text>
         </TouchableOpacity>
       </View>
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: spacing['Spacing-m'],
     flex: 1,
-    paddingHorizontal: spacing['Spacing-10xl'],
+    paddingHorizontal: spacing['Spacing-8xl'],
     paddingVertical: spacing['Spacing-3xl'],
     borderRadius: moderateScale(2),
   },
@@ -159,14 +159,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.StatesFill2,
   },
   tabText: {
-    ...typography.bodySmall2Medium,
+    ...typography.bodySmall3SemiBold,
   },
   tabTextActive: {
-    ...typography.bodySmall2Bold,
+    ...typography.bodySmall3SemiBold,
     color: colors.PrimaryMain,
   },
   tabTextInactive: {
-    ...typography.bodySmall2Medium,
+    ...typography.bodySmall3Regular,
     color: colors.TextSecondaryDefault,
   },
   logButton: {
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     color: colors.StatesWhite,
   },
   logButtonText: {
-    ...typography.bodySmall1Medium,
+    ...typography.bodySmall3Regular,
     color: colors.StatesWhite,
   },
 });

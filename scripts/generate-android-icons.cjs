@@ -19,9 +19,24 @@ const SIZES = [
   { folder: 'mipmap-xxxhdpi', size: 192 },
 ];
 
+/**
+ * Adaptive icon foreground: center crop at this ratio then scale to 108dp.
+ * Larger = more of original image = logo appears smaller inside the circle.
+ */
+const ADAPTIVE_FOREGROUND_CROP = 1.0;
+const FOREGROUND_SIZE = 432; // 108dp at xxxhdpi (4x)
+
 async function main() {
   if (!fs.existsSync(SOURCE)) {
     console.error('Source image not found:', SOURCE);
+    process.exit(1);
+  }
+
+  const meta = await sharp(SOURCE).metadata();
+  const w = meta.width ?? 0;
+  const h = meta.height ?? 0;
+  if (w < 1 || h < 1) {
+    console.error('Invalid source dimensions');
     process.exit(1);
   }
 
@@ -38,6 +53,28 @@ async function main() {
     fs.writeFileSync(path.join(dir, 'ic_launcher_round.png'), resized);
     console.log(`Wrote ${folder}: ${size}x${size}`);
   }
+
+  // Foreground for adaptive icon (API 26+): center crop then scale so logo is
+  // standard size on all launchers (Pixel, Samsung, etc.) — not too small, not too big
+  const inset = (1 - ADAPTIVE_FOREGROUND_CROP) / 2;
+  const cropW = Math.round(w * ADAPTIVE_FOREGROUND_CROP);
+  const cropH = Math.round(h * ADAPTIVE_FOREGROUND_CROP);
+  const left = Math.round(w * inset);
+  const top = Math.round(h * inset);
+  const drawableNodpi = path.join(RES_DIR, 'drawable-nodpi');
+  fs.mkdirSync(drawableNodpi, { recursive: true });
+  const foreground = await sharp(SOURCE)
+    .extract({ left, top, width: cropW, height: cropH })
+    .resize(FOREGROUND_SIZE, FOREGROUND_SIZE, { fit: 'fill' })
+    .png()
+    .toBuffer();
+  fs.writeFileSync(
+    path.join(drawableNodpi, 'ic_launcher_foreground.png'),
+    foreground,
+  );
+  console.log(
+    `Wrote drawable-nodpi/ic_launcher_foreground.png (${FOREGROUND_SIZE}x${FOREGROUND_SIZE})`,
+  );
 
   console.log('Android launcher icons generated.');
 }

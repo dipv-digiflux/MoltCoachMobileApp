@@ -7,6 +7,7 @@
     "ios": "react-native run-ios",
     "build:apk": "cd android && ./gradlew assembleRelease",
     "build:apk:debug": "cd android && ./gradlew assembleDebug",
+    "install:apk": "adb install -r android/app/build/outputs/apk/release/app-release.apk",
     "link-assets": "react-native-asset",
     "generate:android-icons": "node scripts/generate-android-icons.cjs",
     "format": "prettier --write .",
