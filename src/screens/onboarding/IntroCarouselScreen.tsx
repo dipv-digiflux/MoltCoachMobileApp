@@ -5,6 +5,8 @@ import React, {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
+  memo,
 } from 'react';
 import {
   View,
@@ -17,7 +19,7 @@ import {
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components';
@@ -27,7 +29,6 @@ import {
   spacing,
   radius,
   moderateScale,
-  spacingScale,
   lineHeightScale,
   scale,
   verticalScale,
@@ -73,11 +74,11 @@ type ProgressSegmentProps = {
   progressAnim: Animated.Value;
 };
 
-const ProgressSegment = ({
+const ProgressSegment = memo(function ProgressSegment({
   index,
   currentIndex,
   progressAnim,
-}: ProgressSegmentProps): ReactElement => {
+}: ProgressSegmentProps): ReactElement {
   const isFilled = index < currentIndex;
   const isActive = index === currentIndex;
 
@@ -100,11 +101,12 @@ const ProgressSegment = ({
       ) : null}
     </View>
   );
-};
+});
 
 export const IntroCarouselScreen = (): ReactElement => {
   const navigation = useNavigation<OnboardingNavigationProp>();
   const insets = useSafeAreaInsets();
+  const isFocused = useIsFocused();
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -122,10 +124,19 @@ export const IntroCarouselScreen = (): ReactElement => {
   const bottomSectionOpacity = useRef(new Animated.Value(0)).current;
 
   const handleNavigateToGetStarted = useCallback((): void => {
+    progressAnim.stopAnimation();
     navigation.navigate('GetStarted');
-  }, [navigation]);
+  }, [navigation, progressAnim]);
 
   useEffect(() => {
+    if (!isFocused) {
+      progressAnim.stopAnimation();
+      if (currentIndex !== 0) {
+        setCurrentIndex(0);
+      }
+      return;
+    }
+
     progressAnim.setValue(0);
 
     const animation = Animated.timing(progressAnim, {
@@ -148,7 +159,7 @@ export const IntroCarouselScreen = (): ReactElement => {
     return (): void => {
       animation.stop();
     };
-  }, [currentIndex, progressAnim, handleNavigateToGetStarted]);
+  }, [currentIndex, isFocused, progressAnim, handleNavigateToGetStarted]);
 
   useLayoutEffect(() => {
     Animated.parallel([
@@ -208,36 +219,80 @@ export const IntroCarouselScreen = (): ReactElement => {
     ]).start();
   }, [currentIndex, contentTranslateX, contentOpacity]);
 
-  const currentSlide = SLIDES[currentIndex];
+  const currentSlide = useMemo(() => SLIDES[currentIndex], [currentIndex]);
 
-  const imageAnimatedStyle = {
-    transform: [
-      { translateY: topSectionTranslateY },
-      { translateX: contentTranslateX },
+  const imageAnimatedStyle = useMemo(
+    () => ({
+      transform: [
+        { translateY: topSectionTranslateY },
+        { translateX: contentTranslateX },
+      ],
+      opacity: Animated.multiply(topSectionOpacity, contentOpacity),
+    }),
+    [
+      topSectionTranslateY,
+      contentTranslateX,
+      topSectionOpacity,
+      contentOpacity,
     ],
-    opacity: Animated.multiply(topSectionOpacity, contentOpacity),
-  };
+  );
 
-  const progressBarAnimatedStyle = {
-    transform: [{ translateY: topSectionTranslateY }],
-    opacity: topSectionOpacity,
-  };
+  const progressBarAnimatedStyle = useMemo(
+    () => ({
+      transform: [{ translateY: topSectionTranslateY }],
+      opacity: topSectionOpacity,
+    }),
+    [topSectionTranslateY, topSectionOpacity],
+  );
 
-  const textAnimatedStyle = {
-    transform: [
-      { translateY: bottomSectionTranslateY },
-      { translateX: contentTranslateX },
+  const textAnimatedStyle = useMemo(
+    () => ({
+      transform: [
+        { translateY: bottomSectionTranslateY },
+        { translateX: contentTranslateX },
+      ],
+      opacity: Animated.multiply(bottomSectionOpacity, contentOpacity),
+    }),
+    [
+      bottomSectionTranslateY,
+      contentTranslateX,
+      bottomSectionOpacity,
+      contentOpacity,
     ],
-    opacity: Animated.multiply(bottomSectionOpacity, contentOpacity),
-  };
+  );
+
+  const containerStyle = useMemo(
+    () => [styles.container, { paddingTop: insets.top }],
+    [insets.top],
+  );
+
+  const skipButtonStyle = useMemo(
+    () => [styles.skipButton, { top: insets.top + spacing['Spacing-m'] }],
+    [insets.top],
+  );
+
+  const bottomSectionStyle = useMemo(
+    () => [
+      styles.bottomSection,
+      {
+        paddingBottom: Math.max(insets.bottom, spacing['Spacing-10xl']),
+      },
+    ],
+    [insets.bottom],
+  );
+
+  const hitSlop = useMemo(
+    () => ({ top: 10, bottom: 10, left: 10, right: 10 }),
+    [],
+  );
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={containerStyle}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.StatesFill1} />
       <TouchableOpacity
-        style={[styles.skipButton, { top: insets.top + spacingScale(4) }]}
+        style={skipButtonStyle}
         onPress={handleNavigateToGetStarted}
-        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        hitSlop={hitSlop}
         activeOpacity={0.7}
       >
         <Text style={styles.skipText}>Skip</Text>
@@ -265,12 +320,7 @@ export const IntroCarouselScreen = (): ReactElement => {
         ))}
       </Animated.View>
 
-      <View
-        style={[
-          styles.bottomSection,
-          { paddingBottom: Math.max(insets.bottom, spacingScale(24)) },
-        ]}
-      >
+      <View style={bottomSectionStyle}>
         <Animated.View style={[styles.textContentWrapper, textAnimatedStyle]}>
           <Text style={styles.title}>{currentSlide?.title}</Text>
           <Text style={styles.subtitle}>{currentSlide?.subtitle}</Text>
@@ -305,8 +355,8 @@ const styles = StyleSheet.create({
     zIndex: 1,
     backgroundColor: colors.StatesFill1,
     borderRadius: moderateScale(42),
-    paddingHorizontal: spacingScale(18),
-    paddingVertical: spacingScale(10),
+    paddingHorizontal: spacing['Spacing-6xl'],
+    paddingVertical: spacing['Spacing-2xl'],
   },
   skipText: {
     ...typography.bodySmall2Medium,
@@ -340,10 +390,10 @@ const styles = StyleSheet.create({
 
   progressBarContainer: {
     flexDirection: 'row',
-    gap: spacingScale(4),
-    paddingHorizontal: spacingScale(4),
+    gap: spacing['Spacing-m'],
+    paddingHorizontal: spacing['Spacing-m'],
     paddingTop: 0,
-    paddingBottom: spacingScale(4),
+    paddingBottom: spacing['Spacing-m'],
   },
   progressSegmentTrack: {
     flex: 1,

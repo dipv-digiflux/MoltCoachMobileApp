@@ -1,4 +1,9 @@
-import React, { useCallback, useState, type ReactElement } from 'react';
+import React, {
+  useCallback,
+  useMemo,
+  useState,
+  type ReactElement,
+} from 'react';
 import {
   View,
   Text,
@@ -7,6 +12,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Keyboard,
 } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -82,9 +88,9 @@ export const GetStartedScreen = (): ReactElement => {
   }, [enterAppStack]);
 
   const handleContinue = useCallback((): void => {
+    Keyboard.dismiss();
     navigation.navigate('OTPVerification');
-    // enterAppStack();
-  }, [enterAppStack]);
+  }, [navigation]);
 
   const handleTermsPress = useCallback((): void => {
     Linking.openURL(PLACEHOLDER_TERMS_URL).catch(() => {});
@@ -94,9 +100,29 @@ export const GetStartedScreen = (): ReactElement => {
     Linking.openURL(PLACEHOLDER_PRIVACY_URL).catch(() => {});
   }, []);
 
+  const handleSocialPress = useCallback((): void => {
+    // Placeholder for social sign-in
+  }, []);
+
   const bottomInset = insets.bottom;
-  const footerBottomOffset = Math.max(bottomInset, spacing['Spacing-10xl']);
-  const scrollBottomPadding = bottomInset + spacing['Spacing-15xl'];
+  const footerBottomOffset = useMemo(
+    () => Math.max(bottomInset, spacing['Spacing-10xl']),
+    [bottomInset],
+  );
+  const scrollBottomPadding = useMemo(
+    () => bottomInset + spacing['Spacing-15xl'],
+    [bottomInset],
+  );
+
+  const scrollContentStyle = useMemo(
+    () => [styles.scrollContent, { paddingBottom: scrollBottomPadding }],
+    [scrollBottomPadding],
+  );
+
+  const footerStyle = useMemo(
+    () => [styles.footer, { bottom: footerBottomOffset }],
+    [footerBottomOffset],
+  );
 
   return (
     <View style={styles.container}>
@@ -109,10 +135,7 @@ export const GetStartedScreen = (): ReactElement => {
         >
           <ScrollView
             style={styles.scrollView}
-            contentContainerStyle={[
-              styles.scrollContent,
-              { paddingBottom: scrollBottomPadding },
-            ]}
+            contentContainerStyle={scrollContentStyle}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
           >
@@ -155,7 +178,7 @@ export const GetStartedScreen = (): ReactElement => {
                 label="Sign in with Google"
                 variant="minimal"
                 size="default"
-                onPress={() => {}}
+                onPress={handleSocialPress}
                 style={styles.socialButton}
                 iconLeft={
                   <GoogleIconSvg
@@ -168,7 +191,7 @@ export const GetStartedScreen = (): ReactElement => {
                 label="Sign in with Apple"
                 variant="minimal"
                 size="default"
-                onPress={() => {}}
+                onPress={handleSocialPress}
                 style={styles.socialButton}
                 iconLeft={
                   <AppleIconSvg
@@ -181,7 +204,7 @@ export const GetStartedScreen = (): ReactElement => {
           </ScrollView>
 
           {/* Footer legal — aligned with Intro carousel CTA bottom */}
-          <View style={[styles.footer, { bottom: footerBottomOffset }]}>
+          <View style={footerStyle}>
             <Text style={styles.footerText}>
               By continuing, you agree to our{' '}
               <Text style={styles.footerLink} onPress={handleTermsPress}>
