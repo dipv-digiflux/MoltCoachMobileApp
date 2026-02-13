@@ -1,4 +1,4 @@
-package com.moltapp
+package com.molt.user
 
 import android.app.Application
 import com.facebook.react.PackageList

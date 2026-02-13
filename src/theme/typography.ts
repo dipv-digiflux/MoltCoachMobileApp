@@ -86,12 +86,13 @@ export const typographyTokens = {
   },
   bodySmall1: {
     fontSize: fontScale(14),
-    lineHeight: lineHeightScale(16),
+    // lineHeight: lineHeightScale(16),
     letterSpacing: 0,
+    verticalAlign: 'middle',
   },
   bodySmall2: {
     fontSize: fontScale(12),
-    lineHeight: lineHeightScale(14),
+    lineHeight: lineHeightScale(16),
     letterSpacing: 0,
   },
   bodySmall3: {

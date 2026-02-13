@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, { type ReactElement } from 'react';
 import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -17,7 +10,7 @@ const App = (): ReactElement => {
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <StatusBar barStyle={isDarkMode ? 'dark-content' : 'dark-content'} />
       <AppContent />
     </SafeAreaProvider>
   );

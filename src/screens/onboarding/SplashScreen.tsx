@@ -1,19 +1,65 @@
-import React, { type ReactElement } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import React, { useEffect, useRef, type ReactElement } from 'react';
+import { View, Image, StyleSheet, Animated, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
+import { LogoWhite } from '@/assets/images';
+import { colors } from '@/theme/colors';
 
 import type { OnboardingNavigationProp } from '@navigation/types';
 
+const ANIMATION_DURATION_MS = 800;
+const HOLD_BEFORE_NAVIGATE_MS = 1400;
+
 export const SplashScreen = (): ReactElement => {
   const navigation = useNavigation<OnboardingNavigationProp>();
+  const opacity = useRef(new Animated.Value(0)).current;
+  const scale = useRef(new Animated.Value(0.88)).current;
+
+  useEffect(() => {
+    const animation = Animated.parallel([
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: ANIMATION_DURATION_MS,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scale, {
+        toValue: 1,
+        duration: ANIMATION_DURATION_MS,
+        useNativeDriver: true,
+      }),
+    ]);
+
+    animation.start();
+
+    const timeoutId = setTimeout(() => {
+      navigation.replace('IntroCarousel');
+    }, ANIMATION_DURATION_MS + HOLD_BEFORE_NAVIGATE_MS);
+
+    return () => clearTimeout(timeoutId);
+  }, [opacity, scale, navigation]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Splash</Text>
-      <Button
-        title="Go to Intro"
-        onPress={() => navigation.navigate('IntroCarousel')}
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={colors.PrimaryMain}
       />
+      <Animated.View
+        style={[
+          styles.logoWrap,
+          {
+            opacity,
+            transform: [{ scale }],
+          },
+        ]}
+      >
+        <Image
+          source={LogoWhite}
+          style={styles.logo}
+          resizeMode="contain"
+          accessibilityLabel="molt logo"
+        />
+      </Animated.View>
     </View>
   );
 };
@@ -21,12 +67,16 @@ export const SplashScreen = (): ReactElement => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.PrimaryMain,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: '600',
-    marginBottom: 16,
+  logoWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logo: {
+    width: 160,
+    height: 56,
   },
 });

@@ -1,6 +1,7 @@
 import React, { type ReactElement } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { CustomTabBar } from '@components/navigation/CustomTabBar';
 import { HomeStackNavigator } from '@navigation/stacks/HomeStack';
 import { ProfileStackNavigator } from '@navigation/stacks/ProfileStack';
 import { ShopStackNavigator } from '@navigation/stacks/ShopStack';
@@ -11,6 +12,7 @@ const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export const BottomTabs = (): ReactElement => (
   <BottomTab.Navigator
+    tabBar={props => <CustomTabBar {...props} />}
     screenOptions={{
       headerShown: false,
     }}

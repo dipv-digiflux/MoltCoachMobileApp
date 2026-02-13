@@ -20,6 +20,12 @@ export type InputProps = {
   /** Called when the text changes. */
   onChangeText?: (text: string) => void;
 
+  /** Called when the input receives focus. */
+  onFocus?: () => void;
+
+  /** Called when the input loses focus. */
+  onBlur?: () => void;
+
   // ── Label row ─────────────────────────────────────────────────────
 
   /** Primary label text. Uses b1.medium (16px). */
