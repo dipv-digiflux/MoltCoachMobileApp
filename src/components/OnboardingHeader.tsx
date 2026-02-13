@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import BackIconSvg from '@/assets/images/svg/back-icon.svg';
+import { BackIconSvg } from '@/assets/images';
 import { colors, spacing, typography, moderateScale, iconScale } from '@/theme';
 
 import type {
