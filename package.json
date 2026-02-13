@@ -9,6 +9,7 @@
     "build:Staging": "cd android && ./gradlew assembleStagingRelease",
     "build:debug": "cd android && ./gradlew assembleStagingDebug",
     "install:apk": "adb install -r android/app/build/outputs/apk/release/app-release.apk",
+    "ios-clean-open": "rm -rf ~/Library/Developer/Xcode/DerivedData && cd ios && rm -rf Pods Podfile.lock MoltApp.xcworkspace && pod install --repo-update && cd .. && open ios/MoltApp.xcworkspace",
     "link-assets": "react-native-asset",
     "generate:android-icons": "node scripts/generate-android-icons.cjs",
     "format": "prettier --write .",
@@ -21,6 +22,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@react-native-firebase/app": "^23.8.6",
     "@react-native/new-app-screen": "0.83.1",
     "@react-navigation/bottom-tabs": "^7.1.0",
     "@react-navigation/native": "^7.1.0",
