@@ -355,6 +355,7 @@ const styles = StyleSheet.create({
   },
   centerDescriptionLeft: {
     textAlign: 'left',
+    alignSelf: 'stretch',
   },
   card: {
     position: 'absolute',
