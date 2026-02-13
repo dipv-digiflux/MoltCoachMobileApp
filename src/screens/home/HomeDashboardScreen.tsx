@@ -316,7 +316,7 @@ export const HomeDashboardScreen = (): ReactElement => {
           <KeyboardAvoidingView
             style={styles.keyboardAvoid}
             behavior="padding"
-            keyboardVerticalOffset={insets.top}
+            // keyboardVerticalOffset={insets.top}
           >
             {scrollView}
           </KeyboardAvoidingView>
