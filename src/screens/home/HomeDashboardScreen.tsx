@@ -18,6 +18,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BottomSheet, Button } from '@/components';
 import { CurvedHeader } from '@/components/CurvedHeader';
+import { HorizontalDatePicker } from '@/components/HorizontalDatePicker';
 import { Input } from '@/components/Input';
 import { moderateScale, spacing, typography, colors } from '@/theme';
 
@@ -310,6 +311,7 @@ export const HomeDashboardScreen = (): ReactElement => {
   return (
     <View style={styles.container}>
       <CurvedHeader>
+        <HorizontalDatePicker />
         {Platform.OS === 'ios' ? (
           <KeyboardAvoidingView
             style={styles.keyboardAvoid}
