@@ -14,6 +14,7 @@ import {
   Platform,
 } from 'react-native';
 import type { ScrollView } from 'react-native';
+import firebase from '@react-native-firebase/app';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -99,7 +100,8 @@ export const HomeDashboardScreen = (): ReactElement => {
     >
       <View style={styles.scrollContent}>
         <Text style={styles.title}>Input Boxes</Text>
-
+        <Text>{firebase.app().options.projectId}</Text>
+        <Text>{firebase.app().options.appId}</Text>
         <View
           onLayout={e => {
             sectionYRef.current[0] = e.nativeEvent.layout.y;
