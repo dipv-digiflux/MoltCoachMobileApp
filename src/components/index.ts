@@ -45,3 +45,7 @@ export type {
   LoadingType,
   SnapPoint,
 } from './BottomSheet';
+
+export { PageHeaderScrollView } from './PageHeaderScrollView';
+export { PageHeader } from './PageHeader';
+export { ProgressStepper } from './ProgressStepper';

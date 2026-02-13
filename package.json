@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "build:Production": "cd android && ./gradlew assembleProductionRelease",
-    "build:Staging": "cd android && ./gradlew assembleStagingRelease",
-    "build:debug": "cd android && ./gradlew assembleStagingDebug",
+    "android": "ENVFILE=.env.staging react-native run-android",
+    "ios": "ENVFILE=.env.staging react-native run-ios",
+    "build:Production": "ENVFILE=.env.production cd android && ./gradlew assembleProductionRelease",
+    "build:Staging": "ENVFILE=.env.staging cd android && ./gradlew assembleStagingRelease",
+    "build:debug": "ENVFILE=.env.staging cd android && ./gradlew assembleStagingDebug",
     "install:apk": "adb install -r android/app/build/outputs/apk/release/app-release.apk",
     "ios-clean-open": "rm -rf ~/Library/Developer/Xcode/DerivedData && cd ios && rm -rf Pods Podfile.lock MoltApp.xcworkspace && pod install --repo-update && cd .. && open ios/MoltApp.xcworkspace",
     "link-assets": "react-native-asset",
@@ -21,6 +21,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@callstack/liquid-glass": "^0.7.0",
     "@hookform/resolvers": "^5.2.2",
     "@react-native-firebase/app": "^23.8.6",
     "@react-native/new-app-screen": "0.83.1",
@@ -31,6 +32,7 @@
     "react": "19.2.0",
     "react-hook-form": "^7.71.1",
     "react-native": "0.83.1",
+    "react-native-config": "^1.6.1",
     "react-native-gesture-handler": "^2.20.0",
     "react-native-reanimated": "^4.2.1",
     "react-native-safe-area-context": "^5.5.2",

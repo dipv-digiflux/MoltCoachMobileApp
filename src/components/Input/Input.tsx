@@ -64,6 +64,7 @@ export const Input = ({
   onSubmitEditing,
   testID,
   style,
+  autoFocus,
   accessibilityLabel,
 }: InputProps): React.ReactElement => {
   const inputRef = useRef<RNTextInput>(null);
@@ -191,6 +192,7 @@ export const Input = ({
 
         {/* Actual TextInput */}
         <RNTextInput
+          autoFocus={autoFocus}
           ref={inputRef}
           style={[
             styles.textInput,
