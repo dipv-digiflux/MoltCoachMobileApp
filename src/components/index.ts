@@ -33,3 +33,15 @@ export { Accordion } from './Accordion';
 export type { AccordionProps, AccordionSize } from './Accordion';
 
 export { OnboardingHeader } from './OnboardingHeader';
+
+export { BottomSheet } from './BottomSheet';
+export type {
+  BottomSheetFooterProps,
+  BottomSheetHeaderProps,
+  BottomSheetProps,
+  BottomSheetRef,
+  BottomSheetSearchProps,
+  BottomSheetVariant,
+  LoadingType,
+  SnapPoint,
+} from './BottomSheet';

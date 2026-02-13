@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "369907951092",
+    "project_id": "molt-coach-app-e84e4",
+    "storage_bucket": "molt-coach-app-e84e4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:369907951092:android:1e43040d2d6da5df1945a1",
+        "android_client_info": {
+          "package_name": "com.molt.coach"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrfKJAQU1_Sk_WPHX2Qfg_HZktMfn0G8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:369907951092:android:7ee99b5b6933e8921945a1",
+        "android_client_info": {
+          "package_name": "com.molt.user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrfKJAQU1_Sk_WPHX2Qfg_HZktMfn0G8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
