@@ -9,6 +9,7 @@ import {
 
 /** Props for the Input component. */
 export type InputProps = {
+  autoFocus?: boolean;
   // ── Value & input ─────────────────────────────────────────────────
 
   /** Current text value. */

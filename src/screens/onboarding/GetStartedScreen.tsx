@@ -152,6 +152,7 @@ export const GetStartedScreen = (): ReactElement => {
                 placeholder="Enter number or email"
                 keyboardType="email-address"
                 autoCapitalize="none"
+                autoFocus
               />
             </View>
 
