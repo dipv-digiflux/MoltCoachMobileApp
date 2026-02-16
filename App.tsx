@@ -4,7 +4,9 @@ import { firebase } from '@react-native-firebase/app';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
 
+import { store } from '@/store/store';
 import { RootNavigator } from '@navigation/RootNavigator';
 
 const App = (): ReactElement => {
@@ -24,11 +26,13 @@ const App = (): ReactElement => {
 
 const AppContent = (): ReactElement => {
   return (
-    <View style={styles.container}>
-      <NavigationContainer>
-        <RootNavigator />
-      </NavigationContainer>
-    </View>
+    <Provider store={store}>
+      <View style={styles.container}>
+        <NavigationContainer>
+          <RootNavigator />
+        </NavigationContainer>
+      </View>
+    </Provider>
   );
 };
 
