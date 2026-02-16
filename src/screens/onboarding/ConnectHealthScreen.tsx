@@ -2,7 +2,7 @@ import React, { type ReactElement } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { CurvedHeader, OnboardingHeader, Button } from '@/components';
+import { Button, PageHeaderScrollView, ProgressStepper } from '@/components';
 import { colors, spacing, typography, moderateScale } from '@/theme';
 
 import type { OnboardingNavigationProp } from '@navigation/types';
@@ -12,23 +12,11 @@ export const ConnectHealthScreen = (): ReactElement => {
 
   return (
     <View style={styles.container}>
-      <CurvedHeader statusBarStyle="dark-content">
-        <View style={styles.progressBarContainer}>
-          <View style={styles.progressBarRow}>
-            <View
-              style={[styles.progressSegment, styles.progressSegmentActive]}
-            />
-            <View
-              style={[
-                styles.progressSegment,
-                styles.progressSegmentActiveSecondary,
-              ]}
-            />
-          </View>
-        </View>
-
-        <OnboardingHeader showSkip onSkipPress={'PlanPreview'} />
-
+      <PageHeaderScrollView
+        header={{ title: '' }}
+        contentContainerStyle={styles.contentContainerStyle}
+        headerChildren={<ProgressStepper currentStep={2} totalSteps={2} />}
+      >
         <View style={styles.content}>
           <View style={styles.headingBlock}>
             <Text style={styles.title}>Connect your health app</Text>
@@ -46,7 +34,7 @@ export const ConnectHealthScreen = (): ReactElement => {
             style={styles.primaryButton}
           />
         </View>
-      </CurvedHeader>
+      </PageHeaderScrollView>
     </View>
   );
 };
@@ -55,6 +43,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.StatesWhite,
+  },
+  contentContainerStyle: {
+    flexGrow: 1,
   },
   progressBarContainer: {
     paddingHorizontal: spacing['Spacing-2xl'],

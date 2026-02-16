@@ -579,7 +579,35 @@ type UnwrappedNumber = Awaited<NestedPromise>;
 
 ---
 
-## 15) FINAL LAW
+## 15) REACT COMPONENT & TYPES LOCATION RULES
+
+These rules define how React Native components and their types must be organized.
+
+1. **No types in `src/components/` files**
+   - Component files under `src/components/` MUST NOT declare `type` or `interface` definitions for props or other domain data.
+   - If a component needs types, they MUST be imported from `src/types/` (for example: `@/types/components.types`, `@/types/button.types`).
+   - Do NOT add new `.d.ts` files under `src/components/`; ambient declarations belong in `src/types/` (e.g. `src/types/global.d.ts`).
+
+2. **Centralized shared types**
+   - Shared component/domain types live in `src/types/` only (e.g. `src/types/api.types.ts`, `src/types/models.types.ts`, `src/types/store.types.ts`, `src/types/components.types.ts`).
+   - When a type is reused across slices, thunks, services, or components, define it once in `src/types/` and import it everywhere else.
+
+3. **Functional components only**
+   - All React components MUST be functional components.
+   - Class-based React components are forbidden.
+
+4. **Absolute imports**
+   - Application code MUST use absolute imports starting with `@/` (or the configured aliases like `@components`, `@navigation`, etc.), not long relative paths.
+   - Examples:
+     - ✅ `import { Button } from '@/components/Button/Button';`
+     - ✅ `import type { LoginRequest } from '@/types/api.types';`
+     - ❌ `import Button from '../../../../components/Button/Button';`
+
+These rules work together with the rest of this document to keep types centralized, components simple, and imports consistent.
+
+---
+
+## 16) FINAL LAW
 
 > **If a type is hard to read, it is wrong.**  
 > **If TypeScript is slow, the types are too clever.**  

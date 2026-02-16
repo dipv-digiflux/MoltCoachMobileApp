@@ -14,12 +14,12 @@ import {
   ScrollView,
   Keyboard,
 } from 'react-native';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import AppleIconSvg from '@/assets/images/svg/apple-icon.svg';
 import GoogleIconSvg from '@/assets/images/svg/google-icon.svg';
-import { Button, Input, CurvedHeader, OnboardingHeader } from '@/components';
+import { Button, Input, PageHeaderScrollView } from '@/components';
 import { colors, typography, spacing, iconScale } from '@/theme';
 
 import type { OnboardingNavigationProp } from '@navigation/types';
@@ -36,10 +36,6 @@ export const GetStartedScreen = (): ReactElement => {
   const [inputValue, setInputValue] = useState('');
 
   const canContinue = inputValue.trim().length > 0;
-
-  // const handleBack = useCallback((): void => {
-  //   navigation.goBack();
-  // }, [navigation]);
 
   // const enterAppStack = useCallback((): void => {
   //   const root = navigation.getParent();
@@ -62,30 +58,9 @@ export const GetStartedScreen = (): ReactElement => {
   //   );
   // }, [navigation]);
 
-  const enterAppStack = useCallback((): void => {
-    const root = navigation.getParent();
-    root?.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'AppStack',
-            params: {
-              screen: 'BottomTabs',
-              params: {
-                screen: 'HomeTab',
-                params: { screen: 'HomeDashboard' },
-              },
-            },
-          },
-        ],
-      }),
-    );
-  }, [navigation]);
-
-  const handleSkip = useCallback((): void => {
-    enterAppStack();
-  }, [enterAppStack]);
+  // const handleSkip = useCallback((): void => {
+  //   enterAppStack();
+  // }, [enterAppStack]);
 
   const handleContinue = useCallback((): void => {
     Keyboard.dismiss();
@@ -126,8 +101,10 @@ export const GetStartedScreen = (): ReactElement => {
 
   return (
     <View style={styles.container}>
-      <CurvedHeader statusBarStyle="dark-content">
-        <OnboardingHeader showSkip onSkipPress={handleSkip} />
+      <PageHeaderScrollView
+        header={{ title: '' }}
+        contentContainerStyle={styles.contentContainerStyle}
+      >
         <KeyboardAvoidingView
           style={styles.keyboardView}
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -219,7 +196,7 @@ export const GetStartedScreen = (): ReactElement => {
             </Text>
           </View>
         </KeyboardAvoidingView>
-      </CurvedHeader>
+      </PageHeaderScrollView>
     </View>
   );
 };
@@ -230,6 +207,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.StatesWhite,
+  },
+  contentContainerStyle: {
+    flexGrow: 1,
   },
   keyboardView: {
     flex: 1,

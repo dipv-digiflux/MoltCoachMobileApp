@@ -1,11 +1,11 @@
-import React, { type ReactElement, useCallback } from 'react';
+import React, { type ReactElement, ReactNode, useCallback } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
   Pressable,
-  type ViewStyle,
   type StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  type ViewStyle,
 } from 'react-native';
 import {
   isLiquidGlassSupported,
@@ -14,12 +14,14 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { colors, spacing, typography, moderateScale } from '@/theme';
+import { BackIconSvg } from '@/assets/images';
+import { colors, iconScale, moderateScale, spacing, typography } from '@/theme';
 
 import type { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 type PageHeaderProps = {
   title: string;
+  children?: ReactNode;
   subtitle?: string;
 
   /** Optional custom left icon (back button). */
@@ -67,6 +69,7 @@ export const PageHeader = ({
   showBottomBorder = false,
   fallbackBackgroundColor,
   style,
+  children,
 }: PageHeaderProps): ReactElement => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const insets = useSafeAreaInsets();
@@ -91,7 +94,7 @@ export const PageHeader = ({
     },
     showBottomBorder && styles.bottomBorder,
     !isLiquidGlassSupported && {
-      backgroundColor: fallbackBackgroundColor ?? 'rgba(255,255,255,0.9)',
+      backgroundColor: fallbackBackgroundColor ?? 'rgba(255, 255, 255, 0.9)',
     },
     style,
   ];
@@ -112,9 +115,7 @@ export const PageHeader = ({
               style={styles.backButton}
             >
               {leftIcon ?? (
-                <Text style={styles.backIconText} accessibilityLabel="Back">
-                  {'\u2039'}
-                </Text>
+                <BackIconSvg width={iconScale(20)} height={iconScale(20)} />
               )}
             </Pressable>
           )}
@@ -139,6 +140,7 @@ export const PageHeader = ({
           <View style={styles.rightSection}>{rightIcon}</View>
         )}
       </View>
+      {children}
     </LiquidGlassView>
   );
 };
@@ -174,12 +176,11 @@ const styles = StyleSheet.create({
     marginLeft: spacing['Spacing-3xl'],
   },
   backButton: {
-    backgroundColor: colors.StatesFill1,
+    backgroundColor: colors.StatesWhite,
     borderColor: colors.StatesFill1,
     borderWidth: 1,
     borderRadius: moderateScale(42),
-    paddingHorizontal: spacing['Spacing-3xl'],
-    paddingVertical: spacing['Spacing-m'],
+    padding: spacing['Spacing-l'],
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -341,8 +341,8 @@ const styles = StyleSheet.create({
     marginLeft: spacing['Spacing-m'],
   },
   iconWrapRight: {
-    width: ICON_SIZE,
-    height: ICON_SIZE,
+    // width: ICON_SIZE,
+    // height: ICON_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: spacing['Spacing-m'],
