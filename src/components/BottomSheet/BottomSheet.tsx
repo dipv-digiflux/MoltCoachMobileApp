@@ -25,7 +25,11 @@ import {
   type TextStyle,
   type ViewStyle,
 } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
 import Animated, {
   Easing,
   runOnJS,
@@ -576,6 +580,8 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
 
     // ── Gesture handling (on drag handle area only) ──────────────────
     const panGesture = Gesture.Pan()
+      .minPointers(1)
+      .hitSlop({ top: 20, bottom: 20, left: 40, right: 40 })
       .onUpdate(event => {
         if (!dismissOnDragDown) return;
         // Only allow dragging downward (positive translationY)
@@ -667,7 +673,7 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
         statusBarTranslucent
         onRequestClose={dismissOnBackButton ? closeSheet : undefined}
       >
-        <View style={styles.modalRoot} testID={testID}>
+        <GestureHandlerRootView style={styles.modalRoot} testID={testID}>
           {/* Overlay */}
           {showOverlay && (
             <Animated.View style={[styles.overlay, overlayAnimatedStyle]}>
@@ -739,7 +745,7 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
               )}
             </Animated.View>
           </Animated.View>
-        </View>
+        </GestureHandlerRootView>
       </Modal>
     );
   },
