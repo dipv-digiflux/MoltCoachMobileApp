@@ -5,6 +5,11 @@ export type LoginRequest = {
   password: string;
 };
 
+/** Sent to backend after Google Sign-In; backend verifies idToken and returns LoginResponse. */
+export type GoogleAuthRequest = {
+  idToken: string;
+};
+
 export type LoginResponse = {
   user: User;
   tokens: AuthTokens;

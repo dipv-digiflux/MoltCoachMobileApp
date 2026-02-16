@@ -7,20 +7,23 @@ import axios, {
 } from 'axios';
 import Config from 'react-native-config';
 
+import { getAccessToken } from '@/services/authTokenHolder';
+
 import type { ApiErrorResponse } from '@/types/api.types';
 
 const baseURL = Config.API_BASE_URL;
 
-const defaultTimeoutMs = 15000;
-
 const createClient = (): AxiosInstance => {
   const instance = axios.create({
     baseURL,
-    timeout: defaultTimeoutMs,
   });
 
   instance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
+      const token = getAccessToken();
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
       return config;
     },
     (error: AxiosError) => Promise.reject(error),

@@ -1,26 +1,87 @@
 {
   "project_info": {
-    "project_number": "526241206528",
-    "project_id": "molt-user-app-a8870",
-    "storage_bucket": "molt-user-app-a8870.firebasestorage.app"
+    "project_number": "31980184670",
+    "project_id": "molt-staging",
+    "storage_bucket": "molt-staging.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:526241206528:android:4464c45c5136b26692a3e5",
+        "mobilesdk_app_id": "1:31980184670:android:8da5ee59561c6647eac0cf",
         "android_client_info": {
-          "package_name": "com.molt.user"
+          "package_name": "com.molt.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "31980184670-172h986q1t599jkut0entmpniuuh4t22.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.molt.app",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "31980184670-ju013bhet88flt0lodit131ujl6rif6v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyBzY_SnwWzhfsik1UYKZyHP8LjIY5EK0nw"
+          "current_key": "AIzaSyBT5v1lcpz3uWdErV7wu30sR5RBvf-Q1gk"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31980184670-ju013bhet88flt0lodit131ujl6rif6v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "31980184670-blmctpdta4s42bq67q14dgdr9ta6qdko.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.muser.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31980184670:android:8bdc20b170bffd76eac0cf",
+        "android_client_info": {
+          "package_name": "com.molt.coach"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31980184670-ju013bhet88flt0lodit131ujl6rif6v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT5v1lcpz3uWdErV7wu30sR5RBvf-Q1gk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31980184670-ju013bhet88flt0lodit131ujl6rif6v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "31980184670-blmctpdta4s42bq67q14dgdr9ta6qdko.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.muser.app"
+              }
+            }
+          ]
         }
       }
     }

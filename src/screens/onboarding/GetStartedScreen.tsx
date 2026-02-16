@@ -13,13 +13,16 @@ import {
   Platform,
   ScrollView,
   Keyboard,
+  Alert,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import AppleIconSvg from '@/assets/images/svg/apple-icon.svg';
 import GoogleIconSvg from '@/assets/images/svg/google-icon.svg';
 import { Button, Input, PageHeaderScrollView } from '@/components';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { signInWithGoogleThunk } from '@/store/slices/authSlice';
 import { colors, typography, spacing, iconScale } from '@/theme';
 
 import type { OnboardingNavigationProp } from '@navigation/types';
@@ -29,13 +32,37 @@ const SOCIAL_ICON_SIZE = iconScale(20);
 const PLACEHOLDER_TERMS_URL = 'https://example.com/terms';
 const PLACEHOLDER_PRIVACY_URL = 'https://example.com/privacy';
 
+const enterAppStack = (navigation: OnboardingNavigationProp): void => {
+  const root = navigation.getParent();
+  root?.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [
+        {
+          name: 'AppStack',
+          params: {
+            screen: 'BottomTabs',
+            params: {
+              screen: 'HomeTab',
+              params: { screen: 'HomeDashboard' },
+            },
+          },
+        },
+      ],
+    }),
+  );
+};
+
 export const GetStartedScreen = (): ReactElement => {
   const navigation = useNavigation<OnboardingNavigationProp>();
   const insets = useSafeAreaInsets();
+  const dispatch = useAppDispatch();
+  const authStatus = useAppSelector(state => state.auth.status);
 
   const [inputValue, setInputValue] = useState('');
 
   const canContinue = inputValue.trim().length > 0;
+  const isGoogleSigningIn = authStatus === 'loading';
 
   // const enterAppStack = useCallback((): void => {
   //   const root = navigation.getParent();
@@ -75,8 +102,27 @@ export const GetStartedScreen = (): ReactElement => {
     Linking.openURL(PLACEHOLDER_PRIVACY_URL).catch(() => {});
   }, []);
 
+  const handleGoogleSignIn = useCallback((): void => {
+    Keyboard.dismiss();
+    void (async (): Promise<void> => {
+      try {
+        const result = await dispatch(signInWithGoogleThunk());
+        if (result) {
+          enterAppStack(navigation);
+        }
+      } catch (error) {
+        console.log('error', error);
+        Alert.alert(
+          'Sign in failed',
+          'Unable to sign in with Google. Please try again.',
+          [{ text: 'OK' }],
+        );
+      }
+    })();
+  }, [dispatch, navigation]);
+
   const handleSocialPress = useCallback((): void => {
-    // Placeholder for social sign-in
+    // Placeholder for Apple sign-in
   }, []);
 
   const bottomInset = insets.bottom;
@@ -156,7 +202,8 @@ export const GetStartedScreen = (): ReactElement => {
                 label="Sign in with Google"
                 variant="minimal"
                 size="default"
-                onPress={handleSocialPress}
+                onPress={handleGoogleSignIn}
+                disabled={isGoogleSigningIn}
                 style={styles.socialButton}
                 iconLeft={
                   <GoogleIconSvg
