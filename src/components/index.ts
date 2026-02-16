@@ -1,6 +1,10 @@
 // Re-export shared UI components from here
 export { CurvedHeader, CURVED_HEADER_DEFAULT_HEIGHT } from './CurvedHeader';
 
+export { DailyNutritionTargetCard } from './DailyNutritionTargetCard';
+
+export { InfoCard } from './InfoCard';
+
 export { Button } from './Button';
 export type {
   ButtonDefaultIconName,
