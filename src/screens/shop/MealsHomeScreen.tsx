@@ -1,9 +1,9 @@
 import React, { type ReactElement } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/Button';
-import { CurvedHeader } from '@/components/CurvedHeader';
+import { PageHeaderScrollView } from '@/components/PageHeaderScrollView';
 import { moderateScale, colors, spacing, typography } from '@/theme';
 
 const TAB_BAR_HEIGHT = moderateScale(72);
@@ -15,17 +15,14 @@ export const MealsHomeScreen = (): ReactElement => {
 
   return (
     <View style={styles.container}>
-      <CurvedHeader>
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={[
-            styles.scrollContent,
-            { paddingBottom: scrollPaddingBottom },
-          ]}
-          showsVerticalScrollIndicator={false}
-        >
-          <Text style={styles.title}>Buttons</Text>
-
+      <PageHeaderScrollView
+        style={styles.scrollView}
+        contentContainerStyle={[{ paddingBottom: scrollPaddingBottom }]}
+        showsVerticalScrollIndicator={false}
+        header={{ title: 'Buttons', hideBackButton: true }}
+        bounces={false}
+      >
+        <View style={styles.scrollContent}>
           <Text style={styles.sectionLabel}>1. Primary (default)</Text>
           <Button
             label="Primary"
@@ -120,8 +117,8 @@ export const MealsHomeScreen = (): ReactElement => {
             onPress={() => {}}
             style={styles.fullWidthButton}
           />
-        </ScrollView>
-      </CurvedHeader>
+        </View>
+      </PageHeaderScrollView>
     </View>
   );
 };

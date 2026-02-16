@@ -90,10 +90,11 @@ export const HomeDashboardScreen = (): ReactElement => {
       contentContainerStyle={[{ paddingBottom: scrollContentPaddingBottom }]}
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
-      header={{ title: 'ckjdkj' }}
+      header={{ title: 'Input Boxes', hideBackButton: true }}
+      bounces={false}
       headerChildren={
         <>
-          <ProgressStepper currentStep={4} totalSteps={5} />
+          <ProgressStepper currentStep={2} totalSteps={5} />
           <HorizontalDatePicker />
         </>
       }
