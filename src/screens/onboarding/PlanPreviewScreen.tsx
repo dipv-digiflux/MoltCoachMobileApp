@@ -22,7 +22,7 @@ import {
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Button, CurvedHeader } from '@/components';
+import { Button, PageHeaderScrollView } from '@/components';
 import {
   colors,
   spacing,
@@ -239,7 +239,14 @@ export const PlanPreviewScreen = (): ReactElement => {
 
   return (
     <View style={styles.container}>
-      <CurvedHeader statusBarStyle="dark-content">
+      <PageHeaderScrollView
+        header={{
+          title: '',
+          hideBackButton: true,
+          style: { height: 0 },
+        }}
+        contentContainerStyle={styles.contentContainerStyle}
+      >
         <View style={styles.contentArea}>
           <Animated.View
             onLayout={onCenterBlockLayout}
@@ -310,7 +317,7 @@ export const PlanPreviewScreen = (): ReactElement => {
             />
           </View>
         </Animated.View>
-      </CurvedHeader>
+      </PageHeaderScrollView>
     </View>
   );
 };
@@ -319,6 +326,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.StatesWhite,
+  },
+  contentContainerStyle: {
+    flexGrow: 1,
   },
   contentArea: {
     flex: 1,

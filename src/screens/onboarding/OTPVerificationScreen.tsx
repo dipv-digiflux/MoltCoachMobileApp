@@ -15,7 +15,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Button, CurvedHeader, OTPInput, OnboardingHeader } from '@/components';
+import { Button, OTPInput, PageHeaderScrollView } from '@/components';
 import { colors, spacing, typography } from '@/theme';
 
 import type { OnboardingNavigationProp } from '@navigation/types';
@@ -108,9 +108,10 @@ export const OTPVerificationScreen = (): ReactElement => {
 
   return (
     <View style={styles.container}>
-      <CurvedHeader statusBarStyle="dark-content">
-        <OnboardingHeader />
-
+      <PageHeaderScrollView
+        header={{ title: '' }}
+        contentContainerStyle={styles.contentContainerStyle}
+      >
         <View style={styles.content}>
           <View style={styles.headingBlock}>
             <Text style={styles.title}>Enter 4 digit code sent to</Text>
@@ -152,7 +153,7 @@ export const OTPVerificationScreen = (): ReactElement => {
             style={styles.verifyButton}
           />
         </View>
-      </CurvedHeader>
+      </PageHeaderScrollView>
     </View>
   );
 };
@@ -161,6 +162,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.StatesWhite,
+  },
+  contentContainerStyle: {
+    flexGrow: 1,
   },
   content: {
     flex: 1,

@@ -69,8 +69,7 @@ export const PageHeaderScrollView = forwardRef<
         keyboardShouldPersistTaps="handled"
       >
         <View>
-          <PageHeader {...header} />
-          {headerChildren}
+          <PageHeader {...header}>{headerChildren}</PageHeader>
         </View>
         {children}
       </ScrollView>
