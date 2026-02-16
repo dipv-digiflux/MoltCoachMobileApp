@@ -3,12 +3,11 @@ import React, {
   useRef,
   useState,
   useCallback,
+  useMemo,
   type ReactElement,
-  type MutableRefObject,
 } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   Animated,
   Easing,
@@ -22,14 +21,14 @@ import {
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Button, CurvedHeader } from '@/components';
+import { CheckCircleIconSvg } from '@/assets/images';
+import { Button, CurvedHeader, DailyNutritionTargetCard } from '@/components';
 import {
   colors,
   spacing,
   typography,
   moderateScale,
   verticalScale,
-  radius,
 } from '@/theme';
 
 import type { OnboardingNavigationProp } from '@navigation/types';
@@ -42,13 +41,29 @@ if (
 }
 
 const CARD_INITIAL_OFFSET = verticalScale(80);
-const CARD_GAP = 12;
 const POP_DURATION_MS = 450;
 const HOLD_DURATION_MS = 1000;
 const TRANSITION_DURATION_MS = 1000;
 
-const createAnimatedValue = (): MutableRefObject<Animated.Value> =>
-  useRef<Animated.Value>(new Animated.Value(0));
+const PLAN_CARD_PROPS = {
+  title: 'Daily nutrition target',
+  actionLabel: 'Fine-tune',
+  kcal: '2,450 kcal',
+  tags: ['High Protein', 'Fat Loss Mode'] as const,
+  macroTargets: {
+    protein: { value: '180g', percent: 38 },
+    fat: { value: '68g', percent: 25 },
+    carb: { value: '245g', percent: 40 },
+  },
+  lifestyleTitle: 'Lifestyle targets',
+  lifestyleActionLabel: 'Fine-tune',
+  lifestyleTargets: {
+    waterIntake: '3.5 Liters',
+    steps: '12,500',
+    activeCalorieBurn: '250 kcal',
+  },
+  planTip: 'This plan can help you lose 4.2 kg in 12 weeks.',
+} as const;
 
 export const PlanPreviewScreen = (): ReactElement => {
   const navigation = useNavigation<OnboardingNavigationProp>();
@@ -62,13 +77,14 @@ export const PlanPreviewScreen = (): ReactElement => {
   const [titleWidth, setTitleWidth] = useState(0);
   const [isMovingUp, setIsMovingUp] = useState(false);
 
-  const centerOpacity = createAnimatedValue();
-  const centerScale = createAnimatedValue();
-  const centerTranslateY = createAnimatedValue();
-  const cardOpacity = createAnimatedValue();
-  const cardTranslateY = createAnimatedValue();
-  const buttonOpacity = createAnimatedValue();
-  const buttonTranslateY = createAnimatedValue();
+  const animationStartedRef = useRef(false);
+  const centerOpacity = useRef(new Animated.Value(0));
+  const centerScale = useRef(new Animated.Value(0));
+  const centerTranslateY = useRef(new Animated.Value(0));
+  const cardOpacity = useRef(new Animated.Value(0));
+  const cardTranslateY = useRef(new Animated.Value(0));
+  const buttonOpacity = useRef(new Animated.Value(0));
+  const buttonTranslateY = useRef(new Animated.Value(0));
 
   const onCenterBlockLayout = useCallback((e: LayoutChangeEvent) => {
     const { y, height, width } = e.nativeEvent.layout;
@@ -85,9 +101,12 @@ export const PlanPreviewScreen = (): ReactElement => {
       : 0;
 
   useEffect(() => {
-    if (centerBlockLayout == null) {
+    if (centerBlockLayout == null || animationStartedRef.current) {
       return;
     }
+    animationStartedRef.current = true;
+
+    const targetTy = spacing['Spacing-11xl'] - centerBlockLayout.y;
 
     centerOpacity.current.setValue(0);
     centerScale.current.setValue(0.85);
@@ -114,7 +133,7 @@ export const PlanPreviewScreen = (): ReactElement => {
     const hold = Animated.delay(HOLD_DURATION_MS);
 
     const moveCenterUp = Animated.timing(centerTranslateY.current, {
-      toValue: targetTranslateY,
+      toValue: targetTy,
       duration: TRANSITION_DURATION_MS,
       easing: Easing.inOut(Easing.cubic),
       useNativeDriver: true,
@@ -162,7 +181,7 @@ export const PlanPreviewScreen = (): ReactElement => {
     });
   }, [centerBlockLayout]);
 
-  const handleEnterApp = (): void => {
+  const handleEnterApp = useCallback((): void => {
     const root = navigation.getParent();
     root?.dispatch(
       CommonActions.reset({
@@ -181,36 +200,30 @@ export const PlanPreviewScreen = (): ReactElement => {
         ],
       }),
     );
-  };
+  }, [navigation]);
 
-  // Compute per-element horizontal shifts
   const parentWidth = centerBlockLayout?.width ?? 0;
   const iconWidth = moderateScale(40);
   const iconShift = (parentWidth - iconWidth) / 2;
   const titleShift = titleWidth > 0 ? (parentWidth - titleWidth) / 2 : 0;
 
-  // Interpolate translateX off the same animated value as translateY
-  // so horizontal + vertical motion are perfectly in sync (diagonal)
-  const iconTranslateX =
-    targetTranslateY !== 0
-      ? centerTranslateY.current.interpolate({
-          inputRange: [targetTranslateY, 0],
-          outputRange: [-iconShift, 0],
-          extrapolate: 'clamp',
-        })
-      : 0;
+  const iconTranslateX = useMemo(() => {
+    if (targetTranslateY === 0) return 0;
+    return centerTranslateY.current.interpolate({
+      inputRange: [targetTranslateY, 0],
+      outputRange: [-iconShift, 0],
+      extrapolate: 'clamp',
+    });
+  }, [targetTranslateY, iconShift]);
 
-  const titleTranslateX =
-    targetTranslateY !== 0
-      ? centerTranslateY.current.interpolate({
-          inputRange: [targetTranslateY, 0],
-          outputRange: [-titleShift, 0],
-          extrapolate: 'clamp',
-        })
-      : 0;
-
-  // Description wraps to full width, so no horizontal shift needed
-  const descTranslateX = 0;
+  const titleTranslateX = useMemo(() => {
+    if (targetTranslateY === 0) return 0;
+    return centerTranslateY.current.interpolate({
+      inputRange: [targetTranslateY, 0],
+      outputRange: [-titleShift, 0],
+      extrapolate: 'clamp',
+    });
+  }, [targetTranslateY, titleShift]);
 
   const centerAnimatedStyle: StyleProp<ViewStyle> = {
     opacity: centerOpacity.current,
@@ -222,7 +235,9 @@ export const PlanPreviewScreen = (): ReactElement => {
 
   const cardTop =
     centerBlockLayout != null
-      ? spacing['Spacing-11xl'] + centerBlockLayout.height + CARD_GAP
+      ? spacing['Spacing-11xl'] +
+        centerBlockLayout.height +
+        spacing['Spacing-3xl']
       : 0;
 
   const cardAnimatedStyle: StyleProp<ViewStyle> = {
@@ -249,7 +264,10 @@ export const PlanPreviewScreen = (): ReactElement => {
               style={{ transform: [{ translateX: iconTranslateX }] }}
             >
               <View style={styles.checkCircle}>
-                <Text style={styles.checkIcon}>✓</Text>
+                <CheckCircleIconSvg
+                  width={moderateScale(25)}
+                  height={moderateScale(25)}
+                />
               </View>
             </Animated.View>
             <Animated.Text
@@ -265,7 +283,7 @@ export const PlanPreviewScreen = (): ReactElement => {
               style={[
                 styles.centerDescription,
                 isMovingUp && styles.centerDescriptionLeft,
-                { transform: [{ translateX: descTranslateX }] },
+                { transform: [{ translateX: 0 }] },
               ]}
             >
               We&apos;ve built a baseline plan based on your metrics and goals.
@@ -273,23 +291,19 @@ export const PlanPreviewScreen = (): ReactElement => {
           </Animated.View>
 
           <Animated.View
-            style={[styles.card, { top: cardTop }, cardAnimatedStyle]}
+            style={[styles.cardContainer, { top: cardTop }, cardAnimatedStyle]}
           >
-            <View style={styles.cardHeaderRow}>
-              <Text style={styles.cardTitle}>Daily nutrition target</Text>
-              <Text style={styles.cardAction}>Fine-tune</Text>
-            </View>
-
-            <Text style={styles.cardKcal}>2,450 kcal</Text>
-
-            <View style={styles.cardTagRow}>
-              <View style={styles.tag}>
-                <Text style={styles.tagText}>High Protein</Text>
-              </View>
-              <View style={styles.tag}>
-                <Text style={styles.tagText}>Fat Loss Mode</Text>
-              </View>
-            </View>
+            <DailyNutritionTargetCard
+              title={PLAN_CARD_PROPS.title}
+              actionLabel={PLAN_CARD_PROPS.actionLabel}
+              kcal={PLAN_CARD_PROPS.kcal}
+              tags={PLAN_CARD_PROPS.tags}
+              macroTargets={PLAN_CARD_PROPS.macroTargets}
+              lifestyleTitle={PLAN_CARD_PROPS.lifestyleTitle}
+              lifestyleActionLabel={PLAN_CARD_PROPS.lifestyleActionLabel}
+              lifestyleTargets={PLAN_CARD_PROPS.lifestyleTargets}
+              planTip={PLAN_CARD_PROPS.planTip}
+            />
           </Animated.View>
         </View>
 
@@ -330,20 +344,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checkCircle: {
-    width: moderateScale(40),
-    height: moderateScale(40),
-    borderRadius: radius.full,
-    backgroundColor: colors.PrimaryMain,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginBottom: spacing['Spacing-4xl'],
   },
-  checkIcon: {
-    ...typography.bodySmall1Bold,
-    color: colors.StatesWhite,
-  },
   centerTitle: {
-    ...typography.h6Bold,
+    ...typography.h7SemiBold,
     color: colors.TextPrimaryDefault,
     textAlign: 'center',
     marginBottom: spacing['Spacing-3xl'],
@@ -357,48 +361,10 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     alignSelf: 'stretch',
   },
-  card: {
+  cardContainer: {
     position: 'absolute',
     left: spacing['Spacing-5xl'],
     right: spacing['Spacing-5xl'],
-    paddingVertical: spacing['Spacing-6xl'],
-    paddingHorizontal: spacing['Spacing-5xl'],
-    borderRadius: moderateScale(1),
-    backgroundColor: colors.StatesFill2,
-    borderWidth: 1,
-    borderColor: colors.StatesOutline,
-    rowGap: spacing['Spacing-4xl'],
-  },
-  cardHeaderRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  cardTitle: {
-    ...typography.bodySmall2Medium,
-    color: colors.TextSecondaryDefault,
-  },
-  cardAction: {
-    ...typography.bodySmall2Medium,
-    color: colors.PrimaryMain,
-  },
-  cardKcal: {
-    ...typography.h6Bold,
-    color: colors.TextPrimaryDefault,
-  },
-  cardTagRow: {
-    flexDirection: 'row',
-    columnGap: spacing['Spacing-3xl'],
-  },
-  tag: {
-    paddingHorizontal: spacing['Spacing-4xl'],
-    paddingVertical: spacing['Spacing-m'],
-    borderRadius: radius.full,
-    backgroundColor: colors.StatesFill1,
-  },
-  tagText: {
-    ...typography.bodySmall3SemiBold,
-    color: colors.TextPrimaryDefault,
   },
   bottomSection: {
     position: 'absolute',
