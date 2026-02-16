@@ -1,5 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  isLiquidGlassSupported,
+  LiquidGlassView,
+} from '@callstack/liquid-glass';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -29,7 +33,16 @@ export const CustomTabBar = ({
       ]}
     >
       <View style={styles.contentWrapper}>
-        <View style={styles.tabsContainer}>
+        <LiquidGlassView
+          style={[
+            styles.tabsContainer,
+            !isLiquidGlassSupported && {
+              backgroundColor: !isLiquidGlassSupported
+                ? '#E6E6E6B4'
+                : undefined,
+            },
+          ]}
+        >
           {state.routes.map((route, index) => {
             const { options } = descriptors[route.key];
             const label =
@@ -84,15 +97,16 @@ export const CustomTabBar = ({
                     color={iconColor}
                   />
                 )}
-                {route.name === 'ShopTab' && (
-                  <ShopIconSvg
+
+                {route.name === 'ProfileTab' && (
+                  <ProfileIconSvg
                     width={iconScale(24)}
                     height={iconScale(24)}
                     color={iconColor}
                   />
                 )}
-                {route.name === 'ProfileTab' && (
-                  <ProfileIconSvg
+                {route.name === 'ShopTab' && (
+                  <ShopIconSvg
                     width={iconScale(24)}
                     height={iconScale(24)}
                     color={iconColor}
@@ -109,12 +123,11 @@ export const CustomTabBar = ({
               </TouchableOpacity>
             );
           })}
-        </View>
-
-        <TouchableOpacity style={styles.logButton}>
-          <PlusIcon width={iconScale(24)} height={iconScale(24)} />
-          <Text style={styles.logButtonText}>Log</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.logButton}>
+            <PlusIcon width={iconScale(24)} height={iconScale(24)} />
+            <Text style={styles.logButtonText}>Log</Text>
+          </TouchableOpacity>
+        </LiquidGlassView>
       </View>
     </View>
   );
@@ -140,20 +153,22 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    backgroundColor: colors.SurfacePrimaryDefault,
+    justifyContent: 'space-between',
     height: moderateScale(72),
     borderRadius: moderateScale(2),
-    padding: spacing['Spacing-m'],
+    paddingHorizontal: spacing['Spacing-m'],
+    paddingVertical: spacing['Spacing-m'],
+    gap: spacing['Spacing-m'],
   },
   tabButton: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing['Spacing-m'],
-    flex: 1,
-    paddingHorizontal: spacing['Spacing-8xl'],
+    paddingHorizontal: spacing['Spacing-4xl'],
     paddingVertical: spacing['Spacing-3xl'],
     borderRadius: moderateScale(2),
+    minWidth: 0,
   },
   tabButtonActive: {
     backgroundColor: colors.StatesFill2,
@@ -170,23 +185,15 @@ const styles = StyleSheet.create({
     color: colors.TextSecondaryDefault,
   },
   logButton: {
+    flex: 1,
     backgroundColor: colors.PrimaryMain,
-    // width: moderateScale(72),
-    height: moderateScale(72),
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: moderateScale(2),
-    paddingHorizontal: spacing['Spacing-10xl'],
+    gap: spacing['Spacing-m'],
+    paddingHorizontal: spacing['Spacing-4xl'],
     paddingVertical: spacing['Spacing-3xl'],
-    // shadowColor: colors.PrimaryMain,
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.2,
-    // shadowRadius: 8,
-    // elevation: 5,
-  },
-  logIcon: {
-    ...typography.h6Regular,
-    color: colors.StatesWhite,
+    borderRadius: moderateScale(2),
+    minWidth: 0,
   },
   logButtonText: {
     ...typography.bodySmall3Regular,

@@ -1,9 +1,9 @@
 import React, { useState, type ReactElement } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Checkbox } from '@/components/Checkbox';
-import { CurvedHeader } from '@/components/CurvedHeader';
+import { PageHeaderScrollView } from '@/components/PageHeaderScrollView';
 import { Radio } from '@/components/Radio';
 import { Switch } from '@/components/Switch';
 import { moderateScale, colors, spacing, typography } from '@/theme';
@@ -24,17 +24,14 @@ export const ProfileHomeScreen = (): ReactElement => {
 
   return (
     <View style={styles.container}>
-      <CurvedHeader>
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={[
-            styles.scrollContent,
-            { paddingBottom: scrollPaddingBottom },
-          ]}
-          showsVerticalScrollIndicator={false}
-        >
-          <Text style={styles.title}>Checkbox, Switch & Radio Button</Text>
-
+      <PageHeaderScrollView
+        style={styles.scrollView}
+        contentContainerStyle={[{ paddingBottom: scrollPaddingBottom }]}
+        showsVerticalScrollIndicator={false}
+        header={{ title: 'Profile', hideBackButton: true }}
+        bounces={false}
+      >
+        <View style={styles.scrollContent}>
           <Text style={styles.sectionLabel}>Checkbox</Text>
           <Checkbox
             label="Accept terms and conditions"
@@ -99,8 +96,8 @@ export const ProfileHomeScreen = (): ReactElement => {
             on={darkModeOn}
             onChange={setDarkModeOn}
           />
-        </ScrollView>
-      </CurvedHeader>
+        </View>
+      </PageHeaderScrollView>
     </View>
   );
 };

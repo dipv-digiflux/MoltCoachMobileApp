@@ -12,6 +12,7 @@
     "ios-clean-open": "rm -rf ~/Library/Developer/Xcode/DerivedData && cd ios && rm -rf Pods Podfile.lock MoltApp.xcworkspace && pod install --repo-update && cd .. && open ios/MoltApp.xcworkspace",
     "link-assets": "react-native-asset",
     "generate:android-icons": "node scripts/generate-android-icons.cjs",
+    "generate:ios-icons": "node scripts/generate-ios-icons.cjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",

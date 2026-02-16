@@ -22,15 +22,16 @@ export const BottomTabs = (): ReactElement => (
       component={HomeStackNavigator}
       options={{ title: 'Home' }}
     />
-    <BottomTab.Screen
-      name="ShopTab"
-      component={ShopStackNavigator}
-      options={{ title: 'Shop' }}
-    />
+
     <BottomTab.Screen
       name="ProfileTab"
       component={ProfileStackNavigator}
       options={{ title: 'Profile' }}
+    />
+    <BottomTab.Screen
+      name="ShopTab"
+      component={ShopStackNavigator}
+      options={{ title: 'Shop' }}
     />
   </BottomTab.Navigator>
 );
