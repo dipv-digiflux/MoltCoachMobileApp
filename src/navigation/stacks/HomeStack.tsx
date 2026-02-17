@@ -12,12 +12,13 @@ import type { HomeStackParamList } from '@navigation/types';
 const Stack = createNativeStackNavigator<HomeStackParamList>();
 
 export const HomeStackNavigator = (): ReactElement => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="HomeDashboard"
-      component={HomeDashboardScreen}
-      options={{ headerShown: false }}
-    />
+  <Stack.Navigator
+    screenOptions={{
+      animation: 'slide_from_right',
+      headerShown: false,
+    }}
+  >
+    <Stack.Screen name="HomeDashboard" component={HomeDashboardScreen} />
     <Stack.Screen
       name="ExampleForm"
       component={ExampleFormScreen}

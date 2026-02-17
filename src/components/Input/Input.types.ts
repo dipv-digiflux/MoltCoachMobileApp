@@ -9,6 +9,7 @@ import {
 
 /** Props for the Input component. */
 export type InputProps = {
+  autoFocus?: boolean;
   // ── Value & input ─────────────────────────────────────────────────
 
   /** Current text value. */
@@ -19,6 +20,12 @@ export type InputProps = {
 
   /** Called when the text changes. */
   onChangeText?: (text: string) => void;
+
+  /** Called when the input receives focus. */
+  onFocus?: () => void;
+
+  /** Called when the input loses focus. */
+  onBlur?: () => void;
 
   // ── Label row ─────────────────────────────────────────────────────
 

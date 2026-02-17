@@ -10,7 +10,7 @@ import {
 
 // ─── Button-specific colour tokens (not in main theme) ─────────────
 
-const BRAND_HOVER_BORDER = '#5546FF';
+const BRAND_HOVER_BORDER = '';
 const FOCUS_RING_BRAND = '#CEDAFA';
 const FOCUS_RING_NEUTRAL = colors.TextPrimaryDisabled; // #9CA3AF
 const FOCUS_RING_DESTRUCTIVE = 'rgba(240, 62, 63, 0.3)';
