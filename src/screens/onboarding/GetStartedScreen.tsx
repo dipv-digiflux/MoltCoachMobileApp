@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useMemo,
-  useState,
-  type ReactElement,
-} from 'react';
+import React, { useCallback, useMemo, type ReactElement } from 'react';
 import {
   View,
   Text,
@@ -15,22 +10,63 @@ import {
   Keyboard,
   Alert,
 } from 'react-native';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { CommonActions, useNavigation } from '@react-navigation/native';
+import { Controller, useForm } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { z } from 'zod';
 
 import AppleIconSvg from '@/assets/images/svg/apple-icon.svg';
 import GoogleIconSvg from '@/assets/images/svg/google-icon.svg';
 import { Button, Input, PageHeaderScrollView } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { signInWithGoogleThunk } from '@/store/slices/authSlice';
+import { requestOTPThunk, signInWithGoogleThunk } from '@/store/thunks';
 import { colors, typography, spacing, iconScale } from '@/theme';
 
-import type { OnboardingNavigationProp } from '@navigation/types';
+import type {
+  OnboardingNavigationProp,
+  OTPVerificationParams,
+} from '@navigation/types';
 
 const SOCIAL_ICON_SIZE = iconScale(20);
+const COUNTRY_CODE = '+971';
 
 const PLACEHOLDER_TERMS_URL = 'https://example.com/terms';
 const PLACEHOLDER_PRIVACY_URL = 'https://example.com/privacy';
+
+/** Starts with a digit and all characters are digits → phone, else email */
+const isPhoneInput = (value: string): boolean => {
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+  return /^\d+$/.test(trimmed);
+};
+
+const getStartedSchema = z
+  .object({
+    inputValue: z.string().min(1, 'Required'),
+  })
+  .superRefine((data, ctx) => {
+    const value = data.inputValue.trim();
+    if (isPhoneInput(value)) {
+      if (value.length < 8) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['inputValue'],
+          message: 'Phone number must be at least 8 digits',
+        });
+      }
+    } else {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['inputValue'],
+          message: 'Invalid email',
+        });
+      }
+    }
+  });
+
+type GetStartedFormData = z.infer<typeof getStartedSchema>;
 
 const enterAppStack = (navigation: OnboardingNavigationProp): void => {
   const root = navigation.getParent();
@@ -57,42 +93,62 @@ export const GetStartedScreen = (): ReactElement => {
   const navigation = useNavigation<OnboardingNavigationProp>();
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
-  const authStatus = useAppSelector(state => state.auth.status);
+  const googleSignInStatus = useAppSelector(
+    state => state.auth.operations.googleSignIn.status,
+  );
+  const requestOTPStatus = useAppSelector(
+    state => state.auth.operations.requestOTP.status,
+  );
 
-  const [inputValue, setInputValue] = useState('');
+  const { control, handleSubmit } = useForm<GetStartedFormData>({
+    resolver: zodResolver(getStartedSchema),
+    defaultValues: { inputValue: '' },
+  });
 
-  const canContinue = inputValue.trim().length > 0;
-  const isGoogleSigningIn = authStatus === 'loading';
+  const isGoogleSigningIn = googleSignInStatus === 'loading';
 
-  // const enterAppStack = useCallback((): void => {
-  //   const root = navigation.getParent();
-  //   root?.dispatch(
-  //     CommonActions.reset({
-  //       index: 0,
-  //       routes: [
-  //         {
-  //           name: 'AppStack',
-  //           params: {
-  //             screen: 'BottomTabs',
-  //             params: {
-  //               screen: 'HomeTab',
-  //               params: { screen: 'HomeDashboard' },
-  //             },
-  //           },
-  //         },
-  //       ],
-  //     }),
-  //   );
-  // }, [navigation]);
-
-  // const handleSkip = useCallback((): void => {
-  //   enterAppStack();
-  // }, [enterAppStack]);
-
-  const handleContinue = useCallback((): void => {
-    Keyboard.dismiss();
-    navigation.navigate('OTPVerification');
-  }, [navigation]);
+  const handleContinue = useCallback(
+    (data: GetStartedFormData) => {
+      Keyboard.dismiss();
+      void (async (): Promise<void> => {
+        try {
+          const value = data.inputValue.trim();
+          const isPhone = isPhoneInput(value);
+          const request = isPhone
+            ? {
+                type: 'normal' as const,
+                phone_number: value,
+                country_code: COUNTRY_CODE,
+              }
+            : { type: 'normal' as const, email: value };
+          const response = await dispatch(requestOTPThunk(request));
+          if (response.show_otp) {
+            const params: OTPVerificationParams = isPhone
+              ? {
+                  mode: 'phone',
+                  phone_number: value,
+                  country_code: COUNTRY_CODE,
+                }
+              : { mode: 'email', email: value };
+            navigation.navigate('OTPVerification', params);
+          } else {
+            Alert.alert(
+              'Error',
+              response.message || 'Something went wrong. Please try again.',
+              [{ text: 'OK' }],
+            );
+          }
+        } catch {
+          Alert.alert(
+            'Error',
+            'Failed to send verification code. Please try again.',
+            [{ text: 'OK' }],
+          );
+        }
+      })();
+    },
+    [dispatch, navigation],
+  );
 
   const handleTermsPress = useCallback((): void => {
     Linking.openURL(PLACEHOLDER_TERMS_URL).catch(() => {});
@@ -107,11 +163,14 @@ export const GetStartedScreen = (): ReactElement => {
     void (async (): Promise<void> => {
       try {
         const result = await dispatch(signInWithGoogleThunk());
-        if (result) {
-          enterAppStack(navigation);
+        if (result != null && result.status && result.customer) {
+          if (result.customer.user_register_flag === 'verified') {
+            enterAppStack(navigation);
+          } else {
+            navigation.navigate('YourDetails');
+          }
         }
-      } catch (error) {
-        console.log('error', error);
+      } catch {
         Alert.alert(
           'Sign in failed',
           'Unable to sign in with Google. Please try again.',
@@ -167,43 +226,53 @@ export const GetStartedScreen = (): ReactElement => {
               Enter your details to access your personal{'\n'}fitness plan.
             </Text>
 
-            {/* Input */}
-            <View style={styles.inputWrapper}>
-              <Input
-                value={inputValue}
-                onChangeText={setInputValue}
-                placeholder="Enter number or email"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoFocus
-              />
-            </View>
+            <Controller
+              control={control}
+              name="inputValue"
+              render={({
+                field: { onChange, onBlur, value },
+                fieldState: { error },
+              }) => (
+                <View style={styles.inputWrapper}>
+                  <Input
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    placeholder="Enter number or email"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    error={!!error}
+                    errorMessage={error?.message}
+                    autoFocus
+                  />
+                </View>
+              )}
+            />
 
-            {/* Continue */}
             <Button
               label="Continue"
               variant="primary"
               size="large"
-              disabled={!canContinue}
-              onPress={handleContinue}
+              loading={requestOTPStatus === 'loading'}
+              onPress={() => {
+                void handleSubmit(handleContinue)();
+              }}
               style={styles.continueButton}
             />
 
-            {/* Or continue with */}
             <View style={styles.dividerRow}>
               <View style={styles.dividerLine} />
               <Text style={styles.dividerText}>Or continue with</Text>
               <View style={styles.dividerLine} />
             </View>
 
-            {/* Google & Apple */}
             <View style={styles.socialRow}>
               <Button
                 label="Sign in with Google"
                 variant="minimal"
                 size="default"
                 onPress={handleGoogleSignIn}
-                disabled={isGoogleSigningIn}
+                disabled={isGoogleSigningIn || requestOTPStatus === 'loading'}
                 style={styles.socialButton}
                 iconLeft={
                   <GoogleIconSvg
@@ -217,6 +286,7 @@ export const GetStartedScreen = (): ReactElement => {
                 variant="minimal"
                 size="default"
                 onPress={handleSocialPress}
+                disabled={requestOTPStatus === 'loading'}
                 style={styles.socialButton}
                 iconLeft={
                   <AppleIconSvg
@@ -228,7 +298,6 @@ export const GetStartedScreen = (): ReactElement => {
             </View>
           </ScrollView>
 
-          {/* Footer legal — aligned with Intro carousel CTA bottom */}
           <View style={footerStyle}>
             <Text style={styles.footerText}>
               By continuing, you agree to our{' '}
@@ -247,8 +316,6 @@ export const GetStartedScreen = (): ReactElement => {
     </View>
   );
 };
-
-// ─── Styles ─────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
   container: {

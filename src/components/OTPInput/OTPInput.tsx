@@ -1,5 +1,12 @@
 import React, { useCallback, useRef } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 import { colors, moderateScale, spacing, typography } from '@/theme';
 
@@ -29,6 +36,7 @@ export const OTPInput = ({
   length = 4,
   placeholder = '-',
   autoFocus = false,
+  onBlur,
   testID,
   style,
   accessibilityLabel = 'OTP input',
@@ -47,6 +55,10 @@ export const OTPInput = ({
   const handleContainerPress = useCallback((): void => {
     inputRef.current?.focus();
   }, []);
+
+  const handleBlur = useCallback((): void => {
+    onBlur?.();
+  }, [onBlur]);
 
   return (
     <Pressable
@@ -73,10 +85,12 @@ export const OTPInput = ({
         ref={inputRef}
         value={value}
         onChangeText={handleChangeText}
-        keyboardType="number-pad"
+        onBlur={handleBlur}
+        keyboardType={Platform.OS === 'ios' ? 'number-pad' : 'numeric'}
         maxLength={length}
         style={styles.hiddenInput}
         autoFocus={autoFocus}
+        caretHidden={true}
       />
     </Pressable>
   );

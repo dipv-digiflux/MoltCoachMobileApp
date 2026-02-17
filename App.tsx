@@ -4,6 +4,7 @@ import { firebase } from '@react-native-firebase/app';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 
 import { configureGoogleSignIn } from '@/services/authService';
@@ -35,6 +36,7 @@ const AppContent = (): ReactElement => {
         <NavigationContainer>
           <RootNavigator />
         </NavigationContainer>
+        <Toast />
       </View>
     </Provider>
   );

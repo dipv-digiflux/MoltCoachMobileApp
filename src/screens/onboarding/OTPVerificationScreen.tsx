@@ -11,26 +11,82 @@ import {
   StyleSheet,
   TouchableOpacity,
   Keyboard,
+  Alert,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  useNavigation,
+  useRoute,
+  type RouteProp,
+} from '@react-navigation/native';
+import { Controller, useForm } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { z } from 'zod';
 
 import { Button, OTPInput, PageHeaderScrollView } from '@/components';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { requestOTPThunk, verifyOTPThunk } from '@/store/thunks';
 import { colors, spacing, typography } from '@/theme';
 
-import type { OnboardingNavigationProp } from '@navigation/types';
+import type {
+  OnboardingNavigationProp,
+  OnboardingStackParamList,
+  OTPVerificationParams,
+} from '@navigation/types';
 
-const MOCK_DESTINATION = 'John.smith@newmail.com';
 const OTP_LENGTH = 4;
 const RESEND_SECONDS_START = 30;
 
+const otpSchema = z.object({
+  otp: z
+    .string()
+    .length(OTP_LENGTH, `Enter ${OTP_LENGTH} digit code`)
+    .regex(/^\d+$/, 'Code must be digits only'),
+});
+
+type OTPFormData = z.infer<typeof otpSchema>;
+
+const formatDestination = (params: OTPVerificationParams): string => {
+  if (params.mode === 'email') {
+    return params.email;
+  }
+  return `${params.country_code} ${params.phone_number}`;
+};
+
 export const OTPVerificationScreen = (): ReactElement => {
   const navigation = useNavigation<OnboardingNavigationProp>();
+  const route =
+    useRoute<RouteProp<OnboardingStackParamList, 'OTPVerification'>>();
   const insets = useSafeAreaInsets();
+  const dispatch = useAppDispatch();
+  const verifyOTPStatus = useAppSelector(
+    state => state.auth.operations.verifyOTP.status,
+  );
 
-  const [code, setCode] = useState('');
+  const params = route.params;
   const [secondsLeft, setSecondsLeft] = useState(RESEND_SECONDS_START);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  const destination = useMemo(
+    () => (params ? formatDestination(params) : ''),
+    [params],
+  );
+
+  const {
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    trigger,
+    setError,
+    clearErrors,
+  } = useForm<OTPFormData>({
+    resolver: zodResolver(otpSchema),
+    mode: 'onBlur',
+    defaultValues: { otp: '' },
+  });
+
+  const otpValue = watch('otp');
 
   useEffect(() => {
     const showSub = Keyboard.addListener('keyboardDidShow', e => {
@@ -46,44 +102,91 @@ export const OTPVerificationScreen = (): ReactElement => {
   }, []);
 
   useEffect(() => {
-    if (secondsLeft === 0) {
-      return;
-    }
-
+    if (secondsLeft === 0) return;
     const timerId = setInterval(() => {
       setSecondsLeft(prev => (prev > 0 ? prev - 1 : 0));
     }, 1000);
-
-    return () => {
-      clearInterval(timerId);
-    };
+    return () => clearInterval(timerId);
   }, [secondsLeft]);
 
-  const handleVerify = useCallback((): void => {
-    if (code.length === OTP_LENGTH) {
-      navigation.navigate('YourDetails');
-    }
-  }, [code.length, navigation]);
+  const handleVerify = useCallback(
+    (data: OTPFormData) => {
+      if (!params) {
+        navigation.goBack();
+        return;
+      }
+      void (async (): Promise<void> => {
+        try {
+          const request =
+            params.mode === 'email'
+              ? {
+                  type: 'normal' as const,
+                  email: params.email,
+                  otp: data.otp,
+                }
+              : {
+                  type: 'normal' as const,
+                  phone_number: params.phone_number,
+                  country_code: params.country_code,
+                  otp: data.otp,
+                };
+          await dispatch(verifyOTPThunk(request));
+          navigation.navigate('YourDetails');
+        } catch (error) {
+          // TypeScript safety: handle error as unknown
+          let message = 'Invalid OTP';
+          if (
+            error &&
+            typeof error === 'object' &&
+            'message' in error &&
+            typeof (error as { message?: unknown }).message === 'string'
+          ) {
+            message = (error as { message: string }).message;
+          }
+          setError('otp', { message });
+        }
+      })();
+    },
+    [params, dispatch, navigation, setError],
+  );
 
   const handleChangePress = useCallback((): void => {
     navigation.goBack();
   }, [navigation]);
 
   const handleResendPress = useCallback((): void => {
-    if (secondsLeft > 0) return;
+    if (secondsLeft > 0 || !params) return;
+    void (async (): Promise<void> => {
+      clearErrors('otp');
+      try {
+        const request =
+          params.mode === 'email'
+            ? { type: 'normal' as const, email: params.email }
+            : {
+                type: 'normal' as const,
+                phone_number: params.phone_number,
+                country_code: params.country_code,
+              };
+        await dispatch(requestOTPThunk(request));
+        setSecondsLeft(RESEND_SECONDS_START);
+      } catch {
+        Alert.alert(
+          'Resend failed',
+          'Could not resend code. Please try again.',
+          [{ text: 'OK' }],
+        );
+      }
+    })();
+  }, [secondsLeft, params, dispatch, clearErrors]);
 
-    setSecondsLeft(RESEND_SECONDS_START);
-  }, [secondsLeft]);
-
-  const canVerify = code.length === OTP_LENGTH;
+  const canVerify = otpValue.length === OTP_LENGTH;
   const canResend = secondsLeft === 0;
-  const bottomInset = insets.bottom;
 
   const footerBottom = useMemo((): number => {
-    const offset = Math.max(bottomInset, spacing['Spacing-10xl']);
+    const offset = Math.max(insets.bottom, spacing['Spacing-10xl']);
     const keyboardGap = spacing['Spacing-5xl'];
     return offset + keyboardHeight + (keyboardHeight > 0 ? keyboardGap : 0);
-  }, [bottomInset, keyboardHeight]);
+  }, [insets.bottom, keyboardHeight]);
 
   const footerStyle = useMemo(
     () => [styles.footer, { bottom: footerBottom }],
@@ -106,6 +209,14 @@ export const OTPVerificationScreen = (): ReactElement => {
     [canResend],
   );
 
+  if (!params) {
+    return (
+      <View style={styles.container}>
+        <Button label="Go back" onPress={() => navigation.goBack()} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <PageHeaderScrollView
@@ -116,19 +227,52 @@ export const OTPVerificationScreen = (): ReactElement => {
           <View style={styles.headingBlock}>
             <Text style={styles.title}>Enter 4 digit code sent to</Text>
             <View style={styles.destinationRow}>
-              <Text style={styles.destinationText}>{MOCK_DESTINATION}</Text>
+              <Text style={styles.destinationText} numberOfLines={1}>
+                {destination}
+              </Text>
               <TouchableOpacity onPress={handleChangePress}>
                 <Text style={styles.changeText}>Change</Text>
               </TouchableOpacity>
             </View>
           </View>
 
-          <OTPInput
-            value={code}
-            onChangeText={setCode}
-            length={OTP_LENGTH}
-            autoFocus
-            style={styles.otpInput}
+          <Controller
+            control={control}
+            name="otp"
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { error },
+            }) => (
+              <View style={styles.otpWrap}>
+                <OTPInput
+                  value={value}
+                  onChangeText={text => {
+                    const prevLen = value.length;
+                    onChange(text);
+                    setValue('otp', text, {
+                      shouldValidate:
+                        (prevLen === OTP_LENGTH && text.length < OTP_LENGTH) ||
+                        text.length === OTP_LENGTH,
+                    });
+                  }}
+                  onBlur={() => {
+                    onBlur();
+                    void trigger('otp');
+                  }}
+                  length={OTP_LENGTH}
+                  autoFocus
+                  style={[
+                    styles.otpInput,
+                    error?.message && {
+                      borderColor: colors.FeedbackWarningBorder,
+                    },
+                  ]}
+                />
+                {error?.message != null ? (
+                  <Text style={styles.otpError}>{error.message}</Text>
+                ) : null}
+              </View>
+            )}
           />
 
           <View style={styles.resendRow}>
@@ -148,8 +292,11 @@ export const OTPVerificationScreen = (): ReactElement => {
             label="Verify"
             variant="primary"
             size="large"
+            loading={verifyOTPStatus === 'loading'}
             disabled={!canVerify}
-            onPress={handleVerify}
+            onPress={() => {
+              void handleSubmit(handleVerify)();
+            }}
             style={styles.verifyButton}
           />
         </View>
@@ -194,8 +341,15 @@ const styles = StyleSheet.create({
     color: colors.PrimaryMain,
     textDecorationLine: 'underline',
   },
-  otpInput: {
+  otpWrap: {
     marginBottom: spacing['Spacing-3xl'],
+  },
+  otpInput: {
+    marginBottom: spacing['Spacing-xl'],
+  },
+  otpError: {
+    ...typography.bodySmall1Regular,
+    color: colors.FeedbackWarningText,
   },
   resendRow: {
     alignItems: 'center',
