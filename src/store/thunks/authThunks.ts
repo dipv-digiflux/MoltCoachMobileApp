@@ -5,6 +5,7 @@ import {
   getGoogleIdToken,
   isGoogleSignInCancelled,
 } from '@/services/authService';
+import { saveAuth } from '@/services/authStorage';
 import {
   setAuthenticated,
   setOperationError,
@@ -38,6 +39,10 @@ export const signInWithGoogleThunk =
 
       if (response.status && response.customer && response.token) {
         dispatch(setAuthenticated(response));
+        await saveAuth({
+          token: response.token,
+          customer: response.customer,
+        });
         dispatch(setOperationIdle('googleSignIn'));
         return response;
       }
@@ -98,6 +103,10 @@ export const verifyOTPThunk =
       const response = await postAuthenticate(request);
       if (response.status && response.customer && response.token) {
         dispatch(setAuthenticated(response));
+        await saveAuth({
+          token: response.token,
+          customer: response.customer,
+        });
         dispatch(setOperationIdle('verifyOTP'));
         return response;
       }
