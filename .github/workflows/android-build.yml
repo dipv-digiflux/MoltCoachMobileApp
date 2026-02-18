@@ -2,7 +2,7 @@ name: React Native Android Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   build-android:
@@ -23,23 +23,36 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # 4. Setup Java (required for Android build)
+      # 4. Create .env.production file from secrets
+      - name: Create env file
+        run: |
+          echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> .env.production
+          echo "GOOGLE_WEB_CLIENT_ID=${{ secrets.GOOGLE_WEB_CLIENT_ID }}" >> .env.production
+
+      # 5. Setup Java
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # 5. Build APK
-      - name: Build Android APK
+      # 6. Build APK / AAB
+      - name: Build Android
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleRelease
+          ENVFILE=../.env.production ./gradlew assembleProductionRelease bundleProductionRelease
 
-      # 6. Upload APK as artifact
+      # 7. Upload APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
-          path: android/app/build/outputs/apk/release/app-release.apk
+          path: android/app/build/outputs/apk/production/release/*.apk
+
+      # 8. Upload AAB (Play Store)
+      - name: Upload AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: android/app/build/outputs/bundle/productionRelease/*.aab
