@@ -10,6 +10,7 @@ import {
 /** Props for the Input component. */
 export type InputProps = {
   autoFocus?: boolean;
+  caretHidden?: boolean;
   // ── Value & input ─────────────────────────────────────────────────
 
   /** Current text value. */

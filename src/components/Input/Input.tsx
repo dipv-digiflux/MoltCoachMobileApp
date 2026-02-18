@@ -66,12 +66,13 @@ export const Input = ({
   style,
   autoFocus,
   accessibilityLabel,
+  caretHidden,
 }: InputProps): React.ReactElement => {
   const inputRef = useRef<RNTextInput>(null);
   const [focused, setFocused] = useState(false);
 
   // ── Derived state ──────────────────────────────────────────────
-  const isDisabled = disabled || !editable;
+  const isDisabled = disabled;
   const showError = error && errorMessage !== undefined;
   const bottomText = showError ? errorMessage : helperText;
   const hasLeftText = leftText !== undefined;
@@ -205,7 +206,7 @@ export const Input = ({
           onChangeText={onChangeText}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          editable={!isDisabled}
+          editable={editable}
           secureTextEntry={secureTextEntry}
           keyboardType={keyboardType}
           autoCapitalize={autoCapitalize}
@@ -214,6 +215,7 @@ export const Input = ({
           returnKeyType={returnKeyType}
           onSubmitEditing={onSubmitEditing}
           underlineColorAndroid="transparent"
+          caretHidden={caretHidden}
         />
 
         {/* Right icon */}

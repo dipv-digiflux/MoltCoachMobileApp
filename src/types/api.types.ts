@@ -1,4 +1,10 @@
 import type { User, AuthTokens } from '@/types/models.types';
+import type {
+  ChronicCondition,
+  DailyActivity,
+  PrimaryGoal,
+  Sex,
+} from '@/types/onboarding.types';
 
 export type LoginRequest = {
   identifier: string;
@@ -45,6 +51,24 @@ export type AuthenticateResponse = {
   customer: Customer | null;
   show_otp: boolean;
 };
+
+export interface OnboardingRequest {
+  name: string;
+  sex: Sex;
+  birth_date: string;
+  height: number;
+  height_unit: 'cm' | 'ft';
+  weight: number;
+  weight_unit: 'kg' | 'lbs';
+  daily_activity: DailyActivity;
+  primary_goal: PrimaryGoal;
+  chronic_condition: ChronicCondition;
+}
+
+export interface OnboardingResponse {
+  status: boolean;
+  message: string;
+}
 
 export type ApiErrorResponse = {
   message: string;
