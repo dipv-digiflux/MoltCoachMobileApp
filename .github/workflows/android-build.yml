@@ -19,22 +19,19 @@ jobs:
 
       - name: Create env file
         run: |
-          echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> .env.production
-          echo "GOOGLE_WEB_CLIENT_ID=${{ secrets.GOOGLE_WEB_CLIENT_ID }}" >> .env.production
+          echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> .env.staging
+          echo "GOOGLE_WEB_CLIENT_ID=${{ secrets.GOOGLE_WEB_CLIENT_ID }}" >> .env.staging
 
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Build APK
-        run: |
-          cd android
-          chmod +x gradlew
-          ENVFILE=../.env.production ./gradlew assembleProductionRelease
+        run: npm run build:Staging
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: production-apk
-          path: android/app/build/outputs/apk/production/release/*.apk
+          name: staging-apk
+          path: android/app/build/outputs/apk/staging/release/*.apk
