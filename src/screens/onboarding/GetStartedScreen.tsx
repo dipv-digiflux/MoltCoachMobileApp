@@ -238,6 +238,7 @@ export const GetStartedScreen = (): ReactElement => {
               }) => (
                 <View style={styles.inputWrapper}>
                   <Input
+                    leftText={isPhoneInput(value) ? '+971' : undefined}
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -247,6 +248,7 @@ export const GetStartedScreen = (): ReactElement => {
                     error={!!error}
                     errorMessage={error?.message}
                     autoFocus
+                    maxLength={isPhoneInput(value) ? 9 : undefined}
                   />
                 </View>
               )}

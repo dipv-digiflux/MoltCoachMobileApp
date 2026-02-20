@@ -1,6 +1,7 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { getCustomer, postAuthenticate } from '@/api/authApi';
+import { rootNavigationRef } from '@/navigation/navigationRef';
 import {
   getGoogleIdToken,
   isGoogleSignInCancelled,
@@ -179,11 +180,27 @@ export const getCustomerThunk =
   };
 
 /**
- * Thunk: Log out and clear persisted auth.
+ * Thunk: Log out, clear persisted auth, clear Redux user data, and reset
+ * navigation to IntroCarousel (onboarding). Removes all stack history.
  */
 export const logoutThunk =
   () =>
   async (dispatch: AppDispatch): Promise<void> => {
     dispatch(logout());
     await clearAuth();
+
+    if (rootNavigationRef.isReady()) {
+      rootNavigationRef.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'OnboardingStack',
+            state: {
+              index: 0,
+              routes: [{ name: 'IntroCarousel' }],
+            },
+          },
+        ],
+      });
+    }
   };

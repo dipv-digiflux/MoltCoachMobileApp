@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
+  CommonActions,
   useNavigation,
   useRoute,
   type RouteProp,
@@ -66,7 +67,26 @@ export const OTPVerificationScreen = (): ReactElement => {
   const params = route.params;
   const [secondsLeft, setSecondsLeft] = useState(RESEND_SECONDS_START);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-
+  const enterAppStack = (navigation: OnboardingNavigationProp): void => {
+    const root = navigation.getParent();
+    root?.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'AppStack',
+            params: {
+              screen: 'BottomTabs',
+              params: {
+                screen: 'HomeTab',
+                params: { screen: 'HomeDashboard' },
+              },
+            },
+          },
+        ],
+      }),
+    );
+  };
   const destination = useMemo(
     () => (params ? formatDestination(params) : ''),
     [params],
@@ -130,8 +150,15 @@ export const OTPVerificationScreen = (): ReactElement => {
                   country_code: params.country_code,
                   otp: data.otp,
                 };
-          await dispatch(verifyOTPThunk(request));
-          navigation.navigate('YourDetails');
+          const result = await dispatch(verifyOTPThunk(request));
+          if (
+            result?.customer?.status?.on_boarding ||
+            result?.customer?.status?.on_boarding_skip
+          ) {
+            enterAppStack(navigation);
+          } else {
+            navigation.navigate('YourDetails');
+          }
         } catch (error) {
           // TypeScript safety: handle error as unknown
           let message = 'Invalid OTP';

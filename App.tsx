@@ -1,10 +1,7 @@
 import React, { type ReactElement } from 'react';
 import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 import { firebase } from '@react-native-firebase/app';
-import {
-  createNavigationContainerRef,
-  NavigationContainer,
-} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
@@ -16,22 +13,19 @@ import {
   setupPushNotificationListeners,
 } from '@/services/pushNotificationService';
 import { store } from '@/store/store';
+import { rootNavigationRef } from '@navigation/navigationRef';
 import { handleNotificationOpen } from '@navigation/notificationNavigation';
 import { RootNavigator } from '@navigation/RootNavigator';
 
-import type { RootStackParamList } from '@navigation/types';
-
 // Configure Google Sign-In at app startup
 configureGoogleSignIn();
-
-const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
 // Listeners only: handle notification opened / foreground. Permission + token requested after login.
 setupPushNotificationListeners({
   onNotificationOpened: message => {
     const payload = parseNotificationPayload(message);
     if (__DEV__) console.log('Notification opened:', payload);
-    handleNotificationOpen(navigationRef, payload);
+    handleNotificationOpen(rootNavigationRef, payload);
   },
 });
 
@@ -54,7 +48,7 @@ const AppContent = (): ReactElement => {
   return (
     <Provider store={store}>
       <View style={styles.container}>
-        <NavigationContainer ref={navigationRef}>
+        <NavigationContainer ref={rootNavigationRef}>
           <RootNavigator />
         </NavigationContainer>
         <Toast />

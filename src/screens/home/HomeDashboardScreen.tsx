@@ -7,9 +7,10 @@ import React, {
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { PageHeaderScrollView } from '@/components';
+import { Button, PageHeaderScrollView } from '@/components';
 import { HorizontalDatePicker } from '@/components/HorizontalDatePicker';
-import { useAppSelector } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { logoutThunk } from '@/store/thunks';
 import { colors, moderateScale, spacing, typography } from '@/theme';
 
 // ─── Tab config ───────────────────────────────────────────────────────
@@ -41,7 +42,7 @@ export const HomeDashboardScreen = (): ReactElement => {
     () => insets.bottom + spacing['Spacing-15xl'],
     [insets.bottom],
   );
-
+  const dispatch = useAppDispatch();
   const handleDateSelect = useCallback((date: Date): void => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -127,6 +128,13 @@ export const HomeDashboardScreen = (): ReactElement => {
         <Text style={styles.demoSubtext}>
           Content for {activeTab} will go here.
         </Text>
+        <Button
+          style={{ width: '100%' }}
+          label="Logout"
+          onPress={() => {
+            void dispatch(logoutThunk());
+          }}
+        />
       </View>
     </PageHeaderScrollView>
   );
@@ -235,6 +243,7 @@ const styles = StyleSheet.create({
   demoContent: {
     paddingHorizontal: spacing['Spacing-5xl'],
     paddingTop: spacing['Spacing-10xl'],
+    gap: spacing['Spacing-2xl'],
   },
   demoTitle: {
     ...typography.h8SemiBold,
