@@ -59,3 +59,6 @@ export type { DateSelectionCalendarProps } from './DateSelectionCalendar';
 
 export { DateSelectionBottomSheet } from './DateSelectionBottomSheet';
 export type { DateSelectionBottomSheetProps } from './DateSelectionBottomSheet';
+
+export { Dropdown } from './Dropdown';
+export type { DropdownOption, DropdownProps, DropdownValue } from './Dropdown';

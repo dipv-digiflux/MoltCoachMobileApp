@@ -1,27 +1,23 @@
-import type { User, AuthTokens } from '@/types/models.types';
 import type {
   ChronicCondition,
   DailyActivity,
+  HeightUnit,
+  OnboardingFormValues,
   PrimaryGoal,
   Sex,
+  WeightUnit,
 } from '@/types/onboarding.types';
 
-export type LoginRequest = {
-  identifier: string;
-  password: string;
+export type CustomerStatus = {
+  on_boarding_skip: boolean;
+  health_connect_skip: boolean;
+  on_boarding: boolean;
+  health_connect: boolean;
 };
 
-/** Sent to backend after Google Sign-In; backend verifies idToken and returns LoginResponse. */
-export type GoogleAuthRequest = {
-  idToken: string;
-};
+export type CustomerBodyMetrics = OnboardingFormValues;
 
-export type LoginResponse = {
-  user: User;
-  tokens: AuthTokens;
-};
-
-/** Backend customer from POST /v1/auth/authenticate */
+/** Backend customer (auth + profile). */
 export type Customer = {
   id: string;
   email: string;
@@ -29,7 +25,8 @@ export type Customer = {
   last_name: string;
   phone_number: string;
   country_code: string;
-  user_register_flag: string;
+  status?: CustomerStatus;
+  body_metrics?: CustomerBodyMetrics;
 };
 
 /** Request for POST /v1/auth/authenticate */
@@ -57,9 +54,9 @@ export interface OnboardingRequest {
   sex: Sex;
   birth_date: string;
   height: number;
-  height_unit: 'cm' | 'ft';
+  height_unit: HeightUnit;
   weight: number;
-  weight_unit: 'kg' | 'lbs';
+  weight_unit: WeightUnit;
   daily_activity: DailyActivity;
   primary_goal: PrimaryGoal;
   chronic_condition: ChronicCondition;
@@ -69,6 +66,15 @@ export interface OnboardingResponse {
   status: boolean;
   message: string;
 }
+
+/** Response from GET /v1/auth/customer */
+export type GetCustomerResponse = {
+  status: boolean;
+  message: string;
+  data: {
+    customer: Customer;
+  };
+};
 
 export type ApiErrorResponse = {
   message: string;

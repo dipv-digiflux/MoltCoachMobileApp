@@ -25,7 +25,7 @@ src/store/
 ### Slice rules
 
 - Slices contain ONLY: `createSlice`, `initialState`, `reducers`, `actions`, `reducer`
-- No async logic, no API calls, no imports from `api/` or `services/` (except authTokenHolder for logout/setAuthenticated)
+- No async logic, no API calls, no imports from `api/` or `services/` (except authTokenHolder for logout)
 
 ### Per-API operation status (industry standard)
 
@@ -93,8 +93,8 @@ src/api/
 
 1. Thunk: `signInWithGoogleThunk` in `store/thunks/authThunks.ts`
 2. Thunk calls `authService.getGoogleIdToken()` (Google SDK → idToken)
-3. Thunk calls `authApi.postGoogleAuth(idToken)` (HTTP → LoginResponse)
-4. Thunk dispatches `setAuthenticated(response)`
+3. Thunk calls `authApi.postAuthenticate(...)` (HTTP → AuthenticateResponse)
+4. On success, thunk sets token via `authTokenHolder.setAccessToken(token)` for API client use
 
 ---
 

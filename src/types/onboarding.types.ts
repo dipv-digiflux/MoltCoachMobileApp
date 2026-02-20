@@ -1,5 +1,9 @@
 export type Sex = 'male' | 'female' | 'other';
 
+export type HeightUnit = 'cm' | 'ft';
+
+export type WeightUnit = 'kg' | 'lbs';
+
 export type DailyActivity =
   | 'High Output'
   | 'Get Stronger'
@@ -25,7 +29,9 @@ export interface OnboardingFormValues {
   sex: Sex;
   birthDate: string;
   height: string;
+  heightUnit: HeightUnit;
   weight: string;
+  weightUnit: WeightUnit;
   dailyActivity: DailyActivity;
   primaryGoal: PrimaryGoal;
   chronicCondition: ChronicCondition;

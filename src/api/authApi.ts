@@ -1,10 +1,11 @@
-import { httpPost } from '@/services/apiClient';
+import { httpGet, httpPost } from '@/services/apiClient';
 
 import { ENDPOINTS } from './endpoints';
 
 import type {
   AuthenticateRequest,
   AuthenticateResponse,
+  GetCustomerResponse,
   OnboardingRequest,
   OnboardingResponse,
 } from '@/types/api.types';
@@ -33,4 +34,20 @@ export const postOnboarding = async (
     ENDPOINTS.AUTH_ONBOARDING,
     request,
   );
+};
+
+/**
+ * Get customer data (profile, status, body metrics).
+ * GET /v1/auth/customer
+ */
+export const getCustomer = async (
+  include?: string,
+): Promise<GetCustomerResponse> => {
+  const config = include
+    ? {
+        params: { include },
+      }
+    : undefined;
+
+  return httpGet<GetCustomerResponse>(ENDPOINTS.AUTH_CUSTOMER, config);
 };

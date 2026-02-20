@@ -1,4 +1,6 @@
 export {
+  getCustomerThunk,
+  logoutThunk,
   requestOTPThunk,
   signInWithGoogleThunk,
   verifyOTPThunk,

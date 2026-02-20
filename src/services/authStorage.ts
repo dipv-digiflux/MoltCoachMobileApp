@@ -14,7 +14,7 @@ export const saveAuth = async (auth: PersistedAuth): Promise<void> => {
     const payload = JSON.stringify(auth);
     await AsyncStorage.setItem(AUTH_STORAGE_KEY, payload);
   } catch {
-    // Storage failures should not block login flows. Intentionally swallowed.
+    // Storage failures should not block auth flows. Intentionally swallowed.
   }
 };
 

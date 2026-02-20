@@ -4,11 +4,11 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import { LogoWhite } from '@/assets/images';
 import { loadAuth } from '@/services/authStorage';
+import { setAccessToken } from '@/services/authTokenHolder';
 import { useAppDispatch } from '@/store/hooks';
-import { setAuthenticated } from '@/store/slices/authSlice';
+import { getCustomerThunk } from '@/store/thunks';
 import { colors } from '@/theme/colors';
 
-import type { AuthenticateResponse } from '@/types/api.types';
 import type { OnboardingNavigationProp } from '@navigation/types';
 
 const ANIMATION_DURATION_MS = 800;
@@ -51,17 +51,15 @@ export const SplashScreen = (): ReactElement => {
       }
 
       if (persistedAuth && persistedAuth.token && persistedAuth.customer) {
-        const response: AuthenticateResponse = {
-          status: true,
-          message: '',
-          token: persistedAuth.token,
-          customer: persistedAuth.customer,
-          show_otp: false,
-        };
-
-        dispatch(setAuthenticated(response));
-
-        if (persistedAuth.customer.user_register_flag === 'verified') {
+        setAccessToken(persistedAuth.token);
+        const user = await dispatch(getCustomerThunk());
+        const status = user?.status;
+        if (
+          status?.on_boarding === false &&
+          status?.on_boarding_skip === false
+        ) {
+          navigation.replace('YourDetails');
+        } else if (status?.on_boarding || status?.on_boarding_skip) {
           const root = navigation.getParent();
           root?.dispatch(
             CommonActions.reset({
@@ -81,7 +79,7 @@ export const SplashScreen = (): ReactElement => {
             }),
           );
         } else {
-          navigation.replace('YourDetails');
+          navigation.replace('IntroCarousel');
         }
         return;
       }

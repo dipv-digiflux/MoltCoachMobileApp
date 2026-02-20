@@ -164,7 +164,10 @@ export const GetStartedScreen = (): ReactElement => {
       try {
         const result = await dispatch(signInWithGoogleThunk());
         if (result != null && result.status && result.customer) {
-          if (result.customer.user_register_flag === 'verified') {
+          if (
+            result?.customer?.status?.on_boarding ||
+            result?.customer?.status?.on_boarding_skip
+          ) {
             enterAppStack(navigation);
           } else {
             navigation.navigate('YourDetails');
