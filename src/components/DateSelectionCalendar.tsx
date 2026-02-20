@@ -3,7 +3,13 @@ import { StyleSheet, View } from 'react-native';
 import Calendar from 'react-native-calendars/src/calendar';
 
 import { Button } from '@/components';
-import { colors, moderateScale, spacing, typography } from '@/theme';
+import {
+  colors,
+  fontFamily,
+  moderateScale,
+  spacing,
+  typography,
+} from '@/theme';
 
 import type { DateData, MarkedDates } from 'react-native-calendars/src/types';
 
@@ -91,11 +97,11 @@ export const DateSelectionCalendar = ({
           textDisabledColor: colors.TextPrimaryDisabled,
           arrowColor: colors.PrimaryMain,
           monthTextColor: colors.TextPrimaryDefault,
-          textDayFontFamily: typography.bodySmall1Regular.fontFamily,
+          textDayFontFamily: fontFamily.inter,
           textDayFontSize: typography.bodySmall1Regular.fontSize,
-          textMonthFontFamily: typography.b1SemiBold.fontFamily,
+          textMonthFontFamily: fontFamily.interRegular,
           textMonthFontSize: typography.b1SemiBold.fontSize,
-          textDayHeaderFontFamily: typography.bodySmall1Medium.fontFamily,
+          textDayHeaderFontFamily: fontFamily.interRegular,
           textDayHeaderFontSize: typography.bodySmall1Medium.fontSize,
         }}
         style={styles.calendar}

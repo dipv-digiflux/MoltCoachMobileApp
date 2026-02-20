@@ -8,19 +8,25 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+# Required for Firebase iOS SDK (v9+) / react-native-firebase — exposes Swift modules (e.g. FirebaseMessaging)
+$RNFirebaseAsStaticFramework = true
+
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
   use_frameworks! :linkage => linkage.to_sym
 end
 
-pod 'GoogleUtilities', :modular_headers => true
-pod 'FirebaseCore', :modular_headers => true
-pod 'FirebaseCoreInternal', :modular_headers => true
-pod 'Firebase/Messaging'
-
 target 'MoltApp' do
   config = use_native_modules!
+
+  # Firebase: use static frameworks so Swift modules (Firebase, FirebaseMessaging) are available to AppDelegate
+  use_frameworks! :linkage => :static
+
+  pod 'GoogleUtilities', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'FirebaseCoreInternal', :modular_headers => true
+  pod 'Firebase/Messaging'
 
   use_react_native!(
     :path => config[:reactNativePath],

@@ -520,7 +520,7 @@ export const YourDetailsScreen = (): ReactElement => {
     () => [
       styles.footer,
       {
-        bottom: footerBottom,
+        bottom: 0,
         backgroundColor: isLiquidGlassSupported
           ? undefined
           : 'rgba(255, 255, 255, 0.6)',
@@ -987,7 +987,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    paddingTop: spacing['Spacing-10xl'],
+    paddingVertical: spacing['Spacing-10xl'],
     paddingHorizontal: spacing['Spacing-5xl'],
   },
   nextButton: {
