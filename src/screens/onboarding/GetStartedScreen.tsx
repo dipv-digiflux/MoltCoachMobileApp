@@ -8,7 +8,6 @@ import {
   Platform,
   ScrollView,
   Keyboard,
-  Alert,
 } from 'react-native';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CommonActions, useNavigation } from '@react-navigation/native';
@@ -22,6 +21,8 @@ import { Button, Input, PageHeaderScrollView } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { requestOTPThunk, signInWithGoogleThunk } from '@/store/thunks';
 import { colors, typography, spacing, iconScale } from '@/theme';
+import { getApiErrorMessage } from '@/utils/apiError';
+import { showErrorToast } from '@/utils/toast';
 
 import type {
   OnboardingNavigationProp,
@@ -100,7 +101,7 @@ export const GetStartedScreen = (): ReactElement => {
     state => state.auth.operations.requestOTP.status,
   );
 
-  const { control, handleSubmit } = useForm<GetStartedFormData>({
+  const { control, handleSubmit, setError } = useForm<GetStartedFormData>({
     resolver: zodResolver(getStartedSchema),
     defaultValues: { inputValue: '' },
   });
@@ -132,18 +133,15 @@ export const GetStartedScreen = (): ReactElement => {
               : { mode: 'email', email: value };
             navigation.navigate('OTPVerification', params);
           } else {
-            Alert.alert(
-              'Error',
-              response.message || 'Something went wrong. Please try again.',
-              [{ text: 'OK' }],
-            );
+            setError('inputValue', {
+              message:
+                response.message || 'Something went wrong. Please try again.',
+            });
           }
-        } catch {
-          Alert.alert(
-            'Error',
-            'Failed to send verification code. Please try again.',
-            [{ text: 'OK' }],
-          );
+        } catch (error) {
+          setError('inputValue', {
+            message: getApiErrorMessage(error),
+          });
         }
       })();
     },
@@ -174,11 +172,7 @@ export const GetStartedScreen = (): ReactElement => {
           }
         }
       } catch {
-        Alert.alert(
-          'Sign in failed',
-          'Unable to sign in with Google. Please try again.',
-          [{ text: 'OK' }],
-        );
+        showErrorToast('Unable to sign in with Google. Please try again.');
       }
     })();
   }, [dispatch, navigation]);
@@ -396,7 +390,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   footerLink: {
-    ...typography.bodySmall3SemiBold,
+    ...typography.bodySmall2Regular,
     color: colors.TextPrimaryDefault,
   },
 });

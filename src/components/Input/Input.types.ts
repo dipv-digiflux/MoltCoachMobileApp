@@ -9,6 +9,7 @@ import {
 
 /** Props for the Input component. */
 export type InputProps = {
+  containerPress?: () => void;
   autoFocus?: boolean;
   caretHidden?: boolean;
   // ── Value & input ─────────────────────────────────────────────────

@@ -52,36 +52,41 @@ export const SplashScreen = (): ReactElement => {
 
       if (persistedAuth && persistedAuth.token && persistedAuth.customer) {
         setAccessToken(persistedAuth.token);
-        const user = await dispatch(getCustomerThunk());
-        const status = user?.status;
-        if (
-          status?.on_boarding === false &&
-          status?.on_boarding_skip === false
-        ) {
-          navigation.replace('YourDetails');
-        } else if (status?.on_boarding || status?.on_boarding_skip) {
-          const root = navigation.getParent();
-          root?.dispatch(
-            CommonActions.reset({
-              index: 0,
-              routes: [
-                {
-                  name: 'AppStack',
-                  params: {
-                    screen: 'BottomTabs',
+        try {
+          const user = await dispatch(getCustomerThunk());
+          const status = user?.status;
+          if (
+            status?.on_boarding === false &&
+            status?.on_boarding_skip === false
+          ) {
+            navigation.replace('YourDetails');
+          } else if (status?.on_boarding || status?.on_boarding_skip) {
+            const root = navigation.getParent();
+            root?.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: 'AppStack',
                     params: {
-                      screen: 'HomeTab',
-                      params: { screen: 'HomeDashboard' },
+                      screen: 'BottomTabs',
+                      params: {
+                        screen: 'HomeTab',
+                        params: { screen: 'HomeDashboard' },
+                      },
                     },
                   },
-                },
-              ],
-            }),
-          );
-        } else {
+                ],
+              }),
+            );
+          } else {
+            navigation.replace('IntroCarousel');
+          }
+          return;
+        } catch {
           navigation.replace('IntroCarousel');
+          return;
         }
-        return;
       }
 
       navigation.replace('IntroCarousel');

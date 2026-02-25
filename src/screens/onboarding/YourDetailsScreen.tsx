@@ -174,8 +174,8 @@ const displayDateToIso = (display: string): string | undefined => {
   }
 };
 
-/** Maximum selectable DoB = 0 years ago (user must be at least 0). */
-const DOB_MAX_DATE = format(subYears(new Date(), 0), ISO_DATE_FORMAT);
+/** Maximum selectable DoB = 16 years ago (user must be at least 16). */
+const DOB_MAX_DATE = format(subYears(new Date(), 16), ISO_DATE_FORMAT);
 /** Minimum selectable DoB = 120 years ago (sanity cap). */
 const DOB_MIN_DATE = format(subYears(new Date(), 120), ISO_DATE_FORMAT);
 
@@ -610,17 +610,14 @@ export const YourDetailsScreen = (): ReactElement => {
           name="birthDate"
           render={({ field: { value, onChange, onBlur } }) => (
             <Input
+              containerPress={() => setIsDateSelectionBottomSheetVisible(true)}
               placeholder="DD/MM/YYYY"
               value={value}
               onChangeText={onChange}
               editable={false}
               keyboardType="number-pad"
               rightIcon={
-                <CalendarIconSvg
-                  onPress={() => setIsDateSelectionBottomSheetVisible(true)}
-                  width={ICON_SIZE}
-                  height={ICON_SIZE}
-                />
+                <CalendarIconSvg width={ICON_SIZE} height={ICON_SIZE} />
               }
               onFocus={() => scrollToFocusedInput(1)}
               onBlur={onBlur}

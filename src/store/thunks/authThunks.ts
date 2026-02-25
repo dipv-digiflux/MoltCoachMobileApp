@@ -171,6 +171,15 @@ export const getCustomerThunk =
       );
       return null;
     } catch (error) {
+      const status =
+        error && typeof error === 'object' && 'response' in error
+          ? (error as { response?: { status?: number } }).response?.status
+          : undefined;
+      if (status === 401) {
+        dispatch(setOperationIdle('getCustomer'));
+        await dispatch(logoutThunk());
+        return null;
+      }
       const errorMsg = getApiErrorMessage(error);
       dispatch(
         setOperationError({ operation: 'getCustomer', message: errorMsg }),

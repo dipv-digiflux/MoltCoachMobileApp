@@ -67,6 +67,7 @@ export const Input = ({
   autoFocus,
   accessibilityLabel,
   caretHidden,
+  containerPress,
 }: InputProps): React.ReactElement => {
   const inputRef = useRef<RNTextInput>(null);
   const [focused, setFocused] = useState(false);
@@ -116,6 +117,7 @@ export const Input = ({
   }, [onBlurProp]);
 
   const handleContainerPress = useCallback((): void => {
+    containerPress?.();
     inputRef.current?.focus();
   }, []);
 
