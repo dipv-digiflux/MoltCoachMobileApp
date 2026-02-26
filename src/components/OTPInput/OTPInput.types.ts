@@ -17,6 +17,9 @@ export type OTPInputProps = {
   /** Whether to auto-focus the input on mount. @default false */
   autoFocus?: boolean;
 
+  /** Called when the input loses focus. */
+  onBlur?: () => void;
+
   /** Test identifier. */
   testID?: string;
 

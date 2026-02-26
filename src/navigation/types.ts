@@ -1,11 +1,15 @@
 import type { NavigatorScreenParams } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+export type OTPVerificationParams =
+  | { mode: 'email'; email: string }
+  | { mode: 'phone'; phone_number: string; country_code: string };
+
 export type OnboardingStackParamList = {
   Splash: undefined;
   IntroCarousel: undefined;
   GetStarted: undefined;
-  OTPVerification: undefined;
+  OTPVerification: OTPVerificationParams | undefined;
   YourDetails: undefined;
   ConnectHealth: undefined;
   PlanPreview: undefined;

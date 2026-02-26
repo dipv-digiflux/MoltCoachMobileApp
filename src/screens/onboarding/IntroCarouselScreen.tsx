@@ -12,14 +12,20 @@ import {
   View,
   Text,
   StyleSheet,
-  Animated,
-  Easing,
   Dimensions,
   Image,
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  Easing,
+  runOnJS,
+  type SharedValue,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components';
@@ -39,8 +45,8 @@ import type { OnboardingNavigationProp } from '@navigation/types';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const SLIDE_DURATION = 3500;
-const CONTENT_ANIMATION_DURATION = 850;
-const CONTENT_ANIMATION_EASING = Easing.bezier(0.33, 1, 0.68, 1);
+const CAROUSEL_ANIMATION_DURATION = 450;
+const CAROUSEL_EASING = Easing.bezier(0.33, 1, 0.68, 1);
 const ENTRANCE_DURATION = 580;
 const ENTRANCE_EASING = Easing.bezier(0.25, 0.1, 0.25, 1);
 const TOP_ENTRANCE_OFFSET = SCREEN_HEIGHT * 0.12;
@@ -68,10 +74,13 @@ const SLIDES: readonly SlideData[] = [
 
 const TOTAL_SLIDES = SLIDES.length;
 
+// Horizontal strip: [Slide0 | Slide1 | Slide2 | Slide0] for seamless loop
+const CAROUSEL_SLIDES = [...SLIDES, SLIDES[0]] as const;
+
 type ProgressSegmentProps = {
   index: number;
   currentIndex: number;
-  progressAnim: Animated.Value;
+  progressAnim: SharedValue<number>;
 };
 
 const ProgressSegment = memo(function ProgressSegment({
@@ -82,23 +91,61 @@ const ProgressSegment = memo(function ProgressSegment({
   const isFilled = index < currentIndex;
   const isActive = index === currentIndex;
 
+  const fillAnimatedStyle = useAnimatedStyle(() => {
+    'worklet';
+    if (index < currentIndex) return { width: '100%' };
+    if (index === currentIndex) {
+      return { width: `${Math.min(100, progressAnim.value * 100)}%` };
+    }
+    return { width: '0%' };
+  }, [index, currentIndex]);
+
   return (
-    <View style={[styles.progressSegmentTrack]}>
+    <View style={styles.progressSegmentTrack}>
       {isFilled ? (
-        <View style={styles.progressSegmentFillFull} />
+        <View
+          style={[styles.progressSegmentFill, styles.progressSegmentFillFull]}
+        />
       ) : isActive ? (
         <Animated.View
-          style={[
-            styles.progressSegmentFill,
-            {
-              width: progressAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: ['0%', '100%'],
-              }),
-            },
-          ]}
+          style={[styles.progressSegmentFill, fillAnimatedStyle]}
         />
       ) : null}
+    </View>
+  );
+});
+
+type ImageCellProps = {
+  slide: SlideData;
+};
+
+const ImageCell = memo(function ImageCell({
+  slide: _slide,
+}: ImageCellProps): ReactElement {
+  return (
+    <View style={styles.imageCell}>
+      <View style={styles.imageContainer}>
+        <Image
+          source={Device}
+          style={styles.deviceImage}
+          resizeMode="contain"
+        />
+      </View>
+    </View>
+  );
+});
+
+type TextCellProps = {
+  slide: SlideData;
+};
+
+const TextCell = memo(function TextCell({
+  slide,
+}: TextCellProps): ReactElement {
+  return (
+    <View style={styles.textCell}>
+      <Text style={styles.title}>{slide.title}</Text>
+      <Text style={styles.subtitle}>{slide.subtitle}</Text>
     </View>
   );
 });
@@ -110,156 +157,127 @@ export const IntroCarouselScreen = (): ReactElement => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const progressAnim = useRef(new Animated.Value(0)).current;
+  const progressAnim = useSharedValue(0);
+  const stripTranslateX = useSharedValue(SCREEN_WIDTH);
+  const topTranslateY = useSharedValue(-TOP_ENTRANCE_OFFSET);
+  const topOpacity = useSharedValue(0);
+  const bottomTranslateY = useSharedValue(BOTTOM_ENTRANCE_OFFSET);
+  const bottomOpacity = useSharedValue(0);
 
-  const contentTranslateX = useRef(new Animated.Value(0)).current;
-  const contentOpacity = useRef(new Animated.Value(1)).current;
-  const topSectionTranslateY = useRef(
-    new Animated.Value(-TOP_ENTRANCE_OFFSET),
-  ).current;
-  const topSectionOpacity = useRef(new Animated.Value(0)).current;
-  const bottomSectionTranslateY = useRef(
-    new Animated.Value(BOTTOM_ENTRANCE_OFFSET),
-  ).current;
-  const bottomSectionOpacity = useRef(new Animated.Value(0)).current;
+  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
+    null,
+  );
 
   const handleNavigateToGetStarted = useCallback((): void => {
-    progressAnim.stopAnimation();
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
     navigation.navigate('GetStarted');
-  }, [navigation, progressAnim]);
+  }, [navigation]);
+
+  const advanceToNext = useCallback((): void => {
+    setCurrentIndex(prev => {
+      if (prev < TOTAL_SLIDES - 1) {
+        const nextIndex = prev + 1;
+        stripTranslateX.value = withTiming(-(nextIndex * SCREEN_WIDTH), {
+          duration: CAROUSEL_ANIMATION_DURATION,
+          easing: CAROUSEL_EASING,
+        });
+        return nextIndex;
+      }
+      stripTranslateX.value = withTiming(
+        -(TOTAL_SLIDES * SCREEN_WIDTH),
+        { duration: CAROUSEL_ANIMATION_DURATION, easing: CAROUSEL_EASING },
+        () => {
+          stripTranslateX.value = 0;
+          runOnJS(setCurrentIndex)(0);
+        },
+      );
+      return prev;
+    });
+  }, [stripTranslateX]);
 
   useEffect(() => {
     if (!isFocused) {
-      progressAnim.stopAnimation();
-      if (currentIndex !== 0) {
-        setCurrentIndex(0);
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
       }
+      setCurrentIndex(0);
+      stripTranslateX.value = 0;
+      progressAnim.value = 0;
       return;
     }
 
-    progressAnim.setValue(0);
+    progressAnim.value = 0;
 
-    const animation = Animated.timing(progressAnim, {
-      toValue: 1,
-      duration: SLIDE_DURATION,
-      easing: Easing.linear,
-      useNativeDriver: false,
-    });
+    const startTime = Date.now();
+    progressIntervalRef.current = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(1, elapsed / SLIDE_DURATION);
+      progressAnim.value = progress;
 
-    animation.start(({ finished }) => {
-      if (finished) {
-        if (currentIndex < TOTAL_SLIDES - 1) {
-          setCurrentIndex(prev => prev + 1);
-        } else {
-          handleNavigateToGetStarted();
+      if (progress >= 1) {
+        const id = progressIntervalRef.current;
+        if (id) {
+          clearInterval(id);
+          progressIntervalRef.current = null;
         }
+        advanceToNext();
       }
-    });
+    }, 16);
 
-    return (): void => {
-      animation.stop();
+    return () => {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
     };
-  }, [currentIndex, isFocused, progressAnim, handleNavigateToGetStarted]);
+  }, [isFocused, currentIndex, progressAnim, stripTranslateX, advanceToNext]);
 
   useLayoutEffect(() => {
-    Animated.parallel([
-      Animated.timing(topSectionTranslateY, {
-        toValue: 0,
-        duration: ENTRANCE_DURATION,
-        easing: ENTRANCE_EASING,
-        useNativeDriver: true,
-      }),
-      Animated.timing(topSectionOpacity, {
-        toValue: 1,
-        duration: ENTRANCE_DURATION,
-        easing: ENTRANCE_EASING,
-        useNativeDriver: true,
-      }),
-      Animated.timing(bottomSectionTranslateY, {
-        toValue: 0,
-        duration: ENTRANCE_DURATION,
-        easing: ENTRANCE_EASING,
-        useNativeDriver: true,
-      }),
-      Animated.timing(bottomSectionOpacity, {
-        toValue: 1,
-        duration: ENTRANCE_DURATION,
-        easing: ENTRANCE_EASING,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    topTranslateY.value = withTiming(0, {
+      duration: ENTRANCE_DURATION,
+      easing: ENTRANCE_EASING,
+    });
+    topOpacity.value = withTiming(1, {
+      duration: ENTRANCE_DURATION,
+      easing: ENTRANCE_EASING,
+    });
+    bottomTranslateY.value = withTiming(0, {
+      duration: ENTRANCE_DURATION,
+      easing: ENTRANCE_EASING,
+    });
+    bottomOpacity.value = withTiming(1, {
+      duration: ENTRANCE_DURATION,
+      easing: ENTRANCE_EASING,
+    });
+
+    stripTranslateX.value = withTiming(0, {
+      duration: CAROUSEL_ANIMATION_DURATION,
+      easing: CAROUSEL_EASING,
+    });
   }, [
-    topSectionTranslateY,
-    topSectionOpacity,
-    bottomSectionTranslateY,
-    bottomSectionOpacity,
+    topTranslateY,
+    topOpacity,
+    bottomTranslateY,
+    bottomOpacity,
+    stripTranslateX,
   ]);
 
-  useLayoutEffect(() => {
-    if (currentIndex === 0) {
-      return;
-    }
+  const carouselStripStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: stripTranslateX.value }],
+  }));
 
-    contentTranslateX.setValue(SCREEN_WIDTH);
-    contentOpacity.setValue(0);
+  const progressBarStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: topTranslateY.value }],
+    opacity: topOpacity.value,
+  }));
 
-    Animated.parallel([
-      Animated.timing(contentTranslateX, {
-        toValue: 0,
-        duration: CONTENT_ANIMATION_DURATION,
-        easing: CONTENT_ANIMATION_EASING,
-        useNativeDriver: true,
-      }),
-      Animated.timing(contentOpacity, {
-        toValue: 1,
-        duration: CONTENT_ANIMATION_DURATION,
-        easing: CONTENT_ANIMATION_EASING,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [currentIndex, contentTranslateX, contentOpacity]);
-
-  const currentSlide = useMemo(() => SLIDES[currentIndex], [currentIndex]);
-
-  const imageAnimatedStyle = useMemo(
-    () => ({
-      transform: [
-        { translateY: topSectionTranslateY },
-        { translateX: contentTranslateX },
-      ],
-      opacity: Animated.multiply(topSectionOpacity, contentOpacity),
-    }),
-    [
-      topSectionTranslateY,
-      contentTranslateX,
-      topSectionOpacity,
-      contentOpacity,
-    ],
-  );
-
-  const progressBarAnimatedStyle = useMemo(
-    () => ({
-      transform: [{ translateY: topSectionTranslateY }],
-      opacity: topSectionOpacity,
-    }),
-    [topSectionTranslateY, topSectionOpacity],
-  );
-
-  const textAnimatedStyle = useMemo(
-    () => ({
-      transform: [
-        { translateY: bottomSectionTranslateY },
-        { translateX: contentTranslateX },
-      ],
-      opacity: Animated.multiply(bottomSectionOpacity, contentOpacity),
-    }),
-    [
-      bottomSectionTranslateY,
-      contentTranslateX,
-      bottomSectionOpacity,
-      contentOpacity,
-    ],
-  );
+  const bottomSectionAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: bottomTranslateY.value }],
+    opacity: bottomOpacity.value,
+  }));
 
   const containerStyle = useMemo(
     () => [styles.container, { paddingTop: insets.top }],
@@ -271,9 +289,9 @@ export const IntroCarouselScreen = (): ReactElement => {
     [insets.top],
   );
 
-  const bottomSectionStyle = useMemo(
+  const buttonSectionStyle = useMemo(
     () => [
-      styles.bottomSection,
+      styles.buttonSection,
       {
         paddingBottom: Math.max(insets.bottom, spacing['Spacing-10xl']),
       },
@@ -298,18 +316,18 @@ export const IntroCarouselScreen = (): ReactElement => {
         <Text style={styles.skipText}>Skip</Text>
       </TouchableOpacity>
 
-      <Animated.View style={[styles.imageWrapper, imageAnimatedStyle]}>
-        <View style={styles.imageContainer}>
-          <Image
-            source={Device}
-            style={styles.deviceImage}
-            resizeMode="contain"
-          />
-        </View>
-      </Animated.View>
-      <Animated.View
-        style={[styles.progressBarContainer, progressBarAnimatedStyle]}
-      >
+      <View style={styles.imageViewport}>
+        <Animated.View
+          style={[styles.carouselStrip, carouselStripStyle]}
+          pointerEvents="box-none"
+        >
+          {CAROUSEL_SLIDES.map((slide, index) => (
+            <ImageCell key={`image-${String(index)}`} slide={slide} />
+          ))}
+        </Animated.View>
+      </View>
+
+      <Animated.View style={[styles.progressBarContainer, progressBarStyle]}>
         {SLIDES.map((_, index) => (
           <ProgressSegment
             key={`progress-${String(index)}`}
@@ -320,12 +338,21 @@ export const IntroCarouselScreen = (): ReactElement => {
         ))}
       </Animated.View>
 
-      <View style={bottomSectionStyle}>
-        <Animated.View style={[styles.textContentWrapper, textAnimatedStyle]}>
-          <Text style={styles.title}>{currentSlide?.title}</Text>
-          <Text style={styles.subtitle}>{currentSlide?.subtitle}</Text>
-        </Animated.View>
-        <View style={styles.buttonWrapper}>
+      <Animated.View
+        style={[styles.textAndButtonSection, bottomSectionAnimatedStyle]}
+      >
+        <View style={styles.textViewport}>
+          <Animated.View
+            style={[styles.carouselStrip, carouselStripStyle]}
+            pointerEvents="box-none"
+          >
+            {CAROUSEL_SLIDES.map((slide, index) => (
+              <TextCell key={`text-${String(index)}`} slide={slide} />
+            ))}
+          </Animated.View>
+        </View>
+
+        <View style={buttonSectionStyle}>
           <Button
             label="Get Started"
             variant="primary"
@@ -334,12 +361,10 @@ export const IntroCarouselScreen = (): ReactElement => {
             style={styles.button}
           />
         </View>
-      </View>
+      </Animated.View>
     </View>
   );
 };
-
-// ─── Styles ──────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
   container: {
@@ -347,8 +372,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.StatesWhite,
     overflow: 'hidden',
   },
-
-  // ── Skip — absolute top-right pill ──
   skipButton: {
     position: 'absolute',
     right: spacing['Spacing-5xl'],
@@ -363,16 +386,24 @@ const styles = StyleSheet.create({
     color: colors.TextPrimaryDefault,
     textAlign: 'center',
   },
-
-  imageWrapper: {
+  imageViewport: {
     flex: 1.7,
+    overflow: 'hidden',
+  },
+  carouselStrip: {
+    flexDirection: 'row',
+    width: CAROUSEL_SLIDES.length * SCREEN_WIDTH,
+    height: '100%',
+  },
+  imageCell: {
+    width: SCREEN_WIDTH,
+    flex: 1,
     overflow: 'hidden',
   },
   imageContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    overflow: 'hidden',
   },
   deviceImage: {
     width: scale(300),
@@ -380,19 +411,29 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     bottom: 0,
   },
-
-  bottomSection: {
-    backgroundColor: colors.StatesWhite,
+  textAndButtonSection: {
     flex: 1,
-    justifyContent: 'flex-end',
+    backgroundColor: colors.StatesWhite,
+  },
+  textViewport: {
+    flex: 1,
     overflow: 'hidden',
   },
-
+  textCell: {
+    width: SCREEN_WIDTH,
+    paddingHorizontal: spacing['Spacing-5xl'],
+    paddingTop: spacing['Spacing-3xl'],
+    paddingBottom: spacing['Spacing-5xl'],
+    gap: spacing['Spacing-3xl'],
+  },
+  buttonSection: {
+    paddingHorizontal: spacing['Spacing-5xl'],
+    paddingTop: spacing['Spacing-5xl'],
+  },
   progressBarContainer: {
     flexDirection: 'row',
     gap: spacing['Spacing-m'],
     paddingHorizontal: spacing['Spacing-m'],
-    paddingTop: 0,
     paddingBottom: spacing['Spacing-m'],
   },
   progressSegmentTrack: {
@@ -409,20 +450,6 @@ const styles = StyleSheet.create({
   },
   progressSegmentFillFull: {
     width: '100%',
-    height: '100%',
-    backgroundColor: colors.PrimaryMain,
-    borderRadius: radius.full,
-  },
-
-  // ── Text — animated wrapper (button is outside, stable) ──
-  textContentWrapper: {
-    paddingHorizontal: spacing['Spacing-5xl'],
-    paddingTop: spacing['Spacing-11xl'],
-    gap: spacing['Spacing-3xl'],
-  },
-  buttonWrapper: {
-    paddingHorizontal: spacing['Spacing-5xl'],
-    paddingTop: spacing['Spacing-5xl'],
   },
   title: {
     ...typography.h4SemiBold,

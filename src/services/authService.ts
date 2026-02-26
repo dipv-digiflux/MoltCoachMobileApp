@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import {
   GoogleSignin,
   statusCodes,
@@ -5,11 +6,12 @@ import {
 } from '@react-native-google-signin/google-signin';
 import Config from 'react-native-config';
 
-import type { LoginResponse } from '@/types/api.types';
-
 /**
  * Configures Google Sign-In. Call once at app startup (e.g. in App.tsx).
  * Requires GOOGLE_WEB_CLIENT_ID in .env (Web client ID from Firebase/Google Cloud).
+ * On iOS, also requires GOOGLE_IOS_CLIENT_ID — must be an iOS OAuth client ID from
+ * Google Cloud (not the Web client). Using the Web client on iOS causes "Custom scheme
+ * URIs are not allowed for 'WEB' client type". See GOOGLE_SIGNIN_SETUP.md.
  */
 export const configureGoogleSignIn = (): void => {
   const webClientId = Config.GOOGLE_WEB_CLIENT_ID;
@@ -23,48 +25,45 @@ export const configureGoogleSignIn = (): void => {
     return;
   }
 
+  // iOS requires a dedicated iOS OAuth client ID. Do NOT use webClientId here —
+  // Google rejects custom URL schemes for WEB client type (Error 400: invalid_request).
+  const iosClientId =
+    Platform.OS === 'ios' ? Config.GOOGLE_IOS_CLIENT_ID : undefined;
+
+  if (
+    Platform.OS === 'ios' &&
+    (!iosClientId || iosClientId === '') &&
+    __DEV__
+  ) {
+    console.warn(
+      '[authService] GOOGLE_IOS_CLIENT_ID not set. iOS Google Sign-In requires an iOS OAuth client (not Web). Add it in .env and set Info.plist URL scheme to its reversed ID. See GOOGLE_SIGNIN_SETUP.md.',
+    );
+  }
+
   GoogleSignin.configure({
     webClientId,
+    ...(iosClientId ? { iosClientId } : {}),
     offlineAccess: false,
   });
 };
 
 /**
- * Initiates Google Sign-In flow and exchanges the idToken with the backend.
- * Returns LoginResponse on success (login or signup).
- * Throws GoogleSignInCancelledError when user cancels; throw GoogleSignInError otherwise.
+ * Initiates Google Sign-In flow. Returns idToken for backend exchange.
+ * Throws GoogleSignInCancelledError when user cancels; GoogleSignInError otherwise.
  */
-export const signInWithGoogle = async (): Promise<LoginResponse> => {
+export const getGoogleIdToken = async (): Promise<string> => {
   await GoogleSignin.hasPlayServices();
 
   const result: SignInResponse = await GoogleSignin.signIn();
-
   if (result.type === 'cancelled' || result.data === null) {
     throw new GoogleSignInCancelledError('User cancelled sign-in');
   }
-  console.log('result', result);
   const idToken = result.data.idToken;
   if (!idToken) {
     throw new GoogleSignInError('No idToken received from Google');
   }
 
-  // const request: GoogleAuthRequest = {
-  //   idToken,
-  // };
-
-  // const response = await httpPost<GoogleAuthRequest, LoginResponse>(
-  //   GOOGLE_AUTH_ENDPOINT,
-  //   request,
-  // );
-
-  return {
-    tokens: { accessToken: result?.data?.idToken || '' },
-    user: {
-      id: result?.data?.user?.id || '',
-      name: result?.data?.user?.name || '',
-      email: result?.data?.user?.email || '',
-    },
-  };
+  return idToken;
 };
 
 /**

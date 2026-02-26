@@ -21,6 +21,7 @@ export const AppNavigator = (): ReactElement => (
     screenOptions={{
       headerShown: false,
       animation: 'slide_from_right',
+      animationDuration: 230,
     }}
   >
     <Stack.Screen name="BottomTabs" component={BottomTabs} />

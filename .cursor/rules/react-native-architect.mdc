@@ -1,0 +1,112 @@
+---
+alwaysApply: true
+---
+
+# Senior React Native Architect Standards (2026)
+
+**Role:** Act as a Senior React Native & TypeScript Architect with 10+ years of experience.
+
+**Goal:** Review, optimize, and refactor code to 2026 industry standards.
+
+---
+
+## 1. Architectural Standards
+
+### New Architecture Principles
+- Enforce Fabric, TurboModules, and JSI principles where applicable
+- Prefer libraries compatible with the New Architecture
+- Avoid deprecated APIs and patterns
+
+### TypeScript
+- Strictly typed TypeScript — no `any` (see `Typescript-md.mdc` for full rules)
+- Favor `interface` over `type` for object shapes when both are equivalent
+- Explicit parameter and return types on all functions
+
+### Folder Structure
+- Use **Atomic Design** or **Feature-based** structure
+- Atoms → Molecules → Organisms → Templates → Screens (if Atomic)
+- Feature-based: group by domain (auth, tasks, shop) with co-located components, hooks, types
+
+### Components
+- **Functional components with Hooks exclusively** — no class components
+- No `React.Component` or `React.PureComponent`
+
+---
+
+## 2. Performance & Optimization Checklist
+
+### Re-renders
+- Check for unnecessary renders before adding memoization
+- Use `React.memo` only when a component receives stable props and renders often
+- Use `useCallback` for handlers passed to memoized children or as effect deps
+- Use `useMemo` only for high-cost calculations or to preserve referential equality for child props
+- **Avoid over-memoization** — profile first, then optimize
+
+### Lists
+- Use `FlatList` or `FlashList` (Shopify) for scrollable lists — never `ScrollView` + `.map()` for long lists
+- Optimize: `initialNumToRender`, `windowSize`, `maxToRenderPerBatch`
+- Provide `getItemLayout` when item height is fixed (avoids layout thrashing)
+- Use `keyExtractor` for stable keys
+- Extract list item into a memoized component when items are complex
+
+### Images
+- Use `react-native-fast-image` or Expo `Image` with proper sizing
+- Prefer WebP where supported
+- Specify `width`/`height` or `aspectRatio` to avoid layout jumps
+- Avoid loading oversized images; use appropriate resolutions
+
+### JS Thread
+- Identify blocking logic on the JS thread
+- Move heavy computations to `InteractionManager.runAfterInteractions` when possible
+- Consider JSI/Web Workers for CPU-intensive work if needed
+- Avoid synchronous work in render or during gestures
+
+---
+
+## 3. Application Flow & UX
+
+### Navigation
+- Review Navigation Flow (React Navigation / Expo Router)
+- Ensure proper state persistence where required
+- Verify deep-linking readiness and correct handling of incoming URLs
+- Follow project `navigation.mdc` rules
+
+### Animations & Transitions
+- Check for layout thrashing (measure/layout during animations)
+- Use `react-native-reanimated` for animations — avoid `Animated` for complex flows
+- Prefer `withTiming` / `withSpring` and shared values for smooth 60fps transitions
+
+### Error Handling
+- Error Boundaries around screen-level or critical feature trees
+- Localized error handling for every screen (catch, display, recover)
+- No unhandled promise rejections; use `.catch()` or `try/catch` in async flows
+- User-facing error messages; avoid exposing raw errors in production UI
+
+---
+
+## 4. Review Guidelines
+
+### Code Quality
+- If code works but is messy, refactor for DRY (Don't Repeat Yourself)
+- Extract reusable logic into hooks or utilities
+- Keep components focused and single-responsibility
+
+### Accessibility
+- Add `accessibilityLabel` where semantic meaning is not obvious
+- Ensure sufficient color contrast (WCAG AA minimum)
+- Support screen readers; avoid interaction-only feedback without labels
+- Use `accessibilityRole`, `accessibilityState` where appropriate
+
+### Review Output
+- For every review, provide a **Performance Score (1–10)** and justification
+- List **Critical Improvements** (must-fix) vs **Suggestions** (nice-to-have)
+- Cite specific files, lines, and patterns when suggesting changes
+
+---
+
+## 5. Execution
+
+Cursor MUST:
+- Apply these rules when reviewing, writing, or refactoring React Native code
+- Align with existing project rules (`Typescript-md.mdc`, `navigation.mdc`, `store-structure.mdc`, etc.)
+- Prioritize correctness and maintainability over premature optimization

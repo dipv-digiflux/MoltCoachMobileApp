@@ -1,0 +1,105 @@
+# Store & API Structure
+
+## STORE FOLDER RULES
+
+### Thunks must live in a dedicated folder
+
+- Thunks MUST NOT live inside slice files
+- Thunks MUST live in `src/store/thunks/` organized by slice name
+- One file per slice: `authThunks.ts`, `tasksThunks.ts`, etc.
+- Barrel export: `src/store/thunks/index.ts` re-exports all thunks
+
+```
+src/store/
+  slices/
+    authSlice.ts       # Reducers + actions only. NO thunks.
+    tasksSlice.ts
+  thunks/
+    authThunks.ts      # signInWithGoogleThunk, logoutThunk, etc.
+    tasksThunks.ts
+    index.ts           # Barrel: export * from './authThunks'; ...
+  hooks.ts
+  store.ts
+```
+
+### Slice rules
+
+- Slices contain ONLY: `createSlice`, `initialState`, `reducers`, `actions`, `reducer`
+- No async logic, no API calls, no imports from `api/` or `services/` (except authTokenHolder for logout)
+
+### Per-API operation status (industry standard)
+
+When a slice has multiple async operations (API calls) with different response times:
+
+- **DO NOT** use a single `status` or `loading` flag for all APIs — it prevents independent UI feedback and causes race conditions
+- **DO** use per-operation status: each API gets its own `{ status, error }` in an `operations` map
+- **Pattern**: `operations: { operationKey: { status: 'idle' | 'loading' | 'success' | 'error', error: string | null } }`
+- **Actions**: `setOperationLoading(op)`, `setOperationSuccess(op)`, `setOperationError(op, message)`, `setOperationIdle(op)`
+- **Benefits**: Each button shows its own loader; errors attribute to the correct operation; no conflicting states when multiple APIs run
+
+Example shape:
+```ts
+operations: {
+  googleSignIn: { status: 'idle', error: null },
+  requestOTP: { status: 'loading', error: null },
+  verifyOTP: { status: 'idle', error: null },
+}
+```
+
+### Thunk rules
+
+- Thunks import slice actions from `@/store/slices/<slice>`
+- Thunks call APIs from `@/api/<domain>Api` (never from `services/`)
+- Thunks handle loading, success, error dispatch
+- Thunks may call platform services (e.g. `authService` for Google SDK) only to obtain tokens; API calls go through `api/`
+
+---
+
+## API LAYER (SINGLE PLACE FOR ALL HTTP CALLS)
+
+### Centralized API calls
+
+- All HTTP API calls MUST live in `src/api/`
+- One file per domain: `authApi.ts`, `tasksApi.ts`, `mealsApi.ts`, etc.
+- Use `httpGet`, `httpPost`, etc. from `@/services/apiClient`
+- Endpoints live in `src/api/endpoints.ts` (URL constants)
+
+```
+src/api/
+  endpoints.ts         # AUTH_GOOGLE = 'auth/google', TASKS = 'tasks', ...
+  authApi.ts           # postGoogleAuth(idToken), login(), logout(), ...
+  tasksApi.ts
+  index.ts             # Barrel export
+```
+
+### API file rules
+
+- Each `*Api.ts` exports typed functions: `postGoogleAuth(idToken: string): Promise<LoginResponse>`
+- No Redux, no dispatch, no thunks in api files
+- API functions are pure: accept params, return response or throw
+
+---
+
+## SERVICES LAYER
+
+- `services/` holds infrastructure and platform integrations (non-HTTP)
+- `authService.ts`: Google Sign-In SDK only — `configureGoogleSignIn()`, `getGoogleIdToken()`, `isGoogleSignInCancelled()`
+- `apiClient.ts`: Axios instance + `httpGet`, `httpPost`, etc.
+- Services do NOT call APIs; they provide tokens or low-level capabilities
+
+---
+
+## DATA FLOW (Auth example)
+
+1. Thunk: `signInWithGoogleThunk` in `store/thunks/authThunks.ts`
+2. Thunk calls `authService.getGoogleIdToken()` (Google SDK → idToken)
+3. Thunk calls `authApi.postAuthenticate(...)` (HTTP → AuthenticateResponse)
+4. On success, thunk sets token via `authTokenHolder.setAccessToken(token)` for API client use
+
+---
+
+## IMPORTS
+
+- Components/screens: import thunks from `@/store/thunks` or `@/store/thunks/authThunks`
+- Thunks: import actions from `@/store/slices/<slice>`, APIs from `@/api/<domain>Api`
+- API files: import from `@/services/apiClient`, `@/api/endpoints`

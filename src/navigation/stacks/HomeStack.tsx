@@ -15,6 +15,7 @@ export const HomeStackNavigator = (): ReactElement => (
   <Stack.Navigator
     screenOptions={{
       animation: 'slide_from_right',
+      animationDuration: 230,
       headerShown: false,
     }}
   >

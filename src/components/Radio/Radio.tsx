@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   },
   wrapperWithLabel: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     gap: spacing['Spacing-xl'],
   },
   controlWrapper: {

@@ -22,6 +22,7 @@ export const RootNavigator = (): ReactElement => (
     screenOptions={{
       headerShown: false,
       animation: 'slide_from_right',
+      animationDuration: 230,
     }}
     initialRouteName="OnboardingStack"
   >
