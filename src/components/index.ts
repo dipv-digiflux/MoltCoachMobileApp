@@ -80,3 +80,8 @@ export type { ClientCardProps, ClientTag, ClientTagType } from './ClientCard';
 
 export { GettingThingsReady } from './GettingThingsReady';
 export { LoadingRing } from './LoadingRing';
+
+export { RequestAccessHeader } from './RequestAccessHeader';
+export { RequestAccessStatus } from './RequestAccessStatus';
+
+export { StatusDot } from './StatusDot';
