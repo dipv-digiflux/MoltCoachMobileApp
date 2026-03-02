@@ -2,7 +2,12 @@ import { type ReactElement } from 'react';
 import { type StyleProp, type ViewStyle } from 'react-native';
 
 /** Visual style variant of the button. */
-export type ButtonVariant = 'primary' | 'secondary' | 'minimal' | 'destructive';
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'minimal'
+  | 'destructive'
+  | 'outline';
 
 /** Button size preset. */
 export type ButtonSize = 'small' | 'default' | 'large';

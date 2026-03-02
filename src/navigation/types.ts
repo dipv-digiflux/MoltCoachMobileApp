@@ -6,12 +6,7 @@ export type OTPVerificationParams =
   | { mode: 'phone'; phone_number: string; country_code: string };
 
 export type OnboardingStackParamList = {
-  Splash: undefined;
-  IntroCarousel: undefined;
-  GetStarted: undefined;
   OTPVerification: OTPVerificationParams | undefined;
-  YourDetails: undefined;
-  ConnectHealth: undefined;
   PlanPreview: undefined;
 };
 

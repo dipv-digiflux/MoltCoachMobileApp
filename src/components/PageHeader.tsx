@@ -1,6 +1,6 @@
 import React, { type ReactElement, ReactNode, useCallback } from 'react';
 import {
-  Pressable,
+  TouchableOpacity,
   type StyleProp,
   StyleSheet,
   Text,
@@ -15,7 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BackIconSvg } from '@/assets/images';
-import { colors, iconScale, moderateScale, spacing, typography } from '@/theme';
+import { colors, moderateScale, spacing, typography } from '@/theme';
 
 import type { NavigationProp, ParamListBase } from '@react-navigation/native';
 
@@ -45,6 +45,9 @@ type PageHeaderProps = {
   /** Optional background color when LiquidGlass is not supported. */
   fallbackBackgroundColor?: string;
 
+  /** Show a subtitle either above or below the title. @default 'bottom' */
+  subtitlePosition?: 'top' | 'bottom';
+
   /** Extra styles on the container. */
   style?: StyleProp<ViewStyle>;
 };
@@ -68,6 +71,7 @@ export const PageHeader = ({
   alignTitleLeft = true,
   showBottomBorder = false,
   fallbackBackgroundColor,
+  subtitlePosition = 'bottom',
   style,
   children,
 }: PageHeaderProps): ReactElement => {
@@ -109,18 +113,28 @@ export const PageHeader = ({
       >
         <View style={styles.leftSection}>
           {shouldShowBackButton && (
-            <Pressable
-              onPress={handleBackPress}
-              hitSlop={spacing['Spacing-xl']}
+            <TouchableOpacity
               style={styles.backButton}
+              onPress={handleBackPress}
+              accessibilityRole="button"
+              accessibilityLabel="Go back"
             >
-              {leftIcon ?? (
-                <BackIconSvg width={iconScale(20)} height={iconScale(20)} />
-              )}
-            </Pressable>
+              <BackIconSvg
+                width={moderateScale(16)}
+                height={moderateScale(16)}
+                color={colors.IconPrimaryDefault}
+              />
+            </TouchableOpacity>
           )}
 
           <View style={styles.titleBlock}>
+            {subtitle !== undefined &&
+              subtitle.length > 0 &&
+              subtitlePosition === 'top' && (
+                <Text style={styles.subtitleText} numberOfLines={2}>
+                  {subtitle}
+                </Text>
+              )}
             <Text
               style={styles.titleText}
               numberOfLines={1}
@@ -128,11 +142,13 @@ export const PageHeader = ({
             >
               {title}
             </Text>
-            {subtitle !== undefined && subtitle.length > 0 && (
-              <Text style={styles.subtitleText} numberOfLines={2}>
-                {subtitle}
-              </Text>
-            )}
+            {subtitle !== undefined &&
+              subtitle.length > 0 &&
+              subtitlePosition === 'bottom' && (
+                <Text style={styles.subtitleText} numberOfLines={2}>
+                  {subtitle}
+                </Text>
+              )}
           </View>
         </View>
 
@@ -194,7 +210,7 @@ const styles = StyleSheet.create({
     gap: spacing['Spacing-sm'],
   },
   titleText: {
-    ...typography.h6SemiBold,
+    ...typography.h10Bold,
     color: colors.TextPrimaryDefault,
   },
   subtitleText: {

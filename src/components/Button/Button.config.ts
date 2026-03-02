@@ -208,6 +208,49 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       spinnerColor: colors.TextPrimaryDisabled,
     },
   },
+  // ── Outline ───────────────────────────────────────────────────────
+  outline: {
+    default: {
+      backgroundColor: colors.StatesWhite,
+      borderColor: colors.StatesOutline,
+      textColor: colors.PrimaryMain,
+      iconColor: colors.PrimaryMain,
+      focusRingColor: 'transparent',
+      spinnerColor: colors.PrimaryMain,
+    },
+    hover: {
+      backgroundColor: colors.SurfaceSecondaryDefault,
+      borderColor: colors.StatesOutline,
+      textColor: colors.PrimaryMain,
+      iconColor: colors.PrimaryMain,
+      focusRingColor: 'transparent',
+      spinnerColor: colors.PrimaryMain,
+    },
+    focus: {
+      backgroundColor: colors.StatesWhite,
+      borderColor: colors.StatesOutline,
+      textColor: colors.PrimaryMain,
+      iconColor: colors.PrimaryMain,
+      focusRingColor: FOCUS_RING_NEUTRAL,
+      spinnerColor: colors.PrimaryMain,
+    },
+    loading: {
+      backgroundColor: colors.StatesWhite,
+      borderColor: colors.StatesOutline,
+      textColor: colors.PrimaryMain,
+      iconColor: colors.PrimaryMain,
+      focusRingColor: 'transparent',
+      spinnerColor: colors.PrimaryMain,
+    },
+    disabled: {
+      backgroundColor: colors.StatesWhite,
+      borderColor: colors.BorderPrimaryDisabled,
+      textColor: colors.TextPrimaryDisabled,
+      iconColor: colors.IconSecondaryDisabled,
+      focusRingColor: 'transparent',
+      spinnerColor: colors.TextPrimaryDisabled,
+    },
+  },
 };
 
 // ─── Size configuration ─────────────────────────────────────────────
@@ -244,12 +287,12 @@ export const SIZE_CONFIG: Record<ButtonSize, ButtonSizeConfig> = {
   },
   default: {
     height: moderateScale(44),
-    paddingHorizontal: spacing['Spacing-3xl'],
+    paddingHorizontal: spacing['Spacing-2xl'],
     iconSize: iconScale(20),
     gap: spacing['Spacing-m'],
     borderRadius: moderateScale(2),
     iconOnlySize: moderateScale(40),
-    labelStyle: typography.bodySmall1SemiBold,
+    labelStyle: typography.bodySmall2Medium,
   },
   large: {
     height: moderateScale(52),

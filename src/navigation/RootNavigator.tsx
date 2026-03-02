@@ -24,7 +24,7 @@ export const RootNavigator = (): ReactElement => (
       animation: 'slide_from_right',
       animationDuration: 230,
     }}
-    initialRouteName="OnboardingStack"
+    initialRouteName="AppStack"
   >
     <Stack.Screen name="OnboardingStack" component={OnboardingNavigator} />
     <Stack.Screen name="AppStack" component={AppNavigator} />

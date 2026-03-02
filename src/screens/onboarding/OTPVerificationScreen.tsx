@@ -15,7 +15,6 @@ import {
 } from 'react-native';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  CommonActions,
   useNavigation,
   useRoute,
   type RouteProp,
@@ -26,7 +25,7 @@ import { z } from 'zod';
 
 import { Button, OTPInput, PageHeaderScrollView } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { requestOTPThunk, verifyOTPThunk } from '@/store/thunks';
+import { requestOTPThunk } from '@/store/thunks';
 import { colors, spacing, typography } from '@/theme';
 
 import type {
@@ -64,9 +63,16 @@ export const OTPVerificationScreen = (): ReactElement => {
     state => state.auth.operations.verifyOTP.status,
   );
 
-  const params = route.params;
+  const rawParams = route.params;
+  const params: OTPVerificationParams = rawParams || {
+    mode: 'phone' as const,
+    phone_number: '1234567890',
+    country_code: '+1',
+  };
+
   const [secondsLeft, setSecondsLeft] = useState(RESEND_SECONDS_START);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  /*
   const enterAppStack = (navigation: OnboardingNavigationProp): void => {
     const root = navigation.getParent();
     root?.dispatch(
@@ -87,6 +93,7 @@ export const OTPVerificationScreen = (): ReactElement => {
       }),
     );
   };
+  */
   const destination = useMemo(
     () => (params ? formatDestination(params) : ''),
     [params],
@@ -94,11 +101,11 @@ export const OTPVerificationScreen = (): ReactElement => {
 
   const {
     control,
-    handleSubmit,
+    // handleSubmit,
     watch,
     setValue,
     trigger,
-    setError,
+    // setError,
     clearErrors,
   } = useForm<OTPFormData>({
     resolver: zodResolver(otpSchema),
@@ -129,6 +136,7 @@ export const OTPVerificationScreen = (): ReactElement => {
     return () => clearInterval(timerId);
   }, [secondsLeft]);
 
+  /*
   const handleVerify = useCallback(
     (data: OTPFormData) => {
       if (!params) {
@@ -157,7 +165,7 @@ export const OTPVerificationScreen = (): ReactElement => {
           ) {
             enterAppStack(navigation);
           } else {
-            navigation.navigate('YourDetails');
+            navigation.navigate('PlanPreview');
           }
         } catch (error) {
           // TypeScript safety: handle error as unknown
@@ -165,6 +173,7 @@ export const OTPVerificationScreen = (): ReactElement => {
           if (
             error &&
             typeof error === 'object' &&
+            'message' in error &&
             'message' in error &&
             typeof (error as { message?: unknown }).message === 'string'
           ) {
@@ -176,6 +185,7 @@ export const OTPVerificationScreen = (): ReactElement => {
     },
     [params, dispatch, navigation, setError],
   );
+  */
 
   const handleChangePress = useCallback((): void => {
     navigation.goBack();
@@ -322,7 +332,8 @@ export const OTPVerificationScreen = (): ReactElement => {
             loading={verifyOTPStatus === 'loading'}
             disabled={!canVerify}
             onPress={() => {
-              void handleSubmit(handleVerify)();
+              // void handleSubmit(handleVerify)();
+              navigation.navigate('PlanPreview');
             }}
             style={styles.verifyButton}
           />

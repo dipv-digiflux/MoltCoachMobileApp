@@ -86,7 +86,7 @@ export const typographyTokens = {
   },
   bodySmall1: {
     fontSize: fontScale(14),
-    // lineHeight: lineHeightScale(16),
+    lineHeight: lineHeightScale(16),
     letterSpacing: 0,
     verticalAlign: 'middle',
   },
@@ -94,6 +94,7 @@ export const typographyTokens = {
     fontSize: fontScale(12),
     lineHeight: lineHeightScale(16),
     letterSpacing: 0,
+    verticalAlign: 'middle',
   },
   bodySmall3: {
     fontSize: fontScale(10),
@@ -186,6 +187,8 @@ export const typography = {
   bodySmall3SemiBold: typographyByWeight.bodySmall3.semiBold,
   bodySmall3Medium: typographyByWeight.bodySmall3.medium,
   bodySmall3Regular: typographyByWeight.bodySmall3.regular,
+  // ── Tags ────────────────────────────────────────────────
+  tagLabel: typographyByWeight.bodySmall2.medium,
 } as const;
 
 export type FontFamily = (typeof fontFamily)[keyof typeof fontFamily];

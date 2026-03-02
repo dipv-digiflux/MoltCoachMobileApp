@@ -1,13 +1,8 @@
 import React, { type ReactElement } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { ConnectHealthScreen } from '@screens/onboarding/ConnectHealthScreen';
-import { GetStartedScreen } from '@screens/onboarding/GetStartedScreen';
-import { IntroCarouselScreen } from '@screens/onboarding/IntroCarouselScreen';
 import { OTPVerificationScreen } from '@screens/onboarding/OTPVerificationScreen';
 import { PlanPreviewScreen } from '@screens/onboarding/PlanPreviewScreen';
-import { SplashScreen } from '@screens/onboarding/SplashScreen';
-import { YourDetailsScreen } from '@screens/onboarding/YourDetailsScreen';
 
 import type { OnboardingStackParamList } from '@navigation/types';
 
@@ -21,13 +16,6 @@ export const OnboardingNavigator = (): ReactElement => (
       animationDuration: 230,
     }}
   >
-    <Stack.Screen name="Splash" component={SplashScreen} />
-    <Stack.Screen
-      name="IntroCarousel"
-      component={IntroCarouselScreen}
-      options={{ animation: 'fade' }}
-    />
-    <Stack.Screen name="GetStarted" component={GetStartedScreen} />
     <Stack.Screen
       name="OTPVerification"
       component={OTPVerificationScreen}
@@ -35,8 +23,6 @@ export const OnboardingNavigator = (): ReactElement => (
         gestureEnabled: false,
       }}
     />
-    <Stack.Screen name="YourDetails" component={YourDetailsScreen} />
-    <Stack.Screen name="ConnectHealth" component={ConnectHealthScreen} />
     <Stack.Screen name="PlanPreview" component={PlanPreviewScreen} />
   </Stack.Navigator>
 );

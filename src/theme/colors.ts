@@ -103,6 +103,10 @@ export const colors = {
   AccentBlueNavy: '#0E2E6B',
   AccentDeepBlue: '#123C8C',
   AccentYellowMustard: '#EAB308',
+
+  // ── Tags ────────────────────────────────────────────────
+  TagSuccessSurface: '#DCFCE7',
+  TagWarningSurface: '#FFEDF1',
 } as const;
 
 export type ColorToken = keyof typeof colors;
