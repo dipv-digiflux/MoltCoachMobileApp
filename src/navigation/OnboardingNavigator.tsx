@@ -1,6 +1,7 @@
 import React, { type ReactElement } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { GettingThingsReadyScreen } from '@/screens/loading/GettingThingsReadyScreen';
 import { OTPVerificationScreen } from '@screens/onboarding/OTPVerificationScreen';
 import { PlanPreviewScreen } from '@screens/onboarding/PlanPreviewScreen';
 
@@ -15,7 +16,12 @@ export const OnboardingNavigator = (): ReactElement => (
       animation: 'slide_from_right',
       animationDuration: 230,
     }}
+    initialRouteName="GettingThingsReady"
   >
+    <Stack.Screen
+      name="GettingThingsReady"
+      component={GettingThingsReadyScreen}
+    />
     <Stack.Screen
       name="OTPVerification"
       component={OTPVerificationScreen}

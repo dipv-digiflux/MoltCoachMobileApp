@@ -8,6 +8,7 @@ export type OTPVerificationParams =
 export type OnboardingStackParamList = {
   OTPVerification: OTPVerificationParams | undefined;
   PlanPreview: undefined;
+  GettingThingsReady: undefined;
 };
 
 export type HomeStackParamList = {
