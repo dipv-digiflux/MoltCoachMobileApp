@@ -1,0 +1,22 @@
+---
+description: Rules for custom hooks and logic separation
+alwaysApply: true
+---
+
+# LOGIC SEPARATION (HOOK-FIRST)
+
+## 1. The "Screen-is-a-Controller" Rule
+
+- Screens (`src/screens/...`) must ONLY contain layout and event handlers.
+- All complex logic, state calculations, and API interactions MUST live in a custom hook.
+
+## 2. Hook Naming & Location
+
+- Feature-specific hooks: `src/screens/[feature]/hooks/use[Feature]Logic.ts`.
+- Reusable hooks: `src/hooks/`.
+- Hooks must return a structured object: `{ data, states, handlers }`.
+
+## 3. Side Effects
+
+- `useEffect` usage in screens is discouraged. Move the effect into the custom hook.
+- Give every `useEffect` a comment explaining _why_ it is necessary.

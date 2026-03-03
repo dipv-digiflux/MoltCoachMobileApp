@@ -1,0 +1,25 @@
+---
+description: Form handling using React Hook Form and Zod
+alwaysApply: false
+globs: '**/screens/**'
+---
+
+# FORM STANDARDS
+
+## 1. Technology Stack
+
+- **Library:** `react-hook-form`
+- **Validation:** `zod`
+- **Pattern:** Use `Controller` from RHF to wrap custom input components.
+
+## 2. Structure
+
+- Define the Zod schema **outside** the component or in a `.schema.ts` file.
+- Use the `zodResolver` for validation.
+- Every form must have a "Submitting" state that disables the submit button.
+
+## 3. Mobile UX Rules
+
+- Specify `keyboardType` (email-address, numeric, etc.) for every input.
+- Use `returnKeyType="next"` to move between fields.
+- Wrap forms in `KeyboardAwareScrollView` or `KeyboardAvoidingView`.

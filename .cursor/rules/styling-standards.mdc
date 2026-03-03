@@ -1,0 +1,23 @@
+---
+description: Rules for managing styles, theme enforcement, and dynamic styling
+alwaysApply: true
+---
+
+# STYLING ARCHITECTURE
+
+## 1. File Separation
+
+- If a `StyleSheet.create` block exceeds 50 lines, it MUST be extracted into a separate `[ComponentName].styles.ts` file.
+- This applies universally to screens (`@screens/`) and components (`@/components/`).
+
+## 2. Theme Enforcement (Strict)
+
+- NO hardcoded hex codes (`#FFFFFF`) or RGBA values are allowed in styling files. All colors MUST come from `@/theme/colors`.
+- All padding, margin, and gaps MUST use the exported `spacing` tokens.
+- All typography MUST use the predefined typography tokens.
+
+## 3. Dynamic Styling
+
+- If styles depend on props or state (e.g., a dynamic background color based on a task's priority), the style object MUST be wrapped in a `useMemo` hook to prevent unnecessary recalculations on every render.
+- Pass the theme or dynamic variables into the extracted style sheet function:
+  `const styles = useMemo(() => getStyles(theme, priority), [theme, priority]);`

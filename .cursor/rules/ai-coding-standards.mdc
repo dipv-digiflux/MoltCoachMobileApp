@@ -1,0 +1,32 @@
+---
+description: Strict behavioral directives for AI code generation
+alwaysApply: true
+---
+
+# AI CODE GENERATION GUARDRAILS
+
+## 1. Complete Implementations Only
+
+- The AI MUST NEVER generate placeholder comments like `// ... existing code ...` or `// Implement logic here`.
+- Always write out the complete file, function, or block being modified to prevent syntax breakage.
+
+## 2. Null Safety & Optional Chaining
+
+- Assume all API responses and deeply nested objects can be undefined.
+- ALWAYS use optional chaining (`?.`) and nullish coalescing (`??`) when accessing nested properties or mapping arrays.
+- Provide fallback UI (e.g., an EmptyView) when lists or data objects are empty or null.
+
+## 3. Import Verification
+
+- The AI MUST verify that all path aliases (`@/`, `@screens/`, `@navigation/`) match the required project conventions.
+- The AI MUST ensure imports are grouped logically: React/React Native first, third-party libraries second, internal aliases third, and relative path imports (if any) last.
+
+## 4. Self-Correction Context
+
+- Before suggesting code, the AI must silently review the `navigation.mdc` to ensure no routing violations (e.g., putting an action screen in a bottom tab stack).
+- The AI must confirm that all network calls are placed strictly in the `src/api/` folder, never inside components or thunks directly.
+
+## 5. Screen Generation Protocol
+
+- **Stack Confirmation:** BEFORE generating any new screen, the AI MUST ask the user: "Which navigation stack does this screen belong to (e.g., HomeStack, ShopStack, or ActionFlows)?"
+- **Consistency Check:** Cross-reference the user's choice with the `navigation.mdc` hierarchy to ensure it doesn't violate routing rules (e.g., no onboarding in Tab stacks).

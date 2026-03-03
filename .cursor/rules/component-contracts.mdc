@@ -1,0 +1,28 @@
+---
+description: Component creation standards — focus on reusability, prop naming, and decomposition
+alwaysApply: true
+---
+
+# COMPONENT CONTRACTS
+
+## 1. The "400-Line Rule"
+
+- If a component exceeds 400 lines, it MUST be decomposed.
+- Move sub-elements into `components/` (if local) or `src/components/` (if global).
+
+## 2. Prop Standards
+
+- ALWAYS use an interface named `[ComponentName]Props`.
+- Destructure props at the function signature level.
+- NEVER pass the `navigation` or `route` prop directly into child components; pass only the data or callbacks they need.
+
+## 3. Reusability Logic
+
+- **Global Atoms:** (src/components/atoms) No business logic, purely UI (Buttons, Inputs, Badges).
+- **Molecules:** (src/components/molecules) Combination of atoms, may have internal UI state but no API calls.
+- **Organisms:** (src/components/organisms) Large UI blocks (e.g., Header, TaskCard) that take complex objects as props.
+
+## 4. Conditional Rendering (CRITICAL)
+
+- **NEVER** use `{condition && <Component />}` in React Native. If the condition is `0`, the app will crash.
+- **ALWAYS** use ternary operators: `{condition ? <Component /> : null}` or double bang: `{!!condition && <Component />}`.

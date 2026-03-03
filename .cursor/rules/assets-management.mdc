@@ -1,0 +1,25 @@
+---
+description: Rules for importing, exporting, and managing image and vector assets
+alwaysApply: true
+---
+
+# ASSET MANAGEMENT STANDARDS
+
+## 1. Folder Structure
+
+- All local images and icons MUST live inside `src/assets/images/`.
+- Assets MUST be categorized into subfolders based on file type:
+  - `src/assets/images/png/` (for raster images: .png, .jpg, .webp)
+  - `src/assets/images/svg/` (for vector assets: .svg)
+
+## 2. The Index Exporter Rule
+
+- NEVER import an asset directly from its file path in a component (e.g., `import logo from '../../assets/images/png/logo.png'` is FORBIDDEN).
+- All assets MUST be exported from a central index file: `src/assets/images/index.ts`.
+- Components MUST import assets using the configured alias: `import { AppLogo, BackIcon } from '@/assets/images';`
+
+## 3. SVG Implementation
+
+- SVGs must be converted to React Native components using `react-native-svg`.
+- SVG files should accept props for `width`, `height`, and `fill` to allow the theme to control their appearance dynamically.
+- Use the `iconScale` function from the scaling utilities for icon dimensions.
