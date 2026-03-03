@@ -39,6 +39,8 @@ export type BottomTabParamList = {
 export type AppStackParamList = {
   BottomTabs: NavigatorScreenParams<BottomTabParamList>;
 
+  Earnings: undefined;
+
   // Task ActionFlows (tabs hidden, AppStack only)
   CreateTask: { fromScreen?: string } | undefined;
   EditTask: { taskId?: string } | undefined;

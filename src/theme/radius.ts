@@ -6,6 +6,7 @@ import { moderateScale } from './scaling';
 
 export const radius = {
   none: 0,
+  xs: moderateScale(2),
   sm: moderateScale(4),
   md: moderateScale(8),
   lg: moderateScale(12),

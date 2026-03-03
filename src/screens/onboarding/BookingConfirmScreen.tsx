@@ -12,8 +12,6 @@ import { colors } from '@/theme';
 export const BookingConfirmScreen = (): ReactElement => {
   const calendlyUrl = Config.CALENDLY_URL;
 
-  console.log('calendlyUrl', calendlyUrl);
-
   return (
     <PageHeaderScrollView
       header={{ title: '' }}

@@ -41,6 +41,7 @@ export const colors = {
   TextPrimaryDefault: '#030712',
   TextPrimaryHover: '#111827',
   TextPrimaryActive: '#1F2937',
+  TextPrimaryStrong: '#0F1720',
   TextPrimaryDisabled: '#9CA3AF',
 
   // ── Text Secondary ──────────────────────────────────────

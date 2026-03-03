@@ -2,6 +2,7 @@ import React, { type ReactElement } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { BottomTabs } from '@navigation/BottomTabs';
+import { EarningsScreen } from '@screens/earnings/EarningsScreen';
 import {
   CreateTaskScreen,
   EditTaskScreen,
@@ -23,8 +24,11 @@ export const AppNavigator = (): ReactElement => (
       animation: 'slide_from_right',
       animationDuration: 230,
     }}
+    initialRouteName="Earnings"
   >
     <Stack.Screen name="BottomTabs" component={BottomTabs} />
+
+    <Stack.Screen name="Earnings" component={EarningsScreen} />
 
     {/* Task ActionFlows (tabs hidden) */}
     <Stack.Screen name="CreateTask" component={CreateTaskScreen} />

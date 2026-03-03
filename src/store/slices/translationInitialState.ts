@@ -16,4 +16,8 @@ export const translationInitialState = {
   bookingConfirmMainText: 'Booking Confirmed!',
   bookingConfirmSubText:
     'We\u2019ve sent a calendar invitation to your email. Please check your inbox for the meeting link.',
+  earningsTotalEarningsTitle: 'Total Earnings (This Month)',
+  earningsCreditRate: '0 credit = 0 AED',
+  earningsCreditsLabel: 'Credits',
+  earningsAedValueLabel: '= 0 AED',
 };

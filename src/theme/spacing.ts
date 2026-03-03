@@ -7,6 +7,7 @@ import { spacingScale } from './scaling';
 
 export const spacing = {
   'Spacing-xs': 0,
+  'Spacing-1': spacingScale(1),
   'Spacing-sm': spacingScale(2),
   'Spacing-m': spacingScale(4),
   'Spacing-l': spacingScale(6),

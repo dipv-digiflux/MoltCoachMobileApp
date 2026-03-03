@@ -101,6 +101,17 @@ export const typographyTokens = {
     lineHeight: lineHeightScale(12),
     letterSpacing: 0,
   },
+  bodySmall4: {
+    fontSize: fontScale(13),
+    lineHeight: lineHeightScale(16), // 120% of 13px (rounded)
+    letterSpacing: 0,
+    verticalAlign: 'middle',
+  },
+  b2: {
+    fontSize: fontScale(15),
+    lineHeight: lineHeightScale(18), // 120% of 15px
+    letterSpacing: 0,
+  },
 } as const;
 
 const withWeights = (
@@ -128,6 +139,8 @@ export const typographyByWeight = {
   bodySmall1: withWeights(typographyTokens.bodySmall1),
   bodySmall2: withWeights(typographyTokens.bodySmall2),
   bodySmall3: withWeights(typographyTokens.bodySmall3),
+  bodySmall4: withWeights(typographyTokens.bodySmall4),
+  b2: withWeights(typographyTokens.b2),
 } as const;
 
 export const typography = {
@@ -187,6 +200,14 @@ export const typography = {
   bodySmall3SemiBold: typographyByWeight.bodySmall3.semiBold,
   bodySmall3Medium: typographyByWeight.bodySmall3.medium,
   bodySmall3Regular: typographyByWeight.bodySmall3.regular,
+  bodySmall4Bold: typographyByWeight.bodySmall4.bold,
+  bodySmall4SemiBold: typographyByWeight.bodySmall4.semiBold,
+  bodySmall4Medium: typographyByWeight.bodySmall4.medium,
+  bodySmall4Regular: typographyByWeight.bodySmall4.regular,
+  b2Bold: typographyByWeight.b2.bold,
+  b2SemiBold: typographyByWeight.b2.semiBold,
+  b2Medium: typographyByWeight.b2.medium,
+  b2Regular: typographyByWeight.b2.regular,
   // ── Tags ────────────────────────────────────────────────
   tagLabel: typographyByWeight.bodySmall2.medium,
 } as const;
