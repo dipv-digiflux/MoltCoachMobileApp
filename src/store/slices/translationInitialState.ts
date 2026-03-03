@@ -10,4 +10,7 @@ export const translationInitialState = {
   requestAccessHeaderTitle: 'Request Access',
   requestAccessHeaderSubtitle:
     'To maintain the quality and trust of our network, all freelance coaches must complete a brief video verification call. Once verified, your profile will be visible to thousands of potential clients.',
+  applicationNotApprovedWhyTitle: 'Why was I not approved?',
+  applicationNotApprovedWhyDescription:
+    'We have specific criteria for coaches joining our platform to ensure the best experience for our clients. This decision is typically based on experience level, certifications, or current platform demand.',
 };

@@ -81,6 +81,8 @@ export type { ClientCardProps, ClientTag, ClientTagType } from './ClientCard';
 export { GettingThingsReady } from './GettingThingsReady';
 export { LoadingRing } from './LoadingRing';
 
+export { ApplicationNotApprovedMessage } from './ApplicationNotApprovedMessage/ApplicationNotApprovedMessage';
+export { WhyNotApprovedInfo } from './WhyNotApprovedInfo/WhyNotApprovedInfo';
 export { RequestAccessHeader } from './RequestAccessHeader';
 export { RequestAccessStatus } from './RequestAccessStatus';
 

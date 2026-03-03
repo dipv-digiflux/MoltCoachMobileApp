@@ -10,6 +10,7 @@ export type OnboardingStackParamList = {
   PlanPreview: undefined;
   GettingThingsReady: undefined;
   RequestAccessScreen: undefined;
+  ApplicationNotApproved: undefined;
 };
 
 export type HomeStackParamList = {

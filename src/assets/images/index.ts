@@ -9,11 +9,13 @@ import CalendarIconSvg from './svg/calendar-icon.svg';
 import CheckCircleIconSvg from './svg/check-circle-icon.svg';
 import ChevronDownIconSvg from './svg/chevron-down-icon.svg';
 import CreditIconSvg from './svg/credit.svg';
+import InfoIconSvg from './svg/infoicon.svg';
 import LogoWhiteSvg from './svg/logo-WhiteSvg.svg';
 import NotificationBellSvg from './svg/notification-icon.svg';
 import NotificationIconSvg from './svg/notification.svg';
 import ProfileIconSvg from './svg/profile.svg';
 import SearchIconSvg from './svg/search.svg';
+import ShieldIconSvg from './svg/shield.svg';
 import StarIconSvg from './svg/star-icon.svg';
 
 export {
@@ -26,10 +28,12 @@ export {
   CheckCircleIconSvg,
   CalendarIconSvg,
   ChevronDownIconSvg,
+  InfoIconSvg,
   NotificationIconSvg,
   NotificationBellSvg,
   ProfileIconSvg,
   CreditIconSvg,
   SearchIconSvg,
+  ShieldIconSvg,
   StarIconSvg,
 };

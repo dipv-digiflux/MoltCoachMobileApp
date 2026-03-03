@@ -61,6 +61,9 @@ export const colors = {
   IconSecondaryActive: '#1E293B',
   IconSecondaryDisabled: '#94A3B8',
 
+  // ── Icon Tertiary / Subtle ──────────────────────────────
+  IconTertiarySubtle: '#919191',
+
   // ── Border Primary ──────────────────────────────────────
   BorderPrimaryDefault: '#D1D5DB',
   BorderPrimaryHover: '#9CA3AF',

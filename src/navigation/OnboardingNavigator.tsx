@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { GettingThingsReadyScreen } from '@/screens/loading/GettingThingsReadyScreen';
 import { RequestAccessScreen } from '@/screens/profile/RequestAccessScreen';
+import { ApplicationNotApprovedScreen } from '@screens/onboarding/ApplicationNotApprovedScreen';
 import { OTPVerificationScreen } from '@screens/onboarding/OTPVerificationScreen';
 import { PlanPreviewScreen } from '@screens/onboarding/PlanPreviewScreen';
 
@@ -17,7 +18,7 @@ export const OnboardingNavigator = (): ReactElement => (
       animation: 'slide_from_right',
       animationDuration: 230,
     }}
-    initialRouteName="RequestAccessScreen"
+    initialRouteName="ApplicationNotApproved"
   >
     <Stack.Screen
       name="GettingThingsReady"
@@ -32,5 +33,9 @@ export const OnboardingNavigator = (): ReactElement => (
     />
     <Stack.Screen name="PlanPreview" component={PlanPreviewScreen} />
     <Stack.Screen name="RequestAccessScreen" component={RequestAccessScreen} />
+    <Stack.Screen
+      name="ApplicationNotApproved"
+      component={ApplicationNotApprovedScreen}
+    />
   </Stack.Navigator>
 );
