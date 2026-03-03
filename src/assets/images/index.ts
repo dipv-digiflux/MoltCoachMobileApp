@@ -5,6 +5,7 @@ import LogoWhite from './png/logo-white.png';
 import ProfilePng from './png/profile.jpg';
 // svgs
 import BackIconSvg from './svg/back-icon.svg';
+import BlackBackgroundCheckSvg from './svg/BlackBackgroundCheck.svg';
 import CalendarIconSvg from './svg/calendar-icon.svg';
 import CheckCircleIconSvg from './svg/check-circle-icon.svg';
 import ChevronDownIconSvg from './svg/chevron-down-icon.svg';
@@ -36,4 +37,5 @@ export {
   SearchIconSvg,
   ShieldIconSvg,
   StarIconSvg,
+  BlackBackgroundCheckSvg,
 };

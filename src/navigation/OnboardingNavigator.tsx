@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { GettingThingsReadyScreen } from '@/screens/loading/GettingThingsReadyScreen';
 import { RequestAccessScreen } from '@/screens/profile/RequestAccessScreen';
 import { ApplicationNotApprovedScreen } from '@screens/onboarding/ApplicationNotApprovedScreen';
+import { BookingConfirmScreen } from '@screens/onboarding/BookingConfirmScreen';
 import { OTPVerificationScreen } from '@screens/onboarding/OTPVerificationScreen';
 import { PlanPreviewScreen } from '@screens/onboarding/PlanPreviewScreen';
 
@@ -18,8 +19,9 @@ export const OnboardingNavigator = (): ReactElement => (
       animation: 'slide_from_right',
       animationDuration: 230,
     }}
-    initialRouteName="ApplicationNotApproved"
+    initialRouteName="BookingConfirm"
   >
+    <Stack.Screen name="BookingConfirm" component={BookingConfirmScreen} />
     <Stack.Screen
       name="GettingThingsReady"
       component={GettingThingsReadyScreen}

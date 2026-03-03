@@ -67,6 +67,7 @@ export const PageHeaderScrollView = forwardRef<
         ref={ref}
         stickyHeaderIndices={stickyHeaderIndices}
         keyboardShouldPersistTaps="handled"
+        bounces={false}
       >
         <View>
           <PageHeader {...header}>{headerChildren}</PageHeader>

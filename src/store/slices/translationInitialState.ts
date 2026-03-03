@@ -13,4 +13,7 @@ export const translationInitialState = {
   applicationNotApprovedWhyTitle: 'Why was I not approved?',
   applicationNotApprovedWhyDescription:
     'We have specific criteria for coaches joining our platform to ensure the best experience for our clients. This decision is typically based on experience level, certifications, or current platform demand.',
+  bookingConfirmMainText: 'Booking Confirmed!',
+  bookingConfirmSubText:
+    'We\u2019ve sent a calendar invitation to your email. Please check your inbox for the meeting link.',
 };

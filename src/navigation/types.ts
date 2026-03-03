@@ -6,6 +6,7 @@ export type OTPVerificationParams =
   | { mode: 'phone'; phone_number: string; country_code: string };
 
 export type OnboardingStackParamList = {
+  BookingConfirm: undefined;
   OTPVerification: OTPVerificationParams | undefined;
   PlanPreview: undefined;
   GettingThingsReady: undefined;
