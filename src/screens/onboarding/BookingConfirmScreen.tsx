@@ -16,7 +16,7 @@ export const BookingConfirmScreen = (): ReactElement => {
 
   return (
     <PageHeaderScrollView
-      header={{ title: 'ssddsds' }}
+      header={{ title: '' }}
       style={{
         flex: 1,
         backgroundColor: colors.StatesWhite,
