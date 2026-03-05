@@ -24,7 +24,7 @@ export const AppNavigator = (): ReactElement => (
       animation: 'slide_from_right',
       animationDuration: 230,
     }}
-    initialRouteName="Earnings"
+    initialRouteName="BottomTabs"
   >
     <Stack.Screen name="BottomTabs" component={BottomTabs} />
 

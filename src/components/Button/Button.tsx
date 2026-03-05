@@ -78,6 +78,7 @@ export const Button = ({
   testID,
   style,
   accessibilityLabel,
+  fullWidth,
 }: ButtonProps): React.ReactElement => {
   // ── Local state ──────────────────────────────────────────────────
   const [pressed, setPressed] = useState(false);
@@ -176,7 +177,14 @@ export const Button = ({
 
   // ── Render ───────────────────────────────────────────────────────
   return (
-    <View style={[styles.wrapper, style]} testID={testID}>
+    <View
+      style={[
+        styles.wrapper,
+        fullWidth === true ? { alignSelf: 'stretch' } : null,
+        style,
+      ]}
+      testID={testID}
+    >
       <Pressable
         style={containerStyle}
         onPressIn={handlePressIn}

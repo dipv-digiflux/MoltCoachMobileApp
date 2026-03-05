@@ -20,4 +20,10 @@ export const translationInitialState = {
   earningsCreditRate: '0 credit = 0 AED',
   earningsCreditsLabel: 'Credits',
   earningsAedValueLabel: '= 0 AED',
+  profileCompleteTitle: 'Complete your coach profile',
+  profileCompleteDescription:
+    'Finish setting up your profile to unlock your first 100 Molt credits.',
+  profileCompleteStepsLeft: '3 steps left',
+  profileCompleteEarnCredits: 'Earn 100 Molt credits',
+  profileCompleteButton: 'Complete profile',
 };

@@ -80,6 +80,12 @@ export type ButtonProps = {
   /** Extra styles applied to the outermost wrapper. */
   style?: StyleProp<ViewStyle>;
 
+  /**
+   * When true, the button wrapper stretches to fill the available horizontal space.
+   * When false or omitted, the button uses its intrinsic width.
+   */
+  fullWidth?: boolean;
+
   /** Accessibility label. Falls back to `label` when omitted. */
   accessibilityLabel?: string;
 };
