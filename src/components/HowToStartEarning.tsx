@@ -88,10 +88,10 @@ const styles = StyleSheet.create({
   },
   stepTitle: {
     ...typography.bodySmall1SemiBold, // fontScale(14), lineHeightScale(16), 'Inter-SemiBold'
-    color: colors.TextPrimaryActive, // '#1F2937'
+    color: colors.TextPrimaryStrong, // '#0F1720'
   },
   stepDescription: {
-    ...typography.bodySmall2Regular, // fontScale(12), lineHeightScale(16), 'Inter-Regular'
+    ...typography.bodySmall4Regular, // fontScale(), lineHeightScale(12), 'Inter-Regular'
     color: colors.IconTertiarySubtle, // '#919191'
   },
 });
