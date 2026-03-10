@@ -37,6 +37,9 @@ export const colors = {
   SurfaceSubtleFocused: '#F4F1F1',
   SurfaceSubtleDisabled: '#F5F5F5',
 
+  // ── Surface Search ───────────────────────────────────────
+  SurfaceSearchBackground: '#F5F7F8',
+
   // ── Text Primary ────────────────────────────────────────
   TextPrimaryDefault: '#030712',
   TextPrimaryHover: '#111827',
@@ -64,6 +67,9 @@ export const colors = {
 
   // ── Icon Tertiary / Subtle ──────────────────────────────
   IconTertiarySubtle: '#919191',
+
+  // ── Overlays / Subtle Dividers ──────────────────────────
+  DividerSubtleOverlay: '#00000014',
 
   // ── Border Primary ──────────────────────────────────────
   BorderPrimaryDefault: '#D1D5DB',

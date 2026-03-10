@@ -16,6 +16,7 @@ export {
 } from './typography';
 export { spacing, type SpacingToken } from './spacing';
 export { radius, type RadiusToken } from './radius';
+export { borderWidth, type BorderWidthToken } from './border';
 export {
   fontScale,
   getScreenDimensions,

@@ -41,6 +41,12 @@ export type AppStackParamList = {
 
   Earnings: undefined;
 
+  AddClient: undefined;
+
+  ImportContacts: undefined;
+
+  SelectContact: undefined;
+
   // Task ActionFlows (tabs hidden, AppStack only)
   CreateTask: { fromScreen?: string } | undefined;
   EditTask: { taskId?: string } | undefined;

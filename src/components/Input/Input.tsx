@@ -68,6 +68,8 @@ export const Input = ({
   accessibilityLabel,
   caretHidden,
   containerPress,
+  inputContainerStyle: inputContainerStyleProp,
+  textInputStyle,
 }: InputProps): React.ReactElement => {
   const inputRef = useRef<RNTextInput>(null);
   const [focused, setFocused] = useState(false);
@@ -123,14 +125,16 @@ export const Input = ({
 
   // ── Computed styles ────────────────────────────────────────────
   const inputContainerStyle = useMemo(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     () => [
       styles.inputContainer,
       {
         backgroundColor: inputBg,
         borderColor,
       },
+      inputContainerStyleProp,
     ],
-    [inputBg, borderColor],
+    [inputBg, borderColor, inputContainerStyleProp],
   );
 
   // ── Render ─────────────────────────────────────────────────────
@@ -201,6 +205,7 @@ export const Input = ({
             styles.textInput,
             typography.bodySmall1Regular,
             { color: textColor },
+            textInputStyle,
           ]}
           value={value}
           placeholder={placeholder}
