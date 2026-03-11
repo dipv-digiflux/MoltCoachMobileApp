@@ -66,7 +66,7 @@ export const Radio = ({
     : focused && !selected
     ? colors.PrimaryMain
     : selected
-    ? 'transparent'
+    ? colors.Transparent
     : colors.BorderPrimaryDefault;
 
   const dotColor = disabled ? colors.TextPrimaryDisabled : colors.StatesWhite;
@@ -144,9 +144,11 @@ export const Radio = ({
     >
       {/* Control + focus ring */}
       <View style={styles.controlWrapper}>
-        <View style={outerStyle}>{selected && <View style={dotStyle} />}</View>
+        <View style={outerStyle}>
+          {selected ? <View style={dotStyle} /> : null}
+        </View>
 
-        {showFocusRing && (
+        {showFocusRing ? (
           <View
             style={[
               styles.focusRing,
@@ -161,18 +163,18 @@ export const Radio = ({
             ]}
             pointerEvents="none"
           />
-        )}
+        ) : null}
       </View>
 
       {/* Label + description */}
-      {hasLabel && (
+      {hasLabel ? (
         <View style={styles.labelColumn}>
           <Text style={[labelStyle, { color: labelColor }]}>{label}</Text>
-          {description !== undefined && (
+          {description !== undefined ? (
             <Text style={[descStyle, { color: descColor }]}>{description}</Text>
-          )}
+          ) : null}
         </View>
-      )}
+      ) : null}
     </Pressable>
   );
 };

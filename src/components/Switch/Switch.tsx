@@ -174,7 +174,7 @@ export const Switch = ({
           />
         </View>
 
-        {showFocusRing && (
+        {showFocusRing ? (
           <View
             style={[
               styles.focusRing,
@@ -189,20 +189,20 @@ export const Switch = ({
             ]}
             pointerEvents="none"
           />
-        )}
+        ) : null}
       </View>
 
       {/* Label + description */}
-      {hasLabel && (
+      {hasLabel ? (
         <View style={styles.labelColumn}>
           <Text style={[labelTextStyle, { color: labelColor }]}>{label}</Text>
-          {description !== undefined && (
+          {description !== undefined ? (
             <Text style={[descTextStyle, { color: descColor }]}>
               {description}
             </Text>
-          )}
+          ) : null}
         </View>
-      )}
+      ) : null}
     </Pressable>
   );
 };

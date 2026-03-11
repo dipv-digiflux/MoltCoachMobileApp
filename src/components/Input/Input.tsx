@@ -141,21 +141,21 @@ export const Input = ({
   return (
     <View style={[styles.wrapper, style]} testID={testID}>
       {/* ── Label row ────────────────────────────────────────── */}
-      {label !== undefined && (
+      {label !== undefined ? (
         <View style={styles.labelRow}>
           <Text style={[typography.b1Medium, styles.labelText]}>{label}</Text>
 
-          {labelHint !== undefined && (
+          {labelHint !== undefined ? (
             <Text style={[typography.b1Regular, styles.labelHint]}>
               {labelHint}
             </Text>
-          )}
+          ) : null}
 
-          {required && (
+          {required ? (
             <Text style={[typography.b1Regular, styles.requiredStar]}>*</Text>
-          )}
+          ) : null}
 
-          {showInfoIcon && (
+          {showInfoIcon ? (
             <Pressable
               onPress={onInfoPress}
               hitSlop={spacing['Spacing-xl']}
@@ -167,9 +167,9 @@ export const Input = ({
                 <Text style={styles.infoLetter}>i</Text>
               </View>
             </Pressable>
-          )}
+          ) : null}
         </View>
-      )}
+      ) : null}
 
       {/* ── Input container ──────────────────────────────────── */}
       <Pressable
@@ -179,7 +179,7 @@ export const Input = ({
         accessibilityLabel={accessibilityLabel ?? label}
       >
         {/* Left text add-on (external, with divider) */}
-        {hasLeftText && (
+        {hasLeftText ? (
           <View style={styles.leftTextAddOn}>
             <Text
               style={[
@@ -190,12 +190,12 @@ export const Input = ({
               {leftText}
             </Text>
           </View>
-        )}
+        ) : null}
 
         {/* Left icon */}
-        {leftIcon !== undefined && (
+        {leftIcon !== undefined ? (
           <View style={styles.iconWrapLeft}>{leftIcon}</View>
-        )}
+        ) : null}
 
         {/* Actual TextInput */}
         <RNTextInput
@@ -221,17 +221,17 @@ export const Input = ({
           multiline={multiline}
           returnKeyType={returnKeyType}
           onSubmitEditing={onSubmitEditing}
-          underlineColorAndroid="transparent"
+          underlineColorAndroid={colors.Transparent}
           caretHidden={caretHidden}
         />
 
         {/* Right icon */}
-        {rightIcon !== undefined && (
+        {rightIcon !== undefined ? (
           <View style={styles.iconWrapRight}>{rightIcon}</View>
-        )}
+        ) : null}
 
         {/* Right text add-on */}
-        {rightText !== undefined && (
+        {rightText !== undefined ? (
           <View style={styles.rightTextAddOn}>
             <Text
               style={[
@@ -242,10 +242,10 @@ export const Input = ({
               {rightText}
             </Text>
           </View>
-        )}
+        ) : null}
 
         {/* Right button */}
-        {hasRightButton && (
+        {hasRightButton ? (
           <Pressable
             style={styles.rightButton}
             onPress={onRightButtonPress}
@@ -265,17 +265,17 @@ export const Input = ({
               {rightButton}
             </Text>
           </Pressable>
-        )}
+        ) : null}
       </Pressable>
 
       {/* ── Helper / error text ──────────────────────────────── */}
-      {bottomText !== undefined && (
+      {bottomText !== undefined ? (
         <Text
           style={[typography.bodySmall1Regular, { color: bottomTextColor }]}
         >
           {bottomText}
         </Text>
-      )}
+      ) : null}
     </View>
   );
 };

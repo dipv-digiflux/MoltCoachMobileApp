@@ -77,7 +77,7 @@ export const Checkbox = ({
     : focused && !isActive
     ? colors.PrimaryMain
     : isActive
-    ? 'transparent'
+    ? colors.Transparent
     : colors.SurfaceSecondaryHover;
 
   const iconColor = disabled ? colors.TextPrimaryDisabled : colors.StatesWhite;
@@ -147,7 +147,7 @@ export const Checkbox = ({
       <View style={styles.controlWrapper}>
         <View style={boxStyle}>
           {/* Checkmark */}
-          {checked && !mixed && (
+          {checked && !mixed ? (
             <View
               style={{
                 width: tokens.checkLong,
@@ -159,10 +159,10 @@ export const Checkbox = ({
                 marginTop: -tokens.checkShort * 0.2,
               }}
             />
-          )}
+          ) : null}
 
           {/* Indeterminate dash */}
-          {mixed && (
+          {mixed ? (
             <View
               style={{
                 width: tokens.box * 0.5,
@@ -171,10 +171,10 @@ export const Checkbox = ({
                 borderRadius: tokens.stroke / 2,
               }}
             />
-          )}
+          ) : null}
         </View>
 
-        {showFocusRing && (
+        {showFocusRing ? (
           <View
             style={[
               styles.focusRing,
@@ -189,18 +189,18 @@ export const Checkbox = ({
             ]}
             pointerEvents="none"
           />
-        )}
+        ) : null}
       </View>
 
       {/* Label + description */}
-      {hasLabel && (
+      {hasLabel ? (
         <View style={styles.labelColumn}>
           <Text style={[labelStyle, { color: labelColor }]}>{label}</Text>
-          {description !== undefined && (
+          {description !== undefined ? (
             <Text style={[descStyle, { color: descColor }]}>{description}</Text>
-          )}
+          ) : null}
         </View>
-      )}
+      ) : null}
     </Pressable>
   );
 };

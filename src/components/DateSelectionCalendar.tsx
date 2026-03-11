@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   },
   yearPickerBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: colors.OverlayDarkHalf,
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing['Spacing-5xl'],

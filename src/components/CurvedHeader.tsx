@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { colors } from '@/theme';
 import { HeaderCurvedBg } from '@assets/images';
 
 type StatusBarBarStyle = 'default' | 'light-content' | 'dark-content';
@@ -55,7 +56,7 @@ export const CurvedHeader = ({
       <StatusBar
         translucent
         barStyle={statusBarStyle}
-        backgroundColor="transparent"
+        backgroundColor={colors.Transparent}
       />
       <View style={styles.headerContainer}>
         <Image source={backgroundSource} style={headerBgStyle} />

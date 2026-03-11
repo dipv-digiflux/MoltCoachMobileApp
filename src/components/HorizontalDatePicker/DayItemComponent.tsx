@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   containerUnselected: {
-    backgroundColor: 'transparent',
+    backgroundColor: colors.Transparent,
     borderWidth: 1,
     borderColor: colors.BorderPrimaryDisabled,
   },

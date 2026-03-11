@@ -82,12 +82,12 @@ const styles = StyleSheet.create({
   baseCircle: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: colors.Transparent,
     borderColor: colors.StatesOutline,
   },
   arc: {
     position: 'absolute',
-    borderColor: 'transparent',
+    borderColor: colors.Transparent,
     borderTopColor: colors.PrimaryMain,
   },
 });

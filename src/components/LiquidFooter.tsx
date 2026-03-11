@@ -45,8 +45,7 @@ export const LiquidFooter = ({
     showTopBorder ? styles.topBorder : null,
     !isLiquidGlassSupported
       ? {
-          backgroundColor:
-            fallbackBackgroundColor ?? 'rgba(255, 255, 255, 0.9)',
+          backgroundColor: fallbackBackgroundColor ?? colors.OverlayLight,
         }
       : null,
     style,

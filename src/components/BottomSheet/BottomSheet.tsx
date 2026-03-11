@@ -247,18 +247,18 @@ const SheetHeader = ({
         <Text style={[styles.headerTitle, config.titleStyle]} numberOfLines={2}>
           {config.title}
         </Text>
-        {config.subtitle !== undefined && (
+        {config.subtitle !== undefined ? (
           <Text
             style={[styles.headerSubtitle, config.subtitleStyle]}
             numberOfLines={2}
           >
             {config.subtitle}
           </Text>
-        )}
+        ) : null}
       </View>
-      {config.rightElement !== undefined && (
+      {config.rightElement !== undefined ? (
         <View style={styles.headerRight}>{config.rightElement}</View>
-      )}
+      ) : null}
     </View>
   </View>
 );
@@ -285,7 +285,7 @@ const SearchBar = ({
         autoCorrect={false}
         returnKeyType="search"
       />
-      {config.value.length > 0 && (
+      {config.value.length > 0 ? (
         <Pressable
           onPress={(): void => config.onChangeText('')}
           hitSlop={spacing['Spacing-xl']}
@@ -297,7 +297,7 @@ const SearchBar = ({
             <View style={[styles.clearLine, styles.clearLineRight]} />
           </View>
         </Pressable>
-      )}
+      ) : null}
     </View>
   </View>
 );
@@ -320,7 +320,7 @@ const SheetFooter = ({
 
   return (
     <View style={[styles.footerContainer, config.style]}>
-      {config.primaryLabel !== undefined && (
+      {config.primaryLabel !== undefined ? (
         <Pressable
           style={[
             styles.footerPrimaryButton,
@@ -340,8 +340,8 @@ const SheetFooter = ({
             <Text style={styles.footerPrimaryLabel}>{config.primaryLabel}</Text>
           )}
         </Pressable>
-      )}
-      {config.secondaryLabel !== undefined && (
+      ) : null}
+      {config.secondaryLabel !== undefined ? (
         <Pressable
           style={styles.footerSecondaryButton}
           onPress={config.onSecondaryPress ?? onClose}
@@ -352,7 +352,7 @@ const SheetFooter = ({
             {config.secondaryLabel}
           </Text>
         </Pressable>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -675,7 +675,7 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
       >
         <GestureHandlerRootView style={styles.modalRoot} testID={testID}>
           {/* Overlay */}
-          {showOverlay && (
+          {showOverlay ? (
             <Animated.View style={[styles.overlay, overlayAnimatedStyle]}>
               <Pressable
                 style={StyleSheet.absoluteFill}
@@ -684,18 +684,18 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
                 accessibilityLabel="Close bottom sheet"
               />
             </Animated.View>
-          )}
+          ) : null}
 
           {/* Sheet — positioned at the bottom, slides via translateY */}
           <Animated.View
             style={[styles.sheetContainer, style, sheetAnimatedStyle]}
           >
             {/* Close button above the sheet */}
-            {header?.showCloseButton !== false && (
+            {header?.showCloseButton !== false ? (
               <View style={styles.closeButtonRow}>
                 <CloseButton onPress={closeSheet} />
               </View>
-            )}
+            ) : null}
 
             {/* Sheet body — dynamic height, capped at 85 % screen */}
             <Animated.View style={[styles.sheetBody, bodyAnimatedStyle]}>
@@ -705,12 +705,12 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
                   <DragHandle />
 
                   {/* Sticky header */}
-                  {header !== undefined && stickyHeader && (
+                  {header !== undefined && stickyHeader ? (
                     <SheetHeader config={header} />
-                  )}
+                  ) : null}
 
                   {/* Search bar (list variant) */}
-                  {search !== undefined && <SearchBar config={search} />}
+                  {search !== undefined ? <SearchBar config={search} /> : null}
                 </Animated.View>
               </GestureDetector>
 
@@ -726,23 +726,23 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
                 keyboardShouldPersistTaps="handled"
                 nestedScrollEnabled
               >
-                {header !== undefined && !stickyHeader && (
+                {header !== undefined && !stickyHeader ? (
                   <SheetHeader config={header} />
-                )}
-                {showLoading && <LoadingContent type={loadingType} />}
-                {showEmpty && <EmptyContent message={emptyMessage} />}
-                {showContent && children}
-                {footer !== undefined && !stickyFooter && (
+                ) : null}
+                {showLoading ? <LoadingContent type={loadingType} /> : null}
+                {showEmpty ? <EmptyContent message={emptyMessage} /> : null}
+                {showContent ? children : null}
+                {footer !== undefined && !stickyFooter ? (
                   <SheetFooter config={footer} onClose={closeSheet} />
-                )}
+                ) : null}
                 {/* Extra space so the last input can scroll above the keyboard */}
                 <Animated.View style={keyboardSpacerStyle} />
               </ScrollView>
 
               {/* Sticky footer — always visible at the bottom */}
-              {footer !== undefined && stickyFooter && (
+              {footer !== undefined && stickyFooter ? (
                 <SheetFooter config={footer} onClose={closeSheet} />
-              )}
+              ) : null}
             </Animated.View>
           </Animated.View>
         </GestureHandlerRootView>
@@ -762,7 +762,7 @@ const styles = StyleSheet.create({
 
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#000000',
+    backgroundColor: colors.OverlayDark,
   },
 
   /**
@@ -790,7 +790,7 @@ const styles = StyleSheet.create({
     width: CLOSE_BUTTON_SIZE,
     height: CLOSE_BUTTON_SIZE,
     borderRadius: CLOSE_BUTTON_SIZE / 2,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: colors.OverlayLightGlass,
     alignItems: 'center',
     justifyContent: 'center',
   },

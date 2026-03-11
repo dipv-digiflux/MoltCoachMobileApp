@@ -5,6 +5,7 @@ import {
   Text,
   View,
   type StyleProp,
+  type TextStyle,
   type ViewStyle,
 } from 'react-native';
 
@@ -16,6 +17,11 @@ export interface FilterTabsProps {
   onTabChange: (tab: string) => void;
   style?: StyleProp<ViewStyle>;
   rightElement?: React.ReactNode;
+  tabsWrapperStyle?: StyleProp<ViewStyle>;
+  tabButtonStyle?: StyleProp<ViewStyle>;
+  activeTabButtonStyle?: StyleProp<ViewStyle>;
+  tabTextStyle?: StyleProp<TextStyle>;
+  activeTabTextStyle?: StyleProp<TextStyle>;
 }
 
 export const FilterTabs: React.FC<FilterTabsProps> = ({
@@ -24,19 +30,36 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
   onTabChange,
   style,
   rightElement,
+  tabsWrapperStyle,
+  tabButtonStyle,
+  activeTabButtonStyle,
+  tabTextStyle,
+  activeTabTextStyle,
 }) => {
   return (
     <View style={[styles.container, style]}>
-      <View style={styles.tabsWrapper}>
+      <View style={[styles.tabsWrapper, tabsWrapperStyle]}>
         {tabs.map(tab => {
           const isActive = tab === activeTab;
           return (
             <Pressable
               key={tab}
               onPress={() => onTabChange(tab)}
-              style={[styles.tabButton, isActive && styles.activeTabButton]}
+              style={[
+                styles.tabButton,
+                tabButtonStyle,
+                isActive && styles.activeTabButton,
+                isActive && activeTabButtonStyle,
+              ]}
             >
-              <Text style={[styles.tabText, isActive && styles.activeTabText]}>
+              <Text
+                style={[
+                  styles.tabText,
+                  tabTextStyle,
+                  isActive && styles.activeTabText,
+                  isActive && activeTabTextStyle,
+                ]}
+              >
                 {tab}
               </Text>
             </Pressable>

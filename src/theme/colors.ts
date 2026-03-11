@@ -69,7 +69,18 @@ export const colors = {
   IconTertiarySubtle: '#919191',
 
   // ── Overlays / Subtle Dividers ──────────────────────────
+  Transparent: 'transparent',
   DividerSubtleOverlay: '#00000014',
+  OverlayDark: '#000000',
+  OverlayDarkHalf: 'rgba(0, 0, 0, 0.5)',
+  OverlayLight: 'rgba(255, 255, 255, 0.9)',
+  OverlayLightGlass: 'rgba(255, 255, 255, 0.7)',
+  BorderSubtleWhite: 'rgba(255, 255, 255, 0.05)',
+
+  // ── Focus / Shadow ──────────────────────────────────────
+  FocusRingBrand: '#CEDAFA',
+  FocusRingDestructive: 'rgba(240, 62, 63, 0.3)',
+  ShadowDefault: '#000000',
 
   // ── Border Primary ──────────────────────────────────────
   BorderPrimaryDefault: '#D1D5DB',

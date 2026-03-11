@@ -98,7 +98,7 @@ export const PageHeader = ({
     },
     showBottomBorder && styles.bottomBorder,
     !isLiquidGlassSupported && {
-      backgroundColor: fallbackBackgroundColor ?? 'rgba(255, 255, 255, 0.9)',
+      backgroundColor: fallbackBackgroundColor ?? colors.OverlayLight,
     },
     style,
   ];
@@ -112,7 +112,7 @@ export const PageHeader = ({
         ]}
       >
         <View style={styles.leftSection}>
-          {shouldShowBackButton && (
+          {shouldShowBackButton ? (
             <TouchableOpacity
               style={styles.backButton}
               onPress={handleBackPress}
@@ -125,16 +125,16 @@ export const PageHeader = ({
                 color={colors.IconPrimaryDefault}
               />
             </TouchableOpacity>
-          )}
+          ) : null}
 
           <View style={styles.titleBlock}>
             {subtitle !== undefined &&
-              subtitle.length > 0 &&
-              subtitlePosition === 'top' && (
-                <Text style={styles.subtitleText} numberOfLines={2}>
-                  {subtitle}
-                </Text>
-              )}
+            subtitle.length > 0 &&
+            subtitlePosition === 'top' ? (
+              <Text style={styles.subtitleText} numberOfLines={2}>
+                {subtitle}
+              </Text>
+            ) : null}
             <Text
               style={styles.titleText}
               numberOfLines={1}
@@ -143,18 +143,18 @@ export const PageHeader = ({
               {title}
             </Text>
             {subtitle !== undefined &&
-              subtitle.length > 0 &&
-              subtitlePosition === 'bottom' && (
-                <Text style={styles.subtitleText} numberOfLines={2}>
-                  {subtitle}
-                </Text>
-              )}
+            subtitle.length > 0 &&
+            subtitlePosition === 'bottom' ? (
+              <Text style={styles.subtitleText} numberOfLines={2}>
+                {subtitle}
+              </Text>
+            ) : null}
           </View>
         </View>
 
-        {rightIcon !== undefined && (
+        {rightIcon !== undefined ? (
           <View style={styles.rightSection}>{rightIcon}</View>
-        )}
+        ) : null}
       </View>
       {children}
     </LiquidGlassView>

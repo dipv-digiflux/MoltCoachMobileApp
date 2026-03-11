@@ -43,6 +43,8 @@ export type AppStackParamList = {
 
   AddClient: undefined;
 
+  AddedClients: undefined;
+
   ImportContacts: undefined;
 
   SelectContact: undefined;

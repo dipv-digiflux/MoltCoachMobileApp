@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/components';
 import { LiquidFooter } from '@/components/LiquidFooter';
 import { PageHeaderScrollView } from '@/components/PageHeaderScrollView';
-import { SelectContactListItem } from '@/screens/clients/components/SelectContactListItem';
+import { ContactInfoRow } from '@/screens/clients/components/ContactInfoRow';
 import { SelectContactsSearchBar } from '@/screens/clients/components/SelectContactsSearchBar';
 import { SelectContactsSectionHeader } from '@/screens/clients/components/SelectContactsSectionHeader';
 import { useAppSelector } from '@/store/hooks';
@@ -27,6 +27,7 @@ export const SelectContactScreen = (): ReactElement => {
           { paddingBottom: insets.bottom },
         ]}
       >
+        {/* <SelectContactsMainContainer> */}
         <SelectContactsSearchBar
           value={searchValue}
           onChangeText={setSearchValue}
@@ -35,11 +36,14 @@ export const SelectContactScreen = (): ReactElement => {
         <SelectContactsSectionHeader
           label={translations.selectContactsSectionHeaderLabel}
         />
-        <SelectContactListItem
+        <ContactInfoRow
+          avatarSource={{
+            uri: 'https://randomuser.me/api/portraits/women/1.jpg',
+          }}
           name="Alice Smith"
           phoneNumber="+1 (555) 123-4567"
-          isSelected
         />
+        {/* </SelectContactsMainContainer> */}
       </PageHeaderScrollView>
       <LiquidFooter showTopBorder>
         <Button

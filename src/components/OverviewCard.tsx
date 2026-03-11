@@ -47,17 +47,17 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({
   const textColorSecondary = isDark
     ? colors.TextSecondaryDisabled
     : colors.TextSecondaryDefault;
-  const borderColor = isDark ? 'transparent' : colors.StatesOutline;
+  const borderColor = isDark ? colors.Transparent : colors.StatesOutline;
 
   return (
     <View
       style={[styles.card, { backgroundColor: bgColor, borderColor }, style]}
     >
-      {isDark && (
+      {isDark ? (
         <View style={styles.darkBgPattern}>
           <View style={styles.circleDecoration} />
         </View>
-      )}
+      ) : null}
       <View style={styles.topSection}>
         <Text
           style={[styles.title, { color: textColorSecondary }]}
@@ -71,18 +71,18 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({
         >
           {value}
         </Text>
-        {subtitle && (
+        {subtitle ? (
           <Text
             style={[styles.subtitle, { color: textColorSecondary }]}
             numberOfLines={1}
           >
             {subtitle}
           </Text>
-        )}
+        ) : null}
       </View>
 
       <View style={styles.bottomSection}>
-        {metrics.length > 0 && metricsLayout === 'column' && (
+        {metrics.length > 0 && metricsLayout === 'column' ? (
           <View style={styles.metricsColumnContainer}>
             {metrics.map((m, i) => (
               <React.Fragment key={i}>
@@ -95,7 +95,7 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({
                   >
                     {m.label}
                   </Text>
-                  {m.value && (
+                  {m.value ? (
                     <Text
                       style={[
                         styles.metricColumnValue,
@@ -104,29 +104,29 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({
                     >
                       {m.value}
                     </Text>
-                  )}
+                  ) : null}
                 </View>
-                {i < metrics.length - 1 && (
+                {i < metrics.length - 1 ? (
                   <View style={styles.verticalSeparator} />
-                )}
+                ) : null}
               </React.Fragment>
             ))}
           </View>
-        )}
+        ) : null}
 
-        {metrics.length > 0 && metricsLayout === 'row' && (
+        {metrics.length > 0 && metricsLayout === 'row' ? (
           <View style={styles.metricsRowContainer}>
             {metrics.map((m, i) => (
               <View key={i} style={styles.metricRowItem}>
-                {m.type === 'dot' && (
+                {m.type === 'dot' ? (
                   <View
                     style={[
                       styles.dot,
                       { backgroundColor: m.color || textColorSecondary },
                     ]}
                   />
-                )}
-                {m.type === 'arrow' && (
+                ) : null}
+                {m.type === 'arrow' ? (
                   <Text
                     style={[
                       styles.arrow,
@@ -135,7 +135,7 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({
                   >
                     ↗
                   </Text>
-                )}
+                ) : null}
                 <Text
                   style={[
                     styles.metricRowLabel,
@@ -149,15 +149,15 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({
                 >
                   {m.label}
                 </Text>
-                {i < metrics.length - 1 && (
+                {i < metrics.length - 1 ? (
                   <Text style={styles.inlineSeparator}> </Text>
-                )}
+                ) : null}
               </View>
             ))}
           </View>
-        )}
+        ) : null}
 
-        {footerText && (
+        {footerText ? (
           <Text
             style={[
               styles.footerText,
@@ -166,9 +166,9 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({
           >
             {footerText}
           </Text>
-        )}
+        ) : null}
 
-        {actionText && (
+        {actionText ? (
           <Text
             style={[
               styles.actionText,
@@ -177,7 +177,7 @@ export const OverviewCard: React.FC<OverviewCardProps> = ({
           >
             {actionText}
           </Text>
-        )}
+        ) : null}
       </View>
     </View>
   );
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     overflow: 'hidden',
-    shadowColor: '#000000',
+    shadowColor: colors.ShadowDefault,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     height: moderateScale(80),
     borderRadius: moderateScale(40),
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.05)',
+    borderColor: colors.BorderSubtleWhite,
   },
   topSection: {
     marginBottom: spacing['Spacing-5xl'], // 16px
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
   },
   inlineSeparator: {
     ...typography.bodySmall3Regular,
-    color: 'transparent',
+    color: colors.Transparent,
   },
   footerText: {
     ...typography.bodySmall3Regular, // 10px

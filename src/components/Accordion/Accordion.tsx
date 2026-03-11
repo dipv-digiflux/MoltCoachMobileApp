@@ -251,9 +251,9 @@ export const Accordion = ({
         accessibilityLabel={accessibilityLabel ?? title}
       >
         <View style={headerStyle}>
-          {leftIcon !== undefined && (
+          {leftIcon !== undefined ? (
             <View style={styles.leftIconWrap}>{leftIcon}</View>
-          )}
+          ) : null}
 
           <View style={styles.titleWrap}>
             <Text style={[sizeConfig.titleStyle, { color: titleColor }]}>

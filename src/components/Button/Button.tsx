@@ -7,6 +7,8 @@ import {
   View,
 } from 'react-native';
 
+import { colors } from '@/theme';
+
 import {
   FOCUS_RING_WIDTH,
   LOADING_CONTENT_OPACITY,
@@ -173,7 +175,7 @@ export const Button = ({
 
   const showFocusRing =
     interactionState === 'focus' &&
-    stateColors.focusRingColor !== 'transparent';
+    stateColors.focusRingColor !== colors.Transparent;
 
   // ── Render ───────────────────────────────────────────────────────
   return (
@@ -204,9 +206,9 @@ export const Button = ({
             { opacity: contentOpacity, gap: sizeConfig.gap },
           ]}
         >
-          {iconLeft !== undefined && renderIcon(iconLeft)}
+          {iconLeft !== undefined ? renderIcon(iconLeft) : null}
 
-          {label !== undefined && (
+          {label !== undefined ? (
             <View style={styles.labelFrame}>
               <Text
                 style={[
@@ -218,21 +220,21 @@ export const Button = ({
                 {label}
               </Text>
             </View>
-          )}
+          ) : null}
 
-          {iconRight !== undefined && renderIcon(iconRight)}
+          {iconRight !== undefined ? renderIcon(iconRight) : null}
         </View>
 
         {/* Loading spinner – absolute centered over content */}
-        {loading && (
+        {loading ? (
           <View style={styles.spinnerOverlay}>
             <ActivityIndicator size="small" color={stateColors.spinnerColor} />
           </View>
-        )}
+        ) : null}
       </Pressable>
 
       {/* Focus ring – sits outside the button, zero layout impact */}
-      {showFocusRing && (
+      {showFocusRing ? (
         <View
           style={[
             styles.focusRing,
@@ -243,7 +245,7 @@ export const Button = ({
           ]}
           pointerEvents="none"
         />
-      )}
+      ) : null}
     </View>
   );
 };
