@@ -1,5 +1,6 @@
 import React, { useMemo, useState, type ReactElement } from 'react';
 import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -23,6 +24,8 @@ import { ProfileCompletionCard } from '@/screens/home/components/ProfileCompleti
 import { useAppSelector } from '@/store/hooks';
 import { colors, iconScale, moderateScale, spacing, typography } from '@/theme';
 
+import type { AppStackNavigationProp } from '@navigation/types';
+
 // ─── Tab config ───────────────────────────────────────────────────────
 
 // const TAB_INDICATOR_HEIGHT = moderateScale(3);
@@ -35,6 +38,7 @@ import { colors, iconScale, moderateScale, spacing, typography } from '@/theme';
  */
 export const HomeDashboardScreen = (): ReactElement => {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<AppStackNavigationProp>();
   /*
   const [activeTab, setActiveTab] = useState<HomeTabId>('Overview');
   const [selectedDate, setSelectedDate] = useState<string | undefined>(
@@ -251,7 +255,12 @@ export const HomeDashboardScreen = (): ReactElement => {
               />
             </View>
 
-            <Pressable style={styles.addClientPill}>
+            <Pressable
+              style={styles.addClientPill}
+              onPress={() => navigation.navigate('AddClient')}
+              accessibilityRole="button"
+              accessibilityLabel="Add client"
+            >
               <Text style={styles.addClientText}>Client +</Text>
             </Pressable>
           </View>

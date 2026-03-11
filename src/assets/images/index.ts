@@ -6,6 +6,7 @@ import ProfilePng from './png/profile.jpg';
 // svgs
 import BackIconSvg from './svg/back-icon.svg';
 import BlackBackgroundCheckSvg from './svg/BlackBackgroundCheck.svg';
+import CalendarDaysIconSvg from './svg/calendar-days.svg';
 import CalendarIconSvg from './svg/calendar-icon.svg';
 import CheckCircleIconSvg from './svg/check-circle-icon.svg';
 import CheckedcircleWithBlackBgSvg from './svg/CheckedcircleWithBlackBg.svg';
@@ -34,6 +35,7 @@ export {
   HeaderCurvedBg,
   BackIconSvg,
   CheckCircleIconSvg,
+  CalendarDaysIconSvg,
   CalendarIconSvg,
   ChevronDownIconSvg,
   InfoIconSvg,

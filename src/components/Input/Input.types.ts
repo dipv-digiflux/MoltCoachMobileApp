@@ -124,6 +124,9 @@ export type InputProps = {
   /** Extra styles on the outermost wrapper. */
   style?: StyleProp<ViewStyle>;
 
+  /** Extra styles on the label text (when label is set). */
+  labelTextStyle?: StyleProp<TextStyle>;
+
   /** Extra styles on the bordered input container (Pressable). */
   inputContainerStyle?: StyleProp<ViewStyle>;
 

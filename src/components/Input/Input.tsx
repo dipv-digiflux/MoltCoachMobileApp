@@ -68,6 +68,7 @@ export const Input = ({
   accessibilityLabel,
   caretHidden,
   containerPress,
+  labelTextStyle,
   inputContainerStyle: inputContainerStyleProp,
   textInputStyle,
 }: InputProps): React.ReactElement => {
@@ -143,7 +144,9 @@ export const Input = ({
       {/* ── Label row ────────────────────────────────────────── */}
       {label !== undefined ? (
         <View style={styles.labelRow}>
-          <Text style={[typography.b1Medium, styles.labelText]}>{label}</Text>
+          <Text style={[typography.b1Medium, styles.labelText, labelTextStyle]}>
+            {label}
+          </Text>
 
           {labelHint !== undefined ? (
             <Text style={[typography.b1Regular, styles.labelHint]}>
