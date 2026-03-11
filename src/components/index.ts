@@ -88,6 +88,3 @@ export { RequestAccessStatus } from './RequestAccessStatus';
 
 export { StatusDot } from './StatusDot';
 export { BookingConfirmHeader } from './BookingConfirmHeader';
-export { BookingConfirmCalendly } from './BookingConfirmCalendly';
-
-export { Badge } from './Badge';

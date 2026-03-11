@@ -1,40 +1,43 @@
 import React, { type ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Config from 'react-native-config';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import {
-  BookingConfirmCalendly,
-  BookingConfirmHeader,
-  PageHeaderScrollView,
-} from '@/components';
+import { BookingConfirmHeader } from '@/components';
+import { BookingConfirmCalendly } from '@/features/onboarding/components/BookingConfirmCalendly';
+import { useBookingConfirm } from '@/features/onboarding/hooks/useBookingConfirm';
+import { useAppSelector } from '@/store/hooks';
 import { colors } from '@/theme';
 
 export const BookingConfirmScreen = (): ReactElement => {
-  const calendlyUrl = Config.CALENDLY_URL;
+  const coach = useAppSelector(state => state.booking.coach);
+  const { handleEventScheduled } = useBookingConfirm();
+
+  const calendlyUrl = 'https://calendly.com/tech-molt';
 
   return (
-    <PageHeaderScrollView
-      header={{ title: '' }}
-      style={{
-        flex: 1,
-        backgroundColor: colors.StatesWhite,
-      }}
-      contentContainerStyle={{
-        flexGrow: 1,
-        backgroundColor: colors.StatesWhite,
-      }}
-    >
+    <SafeAreaView style={styles.safeArea}>
       <View style={styles.cardContainer}>
         <BookingConfirmHeader />
-        {calendlyUrl ? <BookingConfirmCalendly url={calendlyUrl} /> : null}
+
+        <BookingConfirmCalendly
+          url={calendlyUrl}
+          name={coach?.first_name}
+          email={coach?.email}
+          phoneNumber={coach?.phone_number}
+          onEventScheduled={handleEventScheduled}
+        />
       </View>
-    </PageHeaderScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    backgroundColor: colors.StatesWhite,
+  safeArea: {
     flex: 1,
+    backgroundColor: colors.StatesWhite,
+  },
+  cardContainer: {
+    flex: 1,
+    backgroundColor: colors.StatesWhite,
   },
 });

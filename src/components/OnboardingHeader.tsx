@@ -58,7 +58,7 @@ export const OnboardingHeader = ({
     }
 
     if (onSkipPress) {
-      navigation.navigate(onSkipPress);
+      navigation.navigate(onSkipPress as never);
     }
   }, [navigation, onSkipPress, showSkip]);
 

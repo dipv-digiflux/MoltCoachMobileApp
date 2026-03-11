@@ -6,12 +6,19 @@ export type OTPVerificationParams =
   | { mode: 'phone'; phone_number: string; country_code: string };
 
 export type OnboardingStackParamList = {
+  Splash: undefined;
+  IntroCarousel: undefined;
+  GetStarted: undefined;
   BookingConfirm: undefined;
   OTPVerification: OTPVerificationParams | undefined;
   PlanPreview: undefined;
   GettingThingsReady: undefined;
   RequestAccessScreen: undefined;
   ApplicationNotApproved: undefined;
+  YourDetails: undefined;
+  ConnectHealth: undefined;
+  ProfileSetupDetails: undefined;
+  BookSchedule: { url: string };
 };
 
 export type HomeStackParamList = {

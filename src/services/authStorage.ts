@@ -3,10 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Customer } from '@/types/api.types';
 
 const AUTH_STORAGE_KEY = 'auth/persisted';
+const COACH_ID_STORAGE_KEY = 'auth/coach_id';
 
 export type PersistedAuth = {
   token: string;
-  customer: Customer;
+  customer?: Customer;
 };
 
 export const saveAuth = async (auth: PersistedAuth): Promise<void> => {
@@ -27,7 +28,7 @@ export const loadAuth = async (): Promise<PersistedAuth | null> => {
 
     const parsed = JSON.parse(stored) as Partial<PersistedAuth>;
 
-    if (!parsed.token || !parsed.customer) {
+    if (!parsed.token) {
       return null;
     }
 
@@ -42,7 +43,10 @@ export const loadAuth = async (): Promise<PersistedAuth | null> => {
 
 export const clearAuth = async (): Promise<void> => {
   try {
-    await AsyncStorage.removeItem(AUTH_STORAGE_KEY);
+    await Promise.all([
+      AsyncStorage.removeItem(AUTH_STORAGE_KEY),
+      AsyncStorage.removeItem(COACH_ID_STORAGE_KEY),
+    ]);
   } catch {
     // Ignore clear failures; user can still log out logically.
   }

@@ -2,11 +2,16 @@ import React, { type ReactElement } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { GettingThingsReadyScreen } from '@/screens/loading/GettingThingsReadyScreen';
+import {
+  GetStartedScreen,
+  IntroCarouselScreen,
+  SplashScreen,
+  OTPVerificationScreen,
+  PlanPreviewScreen,
+  BookingConfirmScreen,
+  ApplicationNotApprovedScreen,
+} from '@/screens/onboarding';
 import { RequestAccessScreen } from '@/screens/profile/RequestAccessScreen';
-import { ApplicationNotApprovedScreen } from '@screens/onboarding/ApplicationNotApprovedScreen';
-import { BookingConfirmScreen } from '@screens/onboarding/BookingConfirmScreen';
-import { OTPVerificationScreen } from '@screens/onboarding/OTPVerificationScreen';
-import { PlanPreviewScreen } from '@screens/onboarding/PlanPreviewScreen';
 
 import type { OnboardingStackParamList } from '@navigation/types';
 
@@ -19,9 +24,14 @@ export const OnboardingNavigator = (): ReactElement => (
       animation: 'slide_from_right',
       animationDuration: 230,
     }}
-    initialRouteName="BookingConfirm"
   >
-    <Stack.Screen name="BookingConfirm" component={BookingConfirmScreen} />
+    <Stack.Screen name="Splash" component={SplashScreen} />
+    <Stack.Screen
+      name="IntroCarousel"
+      component={IntroCarouselScreen}
+      options={{ animation: 'fade' }}
+    />
+    <Stack.Screen name="GetStarted" component={GetStartedScreen} />
     <Stack.Screen
       name="GettingThingsReady"
       component={GettingThingsReadyScreen}
@@ -35,6 +45,8 @@ export const OnboardingNavigator = (): ReactElement => (
     />
     <Stack.Screen name="PlanPreview" component={PlanPreviewScreen} />
     <Stack.Screen name="RequestAccessScreen" component={RequestAccessScreen} />
+    <Stack.Screen name="BookSchedule" component={BookingConfirmScreen} />
+
     <Stack.Screen
       name="ApplicationNotApproved"
       component={ApplicationNotApprovedScreen}

@@ -5,4 +5,7 @@ export interface ApplicationNotApprovedMessageProps {
 
 export interface BookingConfirmCalendlyProps {
   url: string;
+  onEventScheduled?: () => void;
+  name?: string;
+  email?: string;
 }

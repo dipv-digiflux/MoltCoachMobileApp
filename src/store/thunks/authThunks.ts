@@ -1,20 +1,21 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
-import { getCustomer, postAuthenticate } from '@/api/authApi';
+import { postAuthenticate, postBookCall } from '@/api/authApi';
 import { rootNavigationRef } from '@/navigation/navigationRef';
 import {
   getGoogleIdToken,
   isGoogleSignInCancelled,
 } from '@/services/authService';
 import { clearAuth, saveAuth } from '@/services/authStorage';
-import { getAccessToken, setAccessToken } from '@/services/authTokenHolder';
+import { setAccessToken } from '@/services/authTokenHolder';
 import {
   logout,
-  setCustomer,
   setOperationError,
   setOperationIdle,
   setOperationLoading,
+  setOperationSuccess,
 } from '@/store/slices/authSlice';
+import { getCoachBookingsThunk } from '@/store/thunks/bookingThunks';
 import { getApiErrorMessage } from '@/utils/apiError';
 import { showErrorToast } from '@/utils/toast';
 
@@ -22,6 +23,8 @@ import type { AppDispatch } from '@/store/store';
 import type {
   AuthenticateRequest,
   AuthenticateResponse,
+  BookCallRequest,
+  BookCallResponse,
 } from '@/types/api.types';
 
 /**
@@ -42,20 +45,9 @@ export const signInWithGoogleThunk =
 
       if (response.status && response.token) {
         setAccessToken(response.token);
-        const response2 = await getCustomer();
-        const customer = response2.data?.customer;
-        if (customer) {
-          dispatch(setCustomer(customer));
-          const token = getAccessToken();
-          if (token) {
-            await saveAuth({ token, customer });
-          }
-        }
         dispatch(setOperationIdle('googleSignIn'));
-        return {
-          ...response,
-          customer: response2.data?.customer ?? null,
-        };
+        void dispatch(getCoachBookingsThunk());
+        return response;
       }
       await GoogleSignin.clearCachedAccessToken(idToken);
       await GoogleSignin.signOut();
@@ -80,10 +72,10 @@ export const signInWithGoogleThunk =
   };
 
 /**
- * Thunk: Request OTP (email or phone). Returns response; caller navigates to OTP screen if show_otp.
+ * Thunk: Request OTP (email or phone).
  */
 export const requestOTPThunk =
-  (request: Extract<AuthenticateRequest, { type: 'normal' }>) =>
+  (request: AuthenticateRequest) =>
   async (dispatch: AppDispatch): Promise<AuthenticateResponse> => {
     dispatch(setOperationLoading('requestOTP'));
 
@@ -101,12 +93,10 @@ export const requestOTPThunk =
   };
 
 /**
- * Thunk: Verify OTP. On success, stores token + customer.
+ * Thunk: Verify OTP.
  */
 export const verifyOTPThunk =
-  (
-    request: Extract<AuthenticateRequest, { type: 'normal' }> & { otp: string },
-  ) =>
+  (request: AuthenticateRequest & { otp: string }) =>
   async (dispatch: AppDispatch): Promise<AuthenticateResponse> => {
     dispatch(setOperationLoading('verifyOTP'));
 
@@ -114,75 +104,21 @@ export const verifyOTPThunk =
       const response = await postAuthenticate(request);
       if (response.status && response.token) {
         setAccessToken(response.token);
-        const response2 = await getCustomer();
-        const customer = response2.data?.customer;
-        if (customer) {
-          dispatch(setCustomer(customer));
-          const token = getAccessToken();
-          if (token) {
-            await saveAuth({ token, customer });
-          }
-        }
+        await saveAuth({ token: response.token });
         dispatch(setOperationIdle('verifyOTP'));
-        return {
-          ...response,
-          customer: response2.data?.customer ?? null,
-        };
+        void dispatch(getCoachBookingsThunk());
+        return response;
       }
-      const errorMsg = response.message || 'Invalid OTP';
+
+      const errorMsg = response.message || 'Verification failed';
       dispatch(
         setOperationError({ operation: 'verifyOTP', message: errorMsg }),
       );
-      throw new Error(response.message);
+      throw new Error(errorMsg);
     } catch (error) {
       const errorMsg = getApiErrorMessage(error);
       dispatch(
         setOperationError({ operation: 'verifyOTP', message: errorMsg }),
-      );
-      throw error;
-    }
-  };
-
-/**
- * Thunk: Fetch customer data from backend (source of truth).
- * Requires Bearer token. On success, stores customer in auth slice.
- */
-export const getCustomerThunk =
-  (include?: string) => async (dispatch: AppDispatch) => {
-    dispatch(setOperationLoading('getCustomer'));
-    try {
-      const response = await getCustomer(include);
-
-      if (response.status && response.data?.customer) {
-        const customer = response.data.customer;
-        dispatch(setCustomer(customer));
-        const token = getAccessToken();
-        if (token) {
-          await saveAuth({ token, customer });
-        }
-        dispatch(setOperationIdle('getCustomer'));
-        return customer;
-      }
-      dispatch(
-        setOperationError({
-          operation: 'getCustomer',
-          message: response.message || 'Failed to load customer',
-        }),
-      );
-      return null;
-    } catch (error) {
-      const status =
-        error && typeof error === 'object' && 'response' in error
-          ? (error as { response?: { status?: number } }).response?.status
-          : undefined;
-      if (status === 401) {
-        dispatch(setOperationIdle('getCustomer'));
-        await dispatch(logoutThunk());
-        return null;
-      }
-      const errorMsg = getApiErrorMessage(error);
-      dispatch(
-        setOperationError({ operation: 'getCustomer', message: errorMsg }),
       );
       throw error;
     }
@@ -211,5 +147,28 @@ export const logoutThunk =
           },
         ],
       });
+    }
+  };
+
+/**
+ * Thunk: Book a call (Calendly booking store).
+ */
+export const bookCallThunk =
+  (request: BookCallRequest) =>
+  async (dispatch: AppDispatch): Promise<BookCallResponse> => {
+    dispatch(setOperationLoading('bookCall'));
+
+    try {
+      const response = await postBookCall(request);
+      if (response.status) {
+        dispatch(setOperationSuccess('bookCall'));
+      } else {
+        dispatch(setOperationIdle('bookCall'));
+      }
+      return response;
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(setOperationError({ operation: 'bookCall', message: errorMsg }));
+      throw error;
     }
   };
