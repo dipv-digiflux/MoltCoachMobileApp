@@ -1,30 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import { colors, typography, spacing, moderateScale } from '@/theme';
 
-export type MetricLayout = 'column' | 'row' | 'text';
+import type {
+  MetricLayout,
+  OverviewCardMetric,
+  OverviewCardProps,
+} from '@/types/components.types';
 
-export interface OverviewCardMetric {
-  label: string;
-  value?: string;
-  color?: string;
-  type?: 'dot' | 'arrow' | 'text';
-}
-
-export interface OverviewCardProps {
-  title: string;
-  value: string | number;
-  subtitle?: string;
-  metrics?: OverviewCardMetric[];
-  metricsLayout?: MetricLayout;
-  footerText?: string;
-  footerTextColor?: string;
-  actionText?: string;
-  actionColor?: string;
-  variant?: 'light' | 'dark';
-  style?: ViewStyle;
-}
+export type { MetricLayout, OverviewCardMetric, OverviewCardProps };
 
 export const OverviewCard: React.FC<OverviewCardProps> = ({
   title,
@@ -234,7 +219,7 @@ const styles = StyleSheet.create({
     ...typography.bodySmall2Regular, // 12px
   },
   bottomSection: {
-    marginTop: 'auto',
+    marginTop: 'auto' as const,
   },
   metricsColumnContainer: {
     flexDirection: 'row',

@@ -1,11 +1,10 @@
-import { type TextStyle } from 'react-native';
-
 import { colors, iconScale, moderateScale, spacing, typography } from '@/theme';
 
 import {
+  type ButtonSizeConfig,
   type ButtonVariant,
-  type ButtonInteractionState,
   type ButtonSize,
+  type VariantStateMap,
 } from './Button.types';
 
 // ─── Button-specific colour tokens (from theme) ───────────────────
@@ -14,19 +13,6 @@ const BRAND_HOVER_BORDER = '';
 const FOCUS_RING_BRAND = colors.FocusRingBrand;
 const FOCUS_RING_NEUTRAL = colors.TextPrimaryDisabled;
 const FOCUS_RING_DESTRUCTIVE = colors.FocusRingDestructive;
-
-// ─── State colour definitions ───────────────────────────────────────
-
-export type ButtonStateColors = {
-  backgroundColor: string;
-  borderColor: string;
-  textColor: string;
-  iconColor: string;
-  focusRingColor: string;
-  spinnerColor: string;
-};
-
-type VariantStateMap = Record<ButtonInteractionState, ButtonStateColors>;
 
 /**
  * Complete colour matrix for every variant × interaction-state combination.
@@ -254,16 +240,6 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
 };
 
 // ─── Size configuration ─────────────────────────────────────────────
-
-export type ButtonSizeConfig = {
-  height: number;
-  paddingHorizontal: number;
-  iconSize: number;
-  gap: number;
-  borderRadius: number;
-  iconOnlySize: number;
-  labelStyle: TextStyle;
-};
 
 /**
  * Size tokens extracted from the Figma design.

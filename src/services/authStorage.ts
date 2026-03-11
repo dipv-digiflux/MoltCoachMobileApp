@@ -1,13 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import type { Customer } from '@/types/api.types';
+import type { PersistedAuth } from '@/types/authStorage.types';
 
 const AUTH_STORAGE_KEY = 'auth/persisted';
 
-export type PersistedAuth = {
-  token: string;
-  customer: Customer;
-};
+export type { PersistedAuth };
 
 export const saveAuth = async (auth: PersistedAuth): Promise<void> => {
   try {

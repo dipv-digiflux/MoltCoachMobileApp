@@ -13,10 +13,7 @@ import ShopIconSvg from '@/assets/images/svg/shop-icon.svg';
 import { colors, typography, spacing, moderateScale, iconScale } from '@/theme';
 import PlusIcon from '@assets/images/svg/plus-icon.svg';
 
-type TabBarOptionsWithTestID =
-  BottomTabBarProps['descriptors'][string]['options'] & {
-    tabBarTestID?: string;
-  };
+import type { TabBarOptionsWithTestID } from '@/types/components.types';
 
 export const CustomTabBar = ({
   state,

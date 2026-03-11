@@ -3,9 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { borderWidth, colors, spacing, typography } from '@/theme';
 
-interface SelectContactsSectionHeaderProps {
-  label: string;
-}
+import type { SelectContactsSectionHeaderProps } from './SelectContactsSectionHeader.types';
 
 export const SelectContactsSectionHeader = ({
   label,

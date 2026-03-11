@@ -2,12 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { PermissionsAndroid, Platform } from 'react-native';
 import Contacts, { Contact } from 'react-native-contacts';
 
-interface UseContactsReturn {
-  contacts: Contact[];
-  loading: boolean;
-  error: string | null;
-  refetch: () => Promise<void>;
-}
+import type { UseContactsReturn } from '@/types/contacts.types';
 
 export const useContacts = (): UseContactsReturn => {
   const [contacts, setContacts] = useState<Contact[]>([]);

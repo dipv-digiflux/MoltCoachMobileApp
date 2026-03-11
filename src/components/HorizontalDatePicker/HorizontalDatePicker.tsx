@@ -29,10 +29,9 @@ import {
 } from '@/utils/timeZone';
 
 import { DayItemComponent } from './DayItemComponent';
-import {
-  type DayItem,
-  type HorizontalDatePickerProps,
-} from './HorizontalDatePicker.types';
+
+import type { HorizontalDatePickerProps } from './HorizontalDatePicker.types';
+import type { DayItem } from '@/types/components.types';
 
 // ─── Design constants ──────────────────────────────────────────────────
 

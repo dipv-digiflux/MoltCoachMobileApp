@@ -1,10 +1,9 @@
 import React, { type ReactElement } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { LoadingRing } from '@/components/LoadingRing';
 import { useAppSelector } from '@/store/hooks';
 import { colors, spacing, typography } from '@/theme';
-
-import { LoadingRing } from './LoadingRing';
 
 /**
  * Centered loading + text block used for "Getting things ready" flows.

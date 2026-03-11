@@ -6,11 +6,10 @@ import { Button, FilterTabs } from '@/components';
 import { LiquidFooter } from '@/components/LiquidFooter';
 import { PageHeaderScrollView } from '@/components/PageHeaderScrollView';
 import { useContacts } from '@/hooks/useContacts';
+import { ContactInfoRow } from '@/screens/clients/components/ContactInfoRow';
+import { SelectContactsMainContainer } from '@/screens/clients/components/SelectContactsMainContainer';
 import { SelectedContactsHeader } from '@/screens/clients/components/SelectedContactsHeader';
 import { colors, radius, spacing, typography } from '@/theme';
-
-import { ContactInfoRow } from './components/ContactInfoRow';
-import { SelectContactsMainContainer } from './components/SelectContactsMainContainer';
 
 export const AddedClientsScreen = (): ReactElement => {
   const insets = useSafeAreaInsets();

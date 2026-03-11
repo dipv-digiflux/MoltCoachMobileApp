@@ -4,11 +4,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ContactBookSvg, RightIndicationArrowSvg } from '@/assets/images';
 import { colors, radius, spacing, typography } from '@/theme';
 
-interface ImportFromContactsCardProps {
-  title: string;
-  subtitle: string;
-  onPress: () => void;
-}
+import type { ImportFromContactsCardProps } from './ImportFromContactsCard.types';
 
 export const ImportFromContactsCard = ({
   title,

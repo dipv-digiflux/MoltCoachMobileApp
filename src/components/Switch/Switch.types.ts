@@ -4,7 +4,7 @@ import { type StyleProp, type ViewStyle } from 'react-native';
 export type SwitchSize = 'default' | 'small';
 
 /** Props for the Switch component. */
-export type SwitchProps = {
+export interface SwitchProps {
   /** Whether the switch is on. @default false */
   on?: boolean;
 
@@ -31,4 +31,4 @@ export type SwitchProps = {
 
   /** Accessibility label. Falls back to `label` when omitted. */
   accessibilityLabel?: string;
-};
+}

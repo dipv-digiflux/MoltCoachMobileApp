@@ -1,5 +1,7 @@
 import { type ReactElement } from 'react';
-import { type StyleProp, type ViewStyle } from 'react-native';
+import { type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
+
+import type { ButtonDefaultIconName } from '@/types/button.types';
 
 /** Visual style variant of the button. */
 export type ButtonVariant =
@@ -12,18 +14,8 @@ export type ButtonVariant =
 /** Button size preset. */
 export type ButtonSize = 'small' | 'default' | 'large';
 
-/**
- * Built-in icon names shipped with the Button component.
- * Pass one of these strings to `iconLeft` / `iconRight` to render
- * a built-in icon without importing an external library.
- */
-export type ButtonDefaultIconName =
-  | 'plus'
-  | 'arrow-right'
-  | 'arrow-left'
-  | 'check'
-  | 'close'
-  | 'search';
+/** Re-export for consumers that import from Button. */
+export type { ButtonDefaultIconName };
 
 /**
  * An icon prop accepts either a built-in name or any ReactElement.
@@ -46,7 +38,7 @@ export type ButtonInteractionState =
   | 'disabled';
 
 /** Props for the Button component. */
-export type ButtonProps = {
+export interface ButtonProps {
   /**
    * Text label displayed inside the button.
    * When omitted and an icon is provided, the button renders as icon-only.
@@ -88,4 +80,28 @@ export type ButtonProps = {
 
   /** Accessibility label. Falls back to `label` when omitted. */
   accessibilityLabel?: string;
-};
+}
+
+/** State colour set for a single button state. */
+export interface ButtonStateColors {
+  backgroundColor: string;
+  borderColor: string;
+  textColor: string;
+  iconColor: string;
+  focusRingColor: string;
+  spinnerColor: string;
+}
+
+/** Map of interaction state to colours. */
+export type VariantStateMap = Record<ButtonInteractionState, ButtonStateColors>;
+
+/** Size configuration for a button size preset. */
+export interface ButtonSizeConfig {
+  height: number;
+  paddingHorizontal: number;
+  iconSize: number;
+  gap: number;
+  borderRadius: number;
+  iconOnlySize: number;
+  labelStyle: TextStyle;
+}

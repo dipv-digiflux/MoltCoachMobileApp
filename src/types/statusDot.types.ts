@@ -1,7 +1,7 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
-export type StatusDotProps = {
+export interface StatusDotProps {
   color?: string;
   size?: number;
   style?: StyleProp<ViewStyle>;
-};
+}

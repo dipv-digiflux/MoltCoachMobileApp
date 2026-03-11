@@ -1,28 +1,11 @@
 import React from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type StyleProp,
-  type TextStyle,
-  type ViewStyle,
-} from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { colors, moderateScale, spacing, typography } from '@/theme';
 
-export interface FilterTabsProps {
-  tabs: string[];
-  activeTab: string;
-  onTabChange: (tab: string) => void;
-  style?: StyleProp<ViewStyle>;
-  rightElement?: React.ReactNode;
-  tabsWrapperStyle?: StyleProp<ViewStyle>;
-  tabButtonStyle?: StyleProp<ViewStyle>;
-  activeTabButtonStyle?: StyleProp<ViewStyle>;
-  tabTextStyle?: StyleProp<TextStyle>;
-  activeTabTextStyle?: StyleProp<TextStyle>;
-}
+import type { FilterTabsProps } from '@/types/components.types';
+
+export type { FilterTabsProps };
 
 export const FilterTabs: React.FC<FilterTabsProps> = ({
   tabs,

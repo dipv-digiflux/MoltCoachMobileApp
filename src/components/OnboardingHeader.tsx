@@ -11,21 +11,8 @@ import { useNavigation } from '@react-navigation/native';
 import { BackIconSvg } from '@/assets/images';
 import { colors, spacing, typography, moderateScale, iconScale } from '@/theme';
 
-import type {
-  OnboardingNavigationProp,
-  OnboardingStackParamList,
-} from '@navigation/types';
-
-type OnboardingHeaderProps = {
-  disableBack?: boolean;
-  showSkip?: boolean;
-  /**
-   * When provided, passing a screen name string is enough:
-   * <OnboardingHeader showSkip onSkipPress=\"YourDetails\" />
-   */
-  onSkipPress?: keyof OnboardingStackParamList | (() => void);
-  skipLabel?: string;
-};
+import type { OnboardingHeaderProps } from '@/types/components.types';
+import type { OnboardingNavigationProp } from '@navigation/types';
 
 export const OnboardingHeader = ({
   disableBack,

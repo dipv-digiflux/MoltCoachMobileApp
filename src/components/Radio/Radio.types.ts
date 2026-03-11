@@ -4,7 +4,7 @@ import { type StyleProp, type ViewStyle } from 'react-native';
 export type RadioSize = 'default' | 'small';
 
 /** Props for the Radio component. */
-export type RadioProps = {
+export interface RadioProps {
   /** Whether this radio option is selected. @default false */
   selected?: boolean;
 
@@ -31,4 +31,4 @@ export type RadioProps = {
 
   /** Accessibility label. Falls back to `label` when omitted. */
   accessibilityLabel?: string;
-};
+}

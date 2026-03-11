@@ -3,9 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { colors, spacing, typography } from '@/theme';
 
-interface AddClientDividerProps {
-  label: string;
-}
+import type { AddClientDividerProps } from './AddClientDivider.types';
 
 const DividerBorder = (): ReactElement => {
   return <View style={styles.border} />;

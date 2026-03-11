@@ -4,7 +4,7 @@ import { type StyleProp, type ViewStyle } from 'react-native';
 export type CheckboxSize = 'default' | 'small';
 
 /** Props for the Checkbox component. */
-export type CheckboxProps = {
+export interface CheckboxProps {
   /** Whether the checkbox is checked. @default false */
   checked?: boolean;
 
@@ -34,4 +34,4 @@ export type CheckboxProps = {
 
   /** Accessibility label. Falls back to `label` when omitted. */
   accessibilityLabel?: string;
-};
+}
