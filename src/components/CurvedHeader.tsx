@@ -1,25 +1,17 @@
-import React, { type ReactNode } from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
   StatusBar,
   Image,
-  type ImageSourcePropType,
   type ImageStyle,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { colors } from '@/theme';
 import { HeaderCurvedBg } from '@assets/images';
 
-type StatusBarBarStyle = 'default' | 'light-content' | 'dark-content';
-
-type CurvedHeaderProps = {
-  children: ReactNode;
-  statusBarStyle?: StatusBarBarStyle;
-  headerHeight?: number;
-  backgroundSource?: ImageSourcePropType;
-  contentOverlap?: number;
-};
+import type { CurvedHeaderProps } from '@/types/components.types';
 
 export const CURVED_HEADER_DEFAULT_HEIGHT = 120;
 
@@ -55,7 +47,7 @@ export const CurvedHeader = ({
       <StatusBar
         translucent
         barStyle={statusBarStyle}
-        backgroundColor="transparent"
+        backgroundColor={colors.Transparent}
       />
       <View style={styles.headerContainer}>
         <Image source={backgroundSource} style={headerBgStyle} />

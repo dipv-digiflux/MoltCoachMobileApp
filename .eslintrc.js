@@ -98,6 +98,7 @@ module.exports = {
           'sibling',
           'index',
           'type',
+          'object',
         ],
         pathGroups: [
           { pattern: 'react', group: 'external', position: 'before' },
@@ -120,11 +121,106 @@ module.exports = {
       },
     ],
 
+    // =====================================================
+    // RULES FROM code_audit.py & .cursor/rules/*.mdc
+    // =====================================================
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: 'TSEnumDeclaration',
+        message: 'Use union types instead of enums. (Typescript-md.mdc §9)',
+      },
+      {
+        selector:
+          'ClassDeclaration[superClass.name=/^(React\\.)?(Pure)?Component$/]',
+        message:
+          'Class-based React components are forbidden; use functional components. (Typescript-md.mdc §15)',
+      },
+      {
+        selector: 'CallExpression[callee.name=/^(useDispatch|useSelector)$/]',
+        message:
+          "NEVER use raw useDispatch/useSelector; use useAppDispatch/useAppSelector from '@/store/hooks'. (store-structure.mdc)",
+      },
+      {
+        selector:
+          "ObjectExpression > Property[key.name=/^(padding|margin|gap).*/][value.type='Literal'][value.value!=0]",
+        message:
+          "Use spacing tokens (e.g. spacing['Spacing-5xl']) not raw numbers. (spacing.mdc)",
+      },
+      {
+        selector:
+          "ObjectExpression > Property[key.name=/^(fontSize|lineHeight|fontWeight|fontFamily)$/][value.type='Literal']",
+        message:
+          'Never use typography properties directly; use typography tokens. (typography.mdc)',
+      },
+      {
+        selector:
+          "ObjectExpression > Property[value.type='Literal'][value.value=/^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/]",
+        message:
+          "Hardcoded colors are forbidden; use colors from '@/theme'. (styling-standards.mdc)",
+      },
+      {
+        selector:
+          "LogicalExpression[operator='&&'] > JSXElement, LogicalExpression[operator='&&'] > JSXFragment",
+        message:
+          "Use ternary {condition ? <Comp /> : null} instead of && to avoid rendering '0'. (react-native-architect.mdc §1)",
+      },
+      {
+        selector:
+          'TSInterfaceDeclaration > TSInterfaceHeritage > TSExpressionWithTypeArguments:nth-child(2)',
+        message:
+          'Multi-inheritance via extends is forbidden; use intersection types. (Typescript-md.mdc §3)',
+      },
+      {
+        selector: 'TSTypeAliasDeclaration, TSInterfaceDeclaration',
+        message:
+          'Move types/interfaces to a .types.ts file or src/types/. (Typescript-md.mdc §15)',
+      },
+      {
+        selector: "CallExpression[callee.name='spacingScale']",
+        message:
+          'NEVER call spacingScale() in component files; use spacing tokens. (spacing.mdc)',
+      },
+    ],
+
     // --- Relax redundant rules when TypeScript covers them ---
     'no-undef': 'off',
     '@typescript-eslint/no-unused-vars': 'off', // use unused-imports/no-unused-vars instead
+
+    // --- Disable unsafe rules as requested ---
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/no-unsafe-call': 'off',
+    '@typescript-eslint/no-unsafe-return': 'off',
+    '@typescript-eslint/no-unsafe-argument': 'off',
   },
   overrides: [
+    {
+      files: ['*.hook.ts', 'src/**/*.hooks.ts'],
+      excludedFiles: ['src/hooks/**'],
+      rules: {
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector: 'Program',
+            message: 'Hook files must be placed in src/hooks/.',
+          },
+        ],
+      },
+    },
+    {
+      files: ['*.types.ts'],
+      excludedFiles: ['src/types/**'],
+      rules: {
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector: 'Program',
+            message: "'.types.ts' files must be placed in src/types/.",
+          },
+        ],
+      },
+    },
     {
       files: ['*.ts', '*.tsx'],
       rules: {
@@ -140,6 +236,115 @@ module.exports = {
       },
     },
     {
+      files: ['*.tsx'],
+      rules: {
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector: 'TSEnumDeclaration',
+            message: 'Use union types instead of enums. (Typescript-md.mdc §9)',
+          },
+          {
+            selector:
+              'ClassDeclaration[superClass.name=/^(React\\.)?(Pure)?Component$/]',
+            message:
+              'Class-based React components are forbidden; use functional components. (Typescript-md.mdc §15)',
+          },
+          {
+            selector:
+              'CallExpression[callee.name=/^(useDispatch|useSelector)$/]',
+            message:
+              "NEVER use raw useDispatch/useSelector; use useAppDispatch/useAppSelector from '@/store/hooks'. (store-structure.mdc)",
+          },
+          {
+            selector:
+              "ObjectExpression > Property[key.name=/^(padding|margin|gap).*/][value.type='Literal'][value.value!=0]",
+            message:
+              "Use spacing tokens (e.g. spacing['Spacing-5xl']) not raw numbers. (spacing.mdc)",
+          },
+          {
+            selector: 'TSTypeAliasDeclaration, TSInterfaceDeclaration',
+            message:
+              'Move types/interfaces to a .types.ts file. (component-structure.mdc)',
+          },
+        ],
+      },
+    },
+    {
+      files: ['src/store/slices/**/*.ts'],
+      rules: {
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector: "CallExpression[callee.name='createAsyncThunk']",
+            message:
+              'createAsyncThunk MUST NOT live in slice files; move to store/thunks/. (store-structure.mdc)',
+          },
+          {
+            selector:
+              'CallExpression[callee.name=/^(axios|httpGet|httpPost|fetch)$/]',
+            message:
+              'No API calls allowed inside slice files. (store-structure.mdc)',
+          },
+        ],
+      },
+    },
+    {
+      files: ['src/api/**/*.ts'],
+      rules: {
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector:
+              'CallExpression[callee.name=/^(useDispatch|useSelector|dispatch|createSlice)$/]',
+            message:
+              'API files must NOT import or use Redux/dispatch. (store-structure.mdc)',
+          },
+        ],
+      },
+    },
+    {
+      files: ['src/types/**/*.ts', '**/*.types.ts', 'src/theme/**/*.ts'],
+      rules: {
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector: 'TSEnumDeclaration',
+            message: 'Use union types instead of enums. (Typescript-md.mdc §9)',
+          },
+          {
+            selector: 'TSTypeAliasDeclaration > TSTypeLiteral',
+            message:
+              "Favor 'interface' over 'type' for object shapes. (react-native-architect.mdc §1)",
+          },
+        ],
+      },
+    },
+    {
+      files: ['src/store/store.ts'],
+      rules: {
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector: 'TSEnumDeclaration',
+            message: 'Use union types instead of enums. (Typescript-md.mdc §9)',
+          },
+        ],
+      },
+    },
+    {
+      files: ['src/store/hooks.ts'],
+      rules: {
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector: 'TSEnumDeclaration',
+            message: 'Use union types instead of enums. (Typescript-md.mdc §9)',
+          },
+        ],
+      },
+    },
+    {
       files: ['__tests__/**/*.ts', '__tests__/**/*.tsx'],
       rules: {
         // Allow object literal assertions for test mocks (e.g. synthetic events)
@@ -150,6 +355,7 @@ module.exports = {
             objectLiteralTypeAssertions: 'allow',
           },
         ],
+        'no-restricted-syntax': 'off',
       },
     },
   ],

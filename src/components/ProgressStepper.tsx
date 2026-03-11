@@ -3,13 +3,7 @@ import { View, StyleSheet } from 'react-native';
 
 import { colors, spacing, moderateScale } from '@/theme';
 
-type ProgressStepperProps = {
-  /** Current step index (1-based). */
-  currentStep: number;
-
-  /** Total steps for the progress stepper (>= 2 to show). */
-  totalSteps: number;
-};
+import type { ProgressStepperProps } from '@/types/components.types';
 
 /**
  * ProgressStepper

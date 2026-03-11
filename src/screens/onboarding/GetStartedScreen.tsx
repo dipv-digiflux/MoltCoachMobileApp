@@ -13,7 +13,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { Controller, useForm } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { z } from 'zod';
 
 import AppleIconSvg from '@/assets/images/svg/apple-icon.svg';
 import GoogleIconSvg from '@/assets/images/svg/google-icon.svg';
@@ -23,6 +22,11 @@ import { requestOTPThunk, signInWithGoogleThunk } from '@/store/thunks';
 import { colors, typography, spacing, iconScale } from '@/theme';
 import { getApiErrorMessage } from '@/utils/apiError';
 import { showErrorToast } from '@/utils/toast';
+
+import {
+  getStartedSchema,
+  type GetStartedFormData,
+} from './GetStartedScreen.types';
 
 import type {
   OnboardingNavigationProp,
@@ -40,33 +44,6 @@ const isPhoneInput = (value: string): boolean => {
   if (!trimmed) return false;
   return /^\d+$/.test(trimmed);
 };
-
-const getStartedSchema = z
-  .object({
-    inputValue: z.string().min(1, 'Required'),
-  })
-  .superRefine((data, ctx) => {
-    const value = data.inputValue.trim();
-    if (isPhoneInput(value)) {
-      if (value.length < 8) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['inputValue'],
-          message: 'Phone number must be at least 8 digits',
-        });
-      }
-    } else {
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['inputValue'],
-          message: 'Invalid email',
-        });
-      }
-    }
-  });
-
-type GetStartedFormData = z.infer<typeof getStartedSchema>;
 
 const enterAppStack = (navigation: OnboardingNavigationProp): void => {
   const root = navigation.getParent();

@@ -12,6 +12,9 @@ export const radius = {
   lg: moderateScale(12),
   xl: moderateScale(16),
   pill: moderateScale(38),
+  '2xl': moderateScale(20),
+  // 22px — used for circular avatar containers in contact rows
+  '3xl': moderateScale(22),
   full: 9999,
 } as const;
 

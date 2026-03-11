@@ -13,6 +13,8 @@ export const spacing = {
   'Spacing-l': spacingScale(6),
   'Spacing-xl': spacingScale(8),
   'Spacing-2xl': spacingScale(10),
+  // 11px — used for fine‑tuned paddings (e.g. contact rows)
+  'Spacing-2_5xl': spacingScale(11),
   'Spacing-3xl': spacingScale(12),
   'Spacing-4xl': spacingScale(14),
   'Spacing-5xl': spacingScale(16),

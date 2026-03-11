@@ -8,17 +8,17 @@ import type {
   WeightUnit,
 } from '@/types/onboarding.types';
 
-export type CustomerStatus = {
+export interface CustomerStatus {
   on_boarding_skip: boolean;
   health_connect_skip: boolean;
   on_boarding: boolean;
   health_connect: boolean;
-};
+}
 
 export type CustomerBodyMetrics = OnboardingFormValues;
 
 /** Backend customer (auth + profile). */
-export type Customer = {
+export interface Customer {
   id: string;
   email: string;
   first_name: string;
@@ -27,7 +27,7 @@ export type Customer = {
   country_code: string;
   status?: CustomerStatus;
   body_metrics?: CustomerBodyMetrics;
-};
+}
 
 export type AuthType = 'normal' | 'google_web' | 'google_mobile';
 
@@ -44,7 +44,7 @@ export interface AuthPayload {
 export type AuthenticateRequest = Partial<AuthPayload> & { type: AuthType };
 
 /** Response from POST /v1/auth/authenticate */
-export type AuthenticateResponse = {
+export interface AuthenticateResponse {
   status: boolean;
   message: string;
   token: string;
@@ -52,7 +52,7 @@ export type AuthenticateResponse = {
   show_otp: boolean;
   coach_id?: string;
   show_calendly?: boolean;
-};
+}
 
 export interface OnboardingRequest {
   name: string;
@@ -109,19 +109,21 @@ export interface OnboardingResponse {
 }
 
 /** Response from GET /v1/auth/customer */
-export type GetCustomerResponse = {
+export interface GetCustomerResponse {
   status: boolean;
   message: string;
   data: {
     customer: Customer;
   };
-};
+}
 
-export type ApiErrorResponse = {
+export interface ApiErrorResponse {
+  message: string;
+  code?: string;
   errors?: Record<string, string[]>;
-};
+}
 
-export type CoachProfile = {
+export interface CoachProfile {
   _id: string;
   email?: string;
   phone_number?: string;
@@ -133,13 +135,13 @@ export type CoachProfile = {
   createdAt: string;
   updatedAt: string;
   __v: number;
-};
+}
 
-export type GetCoachBookingsResponse = {
+export interface GetCoachBookingsResponse {
   status: boolean;
   message: string;
   data: {
     coach: CoachProfile;
     bookings: Booking[];
   };
-};
+}

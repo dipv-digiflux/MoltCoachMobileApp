@@ -1,7 +1,7 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
 /** Props for the OTPInput component. */
-export type OTPInputProps = {
+export interface OTPInputProps {
   /** Current OTP value (digits only). */
   value: string;
 
@@ -28,4 +28,4 @@ export type OTPInputProps = {
 
   /** Accessibility label. */
   accessibilityLabel?: string;
-};
+}

@@ -4,11 +4,12 @@ import {
   type ReturnKeyTypeOptions,
   type StyleProp,
   type TextInputProps as RNTextInputProps,
+  type TextStyle,
   type ViewStyle,
 } from 'react-native';
 
 /** Props for the Input component. */
-export type InputProps = {
+export interface InputProps {
   containerPress?: () => void;
   autoFocus?: boolean;
   caretHidden?: boolean;
@@ -123,6 +124,12 @@ export type InputProps = {
   /** Extra styles on the outermost wrapper. */
   style?: StyleProp<ViewStyle>;
 
+  /** Extra styles on the bordered input container (Pressable). */
+  inputContainerStyle?: StyleProp<ViewStyle>;
+
+  /** Extra styles on the internal TextInput. */
+  textInputStyle?: StyleProp<TextStyle>;
+
   /** Accessibility label. Falls back to `label` when omitted. */
   accessibilityLabel?: string;
-};
+}

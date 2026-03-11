@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 
 /** Props for the TextArea component. */
-export type TextAreaProps = {
+export interface TextAreaProps {
   // ── Value & input ─────────────────────────────────────────────────
 
   /** Current text value. */
@@ -86,4 +86,4 @@ export type TextAreaProps = {
 
   /** Accessibility label. Falls back to `label` when omitted. */
   accessibilityLabel?: string;
-};
+}

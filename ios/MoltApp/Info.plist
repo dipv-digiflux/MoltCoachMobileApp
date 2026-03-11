@@ -35,6 +35,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSContactsUsageDescription</key>
+	<string>We need access to your contacts to help you find friends.</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>

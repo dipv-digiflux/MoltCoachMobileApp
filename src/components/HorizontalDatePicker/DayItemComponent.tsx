@@ -7,13 +7,7 @@ import Animated, {
 
 import { colors, moderateScale, spacing, typography } from '@/theme';
 
-import { type DayItem } from './HorizontalDatePicker.types';
-
-type DayItemComponentProps = {
-  item: DayItem;
-  isSelected: boolean;
-  onPress: (item: DayItem) => void;
-};
+import type { DayItemComponentProps } from '@/types/components.types';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -111,7 +105,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   containerUnselected: {
-    backgroundColor: 'transparent',
+    backgroundColor: colors.Transparent,
     borderWidth: 1,
     borderColor: colors.BorderPrimaryDisabled,
   },

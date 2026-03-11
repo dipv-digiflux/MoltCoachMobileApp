@@ -3,9 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import { colors, spacing, typography, radius, moderateScale } from '@/theme';
 
-type InfoCardProps = {
-  text: string;
-};
+import type { InfoCardProps } from '@/types/components.types';
 
 export const InfoCard = ({ text }: InfoCardProps): ReactElement => {
   return (

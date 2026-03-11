@@ -2,6 +2,8 @@ import React, { type ReactElement } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import { spacing, typography } from '@/theme';
+
 import type { AppStackNavigationProp } from '@navigation/types';
 
 export const TaskSummaryScreen = (): ReactElement => {
@@ -25,8 +27,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 24,
-    fontWeight: '600',
-    marginBottom: 16,
+    ...typography.h3Bold,
+    marginBottom: spacing['Spacing-5xl'],
   },
 });

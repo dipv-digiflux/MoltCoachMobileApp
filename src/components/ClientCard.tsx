@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type StyleProp,
-  type ViewStyle,
-} from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import {
   ChevronDownIconSvg,
@@ -15,28 +7,16 @@ import {
   ProfilePng,
   StarIconSvg,
 } from '@/assets/images';
+import { Button } from '@/components/Button';
 import { colors, iconScale, moderateScale, spacing, typography } from '@/theme';
 
-import { Button } from './Button';
+import type {
+  ClientCardProps,
+  ClientTag,
+  ClientTagType,
+} from '@/types/components.types';
 
-export type ClientTagType = 'positive' | 'negative' | 'warning';
-
-export interface ClientTag {
-  label: string;
-  type: ClientTagType;
-}
-
-export interface ClientCardProps {
-  name: string;
-  score: number;
-  avatarUrl: string;
-  lastSyncedText: string;
-  detailsText: string;
-  tags: ClientTag[];
-  onNudgePress?: () => void;
-  onPress?: () => void;
-  style?: StyleProp<ViewStyle>;
-}
+export type { ClientCardProps, ClientTag, ClientTagType };
 
 export const ClientCard: React.FC<ClientCardProps> = ({
   name,

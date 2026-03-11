@@ -204,21 +204,21 @@ export const Dropdown = ({
   return (
     <View style={[styles.wrapper, style]} testID={testID}>
       {/* ── Label row ─────────────────────────────────────── */}
-      {label !== undefined && (
+      {label !== undefined ? (
         <View style={styles.labelRow}>
           <Text style={[typography.b1Medium, styles.labelText]}>{label}</Text>
 
-          {labelHint !== undefined && (
+          {labelHint !== undefined ? (
             <Text style={[typography.b1Regular, styles.labelHint]}>
               {labelHint}
             </Text>
-          )}
+          ) : null}
 
-          {required && (
+          {required ? (
             <Text style={[typography.b1Regular, styles.requiredStar]}>*</Text>
-          )}
+          ) : null}
 
-          {showInfoIcon && (
+          {showInfoIcon ? (
             <Pressable
               onPress={onInfoPress}
               hitSlop={spacing['Spacing-xl']}
@@ -230,9 +230,9 @@ export const Dropdown = ({
                 <Text style={styles.infoLetter}>i</Text>
               </View>
             </Pressable>
-          )}
+          ) : null}
         </View>
-      )}
+      ) : null}
 
       {/* ── Trigger ───────────────────────────────────────── */}
       <Pressable
@@ -268,13 +268,13 @@ export const Dropdown = ({
       </Pressable>
 
       {/* ── Helper / error text ────────────────────────────── */}
-      {bottomText !== undefined && (
+      {bottomText !== undefined ? (
         <Text
           style={[typography.bodySmall1Regular, { color: bottomTextColor }]}
         >
           {bottomText}
         </Text>
-      )}
+      ) : null}
 
       {/* ── Bottom Sheet ───────────────────────────────────── */}
       <BottomSheet
@@ -288,9 +288,9 @@ export const Dropdown = ({
         emptyMessage="No options found"
       >
         {/* Select All / Clear actions */}
-        {multiple && (showSelectAll || showClearButton) && (
+        {multiple && (showSelectAll || showClearButton) ? (
           <View style={styles.actionRow}>
-            {showSelectAll && (
+            {showSelectAll ? (
               <Pressable
                 onPress={dropdown.selectAll}
                 style={styles.actionButton}
@@ -301,8 +301,8 @@ export const Dropdown = ({
                   Select all
                 </Text>
               </Pressable>
-            )}
-            {showClearButton && dropdown.selectedValues.length > 0 && (
+            ) : null}
+            {showClearButton && dropdown.selectedValues.length > 0 ? (
               <Pressable
                 onPress={dropdown.clearSelection}
                 style={styles.actionButton}
@@ -315,9 +315,9 @@ export const Dropdown = ({
                   Clear
                 </Text>
               </Pressable>
-            )}
+            ) : null}
           </View>
-        )}
+        ) : null}
 
         {/* Options list */}
         {dropdown.filteredOptions.map(option => {
@@ -344,11 +344,11 @@ export const Dropdown = ({
         })}
 
         {/* Empty state when filtered results are empty */}
-        {dropdown.filteredOptions.length === 0 && !loading && (
+        {dropdown.filteredOptions.length === 0 && !loading ? (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>No options found</Text>
           </View>
-        )}
+        ) : null}
       </BottomSheet>
     </View>
   );

@@ -1,36 +1,10 @@
 import React, { type ReactElement } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import { InfoCard } from '@/components/InfoCard';
 import { colors, spacing, typography, radius, moderateScale } from '@/theme';
 
-import { InfoCard } from './InfoCard';
-
-type MacroItem = {
-  value: string;
-  percent: number;
-};
-
-type LifestyleTargets = {
-  waterIntake: string;
-  steps: string;
-  activeCalorieBurn: string;
-};
-
-type DailyNutritionTargetCardProps = {
-  title: string;
-  actionLabel: string;
-  kcal: string;
-  tags: readonly string[];
-  macroTargets: {
-    protein: MacroItem;
-    fat: MacroItem;
-    carb: MacroItem;
-  };
-  lifestyleTitle: string;
-  lifestyleActionLabel: string;
-  lifestyleTargets: LifestyleTargets;
-  planTip: string;
-};
+import type { DailyNutritionTargetCardProps } from '@/types/components.types';
 
 const PROGRESS_BAR_HEIGHT = 8;
 

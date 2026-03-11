@@ -2,15 +2,8 @@ import React, { type ReactElement, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
+import type { BookingConfirmCalendlyProps } from './BookingConfirmCalendly.types';
 import type { CalendlyEvent } from '@/types/calendly.types';
-
-interface BookingConfirmCalendlyProps {
-  url: string;
-  name?: string;
-  email?: string;
-  phoneNumber?: string;
-  onEventScheduled?: (data: CalendlyEvent) => void;
-}
 
 /**
  * Calendly WebView component for booking confirmation.

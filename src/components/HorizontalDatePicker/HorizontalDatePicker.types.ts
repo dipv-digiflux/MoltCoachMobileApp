@@ -1,18 +1,11 @@
 import { type StyleProp, type ViewStyle } from 'react-native';
 
-/** Day item data structure. */
-export type DayItem = {
-  date: Date;
-  dateString: string;
-  dayName: string;
-  dayNumber: number;
-  isPast: boolean;
-  isToday: boolean;
-  isDisabled?: boolean;
-};
+import type { DayItem } from '@/types/components.types';
+
+export type { DayItem };
 
 /** Props for the HorizontalDatePicker component. */
-export type HorizontalDatePickerProps = {
+export interface HorizontalDatePickerProps {
   /** Number of past days to show. @default 7 */
   pastDays?: number;
 
@@ -45,4 +38,4 @@ export type HorizontalDatePickerProps = {
 
   /** Extra styles on the container. */
   style?: StyleProp<ViewStyle>;
-};
+}

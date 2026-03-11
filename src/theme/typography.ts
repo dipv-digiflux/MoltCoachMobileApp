@@ -107,10 +107,24 @@ export const typographyTokens = {
     letterSpacing: 0,
     verticalAlign: 'middle',
   },
+  bodySmall4Tall: {
+    fontSize: fontScale(13),
+    // Matches design: 13px font-size with 19.5px line-height
+    lineHeight: lineHeightScale(19.5),
+    letterSpacing: 0,
+    verticalAlign: 'middle',
+  },
   b2: {
     fontSize: fontScale(15),
     lineHeight: lineHeightScale(18), // 120% of 15px
     letterSpacing: 0,
+  },
+  b2Tall: {
+    fontSize: fontScale(15),
+    // Matches design: 15px font-size with 22.5px line-height
+    lineHeight: lineHeightScale(22.5),
+    letterSpacing: 0,
+    verticalAlign: 'middle',
   },
 } as const;
 
@@ -140,7 +154,9 @@ export const typographyByWeight = {
   bodySmall2: withWeights(typographyTokens.bodySmall2),
   bodySmall3: withWeights(typographyTokens.bodySmall3),
   bodySmall4: withWeights(typographyTokens.bodySmall4),
+  bodySmall4Tall: withWeights(typographyTokens.bodySmall4Tall),
   b2: withWeights(typographyTokens.b2),
+  b2Tall: withWeights(typographyTokens.b2Tall),
 } as const;
 
 export const typography = {
@@ -204,10 +220,18 @@ export const typography = {
   bodySmall4SemiBold: typographyByWeight.bodySmall4.semiBold,
   bodySmall4Medium: typographyByWeight.bodySmall4.medium,
   bodySmall4Regular: typographyByWeight.bodySmall4.regular,
+  bodySmall4TallBold: typographyByWeight.bodySmall4Tall.bold,
+  bodySmall4TallSemiBold: typographyByWeight.bodySmall4Tall.semiBold,
+  bodySmall4TallMedium: typographyByWeight.bodySmall4Tall.medium,
+  bodySmall4TallRegular: typographyByWeight.bodySmall4Tall.regular,
   b2Bold: typographyByWeight.b2.bold,
   b2SemiBold: typographyByWeight.b2.semiBold,
   b2Medium: typographyByWeight.b2.medium,
   b2Regular: typographyByWeight.b2.regular,
+  b2TallBold: typographyByWeight.b2Tall.bold,
+  b2TallSemiBold: typographyByWeight.b2Tall.semiBold,
+  b2TallMedium: typographyByWeight.b2Tall.medium,
+  b2TallRegular: typographyByWeight.b2Tall.regular,
   // ── Tags ────────────────────────────────────────────────
   tagLabel: typographyByWeight.bodySmall2.medium,
 } as const;

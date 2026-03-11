@@ -21,13 +21,14 @@ import {
 } from '@react-navigation/native';
 import { Controller, useForm } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { z } from 'zod';
 
 import { Button, OTPInput, PageHeaderScrollView } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { requestOTPThunk, verifyOTPThunk } from '@/store/thunks';
 import { colors, spacing, typography } from '@/theme';
 import { getApiErrorMessage } from '@/utils/apiError';
+
+import { type OTPFormData, otpSchema } from './OTPVerification.types';
 
 import type {
   OnboardingNavigationProp,
@@ -37,15 +38,6 @@ import type {
 
 const OTP_LENGTH = 4;
 const RESEND_SECONDS_START = 300;
-
-const otpSchema = z.object({
-  otp: z
-    .string()
-    .length(OTP_LENGTH, `Enter ${OTP_LENGTH} digit code`)
-    .regex(/^\d+$/, 'Code must be digits only'),
-});
-
-type OTPFormData = z.infer<typeof otpSchema>;
 
 const formatDestination = (params: OTPVerificationParams): string => {
   if (params.mode === 'email') {

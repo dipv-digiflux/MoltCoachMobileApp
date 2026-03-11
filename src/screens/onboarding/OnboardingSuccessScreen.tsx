@@ -2,6 +2,8 @@ import React, { type ReactElement } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
+import { spacing } from '@/theme';
+
 import type { OnboardingNavigationProp } from '@navigation/types';
 
 export const OnboardingSuccessScreen = (): ReactElement => {
@@ -45,6 +47,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '600',
-    marginBottom: 16,
+    marginBottom: spacing['Spacing-5xl'],
   },
 });

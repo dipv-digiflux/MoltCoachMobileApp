@@ -1,32 +1,18 @@
-import { type TextStyle } from 'react-native';
-
 import { colors, iconScale, moderateScale, spacing, typography } from '@/theme';
 
 import {
+  type ButtonSizeConfig,
   type ButtonVariant,
-  type ButtonInteractionState,
   type ButtonSize,
+  type VariantStateMap,
 } from './Button.types';
 
-// ─── Button-specific colour tokens (not in main theme) ─────────────
+// ─── Button-specific colour tokens (from theme) ───────────────────
 
 const BRAND_HOVER_BORDER = '';
-const FOCUS_RING_BRAND = '#CEDAFA';
-const FOCUS_RING_NEUTRAL = colors.TextPrimaryDisabled; // #9CA3AF
-const FOCUS_RING_DESTRUCTIVE = 'rgba(240, 62, 63, 0.3)';
-
-// ─── State colour definitions ───────────────────────────────────────
-
-export type ButtonStateColors = {
-  backgroundColor: string;
-  borderColor: string;
-  textColor: string;
-  iconColor: string;
-  focusRingColor: string;
-  spinnerColor: string;
-};
-
-type VariantStateMap = Record<ButtonInteractionState, ButtonStateColors>;
+const FOCUS_RING_BRAND = colors.FocusRingBrand;
+const FOCUS_RING_NEUTRAL = colors.TextPrimaryDisabled;
+const FOCUS_RING_DESTRUCTIVE = colors.FocusRingDestructive;
 
 /**
  * Complete colour matrix for every variant × interaction-state combination.
@@ -40,7 +26,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.PrimarySecondary,
       textColor: colors.StatesWhite,
       iconColor: colors.StatesWhite,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.StatesWhite,
     },
     hover: {
@@ -48,7 +34,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: BRAND_HOVER_BORDER,
       textColor: colors.StatesWhite,
       iconColor: colors.StatesWhite,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.StatesWhite,
     },
     focus: {
@@ -64,7 +50,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.PrimarySecondary,
       textColor: colors.StatesWhite,
       iconColor: colors.StatesWhite,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.StatesWhite,
     },
     disabled: {
@@ -72,7 +58,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.StatesDivider,
       textColor: colors.TextPrimaryDisabled,
       iconColor: colors.IconSecondaryDisabled,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.TextPrimaryDisabled,
     },
   },
@@ -84,7 +70,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.SurfaceSecondaryHover,
       textColor: colors.PrimaryMain,
       iconColor: colors.PrimaryMain,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.PrimaryMain,
     },
     hover: {
@@ -92,12 +78,12 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.SurfaceSecondaryHover,
       textColor: colors.PrimaryMain,
       iconColor: colors.PrimaryMain,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.PrimaryMain,
     },
     focus: {
       backgroundColor: colors.SurfaceSecondaryDefault,
-      borderColor: 'transparent',
+      borderColor: colors.Transparent,
       textColor: colors.PrimaryMain,
       iconColor: colors.PrimaryMain,
       focusRingColor: FOCUS_RING_NEUTRAL,
@@ -108,7 +94,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.SurfaceSecondaryHover,
       textColor: colors.PrimaryMain,
       iconColor: colors.PrimaryMain,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.PrimaryMain,
     },
     disabled: {
@@ -116,7 +102,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.BorderPrimaryDisabled,
       textColor: colors.TextPrimaryDisabled,
       iconColor: colors.IconSecondaryDisabled,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.TextPrimaryDisabled,
     },
   },
@@ -124,11 +110,11 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
   // ── Minimal ────────────────────────────────────────────────────────
   minimal: {
     default: {
-      backgroundColor: 'transparent',
+      backgroundColor: colors.Transparent,
       borderColor: colors.StatesOutline,
       textColor: colors.PrimaryMain,
       iconColor: colors.PrimaryMain,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.PrimaryMain,
     },
     hover: {
@@ -136,11 +122,11 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.StatesOutline,
       textColor: colors.PrimaryMain,
       iconColor: colors.PrimaryMain,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.PrimaryMain,
     },
     focus: {
-      backgroundColor: 'transparent',
+      backgroundColor: colors.Transparent,
       borderColor: colors.StatesOutline,
       textColor: colors.PrimaryMain,
       iconColor: colors.PrimaryMain,
@@ -148,19 +134,19 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       spinnerColor: colors.PrimaryMain,
     },
     loading: {
-      backgroundColor: 'transparent',
+      backgroundColor: colors.Transparent,
       borderColor: colors.StatesOutline,
       textColor: colors.PrimaryMain,
       iconColor: colors.PrimaryMain,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.PrimaryMain,
     },
     disabled: {
-      backgroundColor: 'transparent',
-      borderColor: 'transparent',
+      backgroundColor: colors.Transparent,
+      borderColor: colors.Transparent,
       textColor: colors.TextPrimaryDisabled,
       iconColor: colors.IconSecondaryDisabled,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.TextPrimaryDisabled,
     },
   },
@@ -172,7 +158,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.FeedbackWarningBorder,
       textColor: colors.FeedbackWarningText,
       iconColor: colors.FeedbackWarningText,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.FeedbackWarningText,
     },
     hover: {
@@ -180,7 +166,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.FeedbackWarningText,
       textColor: colors.FeedbackWarningText,
       iconColor: colors.FeedbackWarningText,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.FeedbackWarningText,
     },
     focus: {
@@ -196,7 +182,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.FeedbackWarningBorder,
       textColor: colors.FeedbackWarningText,
       iconColor: colors.FeedbackWarningText,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.FeedbackWarningText,
     },
     disabled: {
@@ -204,7 +190,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.BorderPrimaryDisabled,
       textColor: colors.TextPrimaryDisabled,
       iconColor: colors.IconSecondaryDisabled,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.TextPrimaryDisabled,
     },
   },
@@ -215,7 +201,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.StatesOutline,
       textColor: colors.PrimaryMain,
       iconColor: colors.PrimaryMain,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.PrimaryMain,
     },
     hover: {
@@ -223,7 +209,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.StatesOutline,
       textColor: colors.PrimaryMain,
       iconColor: colors.PrimaryMain,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.PrimaryMain,
     },
     focus: {
@@ -239,7 +225,7 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.StatesOutline,
       textColor: colors.PrimaryMain,
       iconColor: colors.PrimaryMain,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.PrimaryMain,
     },
     disabled: {
@@ -247,23 +233,13 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       borderColor: colors.BorderPrimaryDisabled,
       textColor: colors.TextPrimaryDisabled,
       iconColor: colors.IconSecondaryDisabled,
-      focusRingColor: 'transparent',
+      focusRingColor: colors.Transparent,
       spinnerColor: colors.TextPrimaryDisabled,
     },
   },
 };
 
 // ─── Size configuration ─────────────────────────────────────────────
-
-export type ButtonSizeConfig = {
-  height: number;
-  paddingHorizontal: number;
-  iconSize: number;
-  gap: number;
-  borderRadius: number;
-  iconOnlySize: number;
-  labelStyle: TextStyle;
-};
 
 /**
  * Size tokens extracted from the Figma design.

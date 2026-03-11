@@ -10,7 +10,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigation } from '@react-navigation/native';
 import { Controller, useForm } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { z } from 'zod';
 
 import {
   Button,
@@ -22,18 +21,12 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { bookCallThunk } from '@/store/thunks';
 import { colors, spacing } from '@/theme';
 
+import {
+  accessRequestSchema,
+  type AccessRequestFormData,
+} from './RequestAccessScreen.types';
+
 import type { OnboardingNavigationProp } from '@navigation/types';
-
-const accessRequestSchema = z.object({
-  fullName: z.string().min(1, 'Full name is required'),
-  email: z.string().min(1, 'Email is required').email('Invalid email address'),
-  phone: z
-    .string()
-    .min(1, 'Phone number is required')
-    .min(10, 'Phone number must be at least 10 digits'),
-});
-
-type AccessRequestFormData = z.infer<typeof accessRequestSchema>;
 
 export const RequestAccessScreen = (): ReactElement => {
   const insets = useSafeAreaInsets();

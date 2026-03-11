@@ -24,7 +24,6 @@ import Animated, {
   withTiming,
   Easing,
   runOnJS,
-  type SharedValue,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -41,6 +40,13 @@ import {
 } from '@/theme';
 import { Device } from '@assets/images';
 
+import {
+  type SlideData,
+  type ProgressSegmentProps,
+  type ImageCellProps,
+  type TextCellProps,
+} from './IntroCarouselScreen.types';
+
 import type { OnboardingNavigationProp } from '@navigation/types';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -51,11 +57,6 @@ const ENTRANCE_DURATION = 580;
 const ENTRANCE_EASING = Easing.bezier(0.25, 0.1, 0.25, 1);
 const TOP_ENTRANCE_OFFSET = SCREEN_HEIGHT * 0.12;
 const BOTTOM_ENTRANCE_OFFSET = SCREEN_HEIGHT * 0.1;
-
-type SlideData = {
-  title: string;
-  subtitle: string;
-};
 
 const SLIDES: readonly SlideData[] = [
   {
@@ -75,12 +76,6 @@ const SLIDES: readonly SlideData[] = [
 const TOTAL_SLIDES = SLIDES.length;
 
 const CAROUSEL_SLIDES = [...SLIDES, SLIDES[0]] as const;
-
-type ProgressSegmentProps = {
-  index: number;
-  currentIndex: number;
-  progressAnim: SharedValue<number>;
-};
 
 const ProgressSegment = memo(function ProgressSegment({
   index,
@@ -114,10 +109,6 @@ const ProgressSegment = memo(function ProgressSegment({
   );
 });
 
-type ImageCellProps = {
-  slide: SlideData;
-};
-
 const ImageCell = memo(function ImageCell({
   slide: _slide,
 }: ImageCellProps): ReactElement {
@@ -133,10 +124,6 @@ const ImageCell = memo(function ImageCell({
     </View>
   );
 });
-
-type TextCellProps = {
-  slide: SlideData;
-};
 
 const TextCell = memo(function TextCell({
   slide,

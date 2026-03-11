@@ -1,21 +1,11 @@
 import React from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  Pressable,
-  type StyleProp,
-  type ViewStyle,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, Pressable } from 'react-native';
 
 import { colors, moderateScale, spacing, typography } from '@/theme';
 
-export interface StatusTabsProps {
-  tabs: string[];
-  activeTab: string;
-  onTabChange: (tab: string) => void;
-  style?: StyleProp<ViewStyle>;
-}
+import type { StatusTabsProps } from '@/types/components.types';
+
+export type { StatusTabsProps };
 
 export const StatusTabs: React.FC<StatusTabsProps> = ({
   tabs,
