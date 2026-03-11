@@ -11,6 +11,8 @@ import { colors, moderateScale, spacing, typography } from '@/theme';
 
 import { type SwitchProps, type SwitchSize } from './Switch.types';
 
+import type { SwitchSizeTokens } from '@/types/components.types';
+
 // ─── Design tokens ──────────────────────────────────────────────────
 
 const FOCUS_RING_COLOR = '#EDEFF5';
@@ -19,18 +21,11 @@ const FOCUS_RING_GAP = 1;
 const THUMB_INSET = moderateScale(2);
 const ANIMATION_DURATION = 200;
 
-type SizeTokens = {
-  trackWidth: number;
-  trackHeight: number;
-  thumb: number;
-  onTranslateX: number;
-};
-
 const buildSizeTokens = (
   trackW: number,
   trackH: number,
   thumbD: number,
-): SizeTokens => {
+): SwitchSizeTokens => {
   const tw = moderateScale(trackW);
   const th = moderateScale(trackH);
   const td = moderateScale(thumbD);
@@ -42,7 +37,7 @@ const buildSizeTokens = (
   };
 };
 
-const SIZE_TOKENS: Record<SwitchSize, SizeTokens> = {
+const SIZE_TOKENS: Record<SwitchSize, SwitchSizeTokens> = {
   default: buildSizeTokens(32, 20, 16),
   small: buildSizeTokens(24, 16, 12),
 };
@@ -174,7 +169,7 @@ export const Switch = ({
           />
         </View>
 
-        {showFocusRing && (
+        {showFocusRing ? (
           <View
             style={[
               styles.focusRing,
@@ -189,20 +184,20 @@ export const Switch = ({
             ]}
             pointerEvents="none"
           />
-        )}
+        ) : null}
       </View>
 
       {/* Label + description */}
-      {hasLabel && (
+      {hasLabel ? (
         <View style={styles.labelColumn}>
           <Text style={[labelTextStyle, { color: labelColor }]}>{label}</Text>
-          {description !== undefined && (
+          {description !== undefined ? (
             <Text style={[descTextStyle, { color: descColor }]}>
               {description}
             </Text>
-          )}
+          ) : null}
         </View>
-      )}
+      ) : null}
     </Pressable>
   );
 };

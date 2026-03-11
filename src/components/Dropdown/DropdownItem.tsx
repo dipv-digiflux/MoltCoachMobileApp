@@ -55,7 +55,7 @@ const DropdownItemComponent = ({
       testID={testID}
     >
       {/* Multi-select checkbox indicator */}
-      {multiple && (
+      {multiple ? (
         <View
           style={[
             styles.checkbox,
@@ -64,11 +64,11 @@ const DropdownItemComponent = ({
             isDisabled && !selected && styles.checkboxDisabled,
           ]}
         >
-          {selected && (
+          {selected ? (
             <View style={[styles.checkmark, { borderColor: checkColor }]} />
-          )}
+          ) : null}
         </View>
-      )}
+      ) : null}
 
       <Text
         style={[
@@ -81,11 +81,11 @@ const DropdownItemComponent = ({
       </Text>
 
       {/* Single-select check indicator */}
-      {!multiple && selected && (
+      {!multiple && selected ? (
         <View style={styles.singleCheckWrap}>
           <View style={styles.singleCheckmark} />
         </View>
-      )}
+      ) : null}
     </Pressable>
   );
 };

@@ -2,6 +2,11 @@ import React, { type ReactElement } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { BottomTabs } from '@navigation/BottomTabs';
+import { AddClientScreen } from '@screens/clients/AddClientScreen';
+import { AddedClientsScreen } from '@screens/clients/AddedClientsScreen';
+import { SelectContactScreen } from '@screens/clients/SelectContactScreen';
+import { EarningsScreen } from '@screens/earnings/EarningsScreen';
+import { ImportContactsScreen } from '@screens/onboarding/ImportContactsScreen';
 import {
   CreateTaskScreen,
   EditTaskScreen,
@@ -23,8 +28,15 @@ export const AppNavigator = (): ReactElement => (
       animation: 'slide_from_right',
       animationDuration: 230,
     }}
+    initialRouteName="AddedClients"
   >
     <Stack.Screen name="BottomTabs" component={BottomTabs} />
+
+    <Stack.Screen name="Earnings" component={EarningsScreen} />
+    <Stack.Screen name="AddClient" component={AddClientScreen} />
+    <Stack.Screen name="AddedClients" component={AddedClientsScreen} />
+    <Stack.Screen name="ImportContacts" component={ImportContactsScreen} />
+    <Stack.Screen name="SelectContact" component={SelectContactScreen} />
 
     {/* Task ActionFlows (tabs hidden) */}
     <Stack.Screen name="CreateTask" component={CreateTaskScreen} />

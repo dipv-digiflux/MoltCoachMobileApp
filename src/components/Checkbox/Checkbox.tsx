@@ -5,21 +5,15 @@ import { colors, moderateScale, spacing, typography } from '@/theme';
 
 import { type CheckboxProps, type CheckboxSize } from './Checkbox.types';
 
+import type { CheckboxSizeTokens } from '@/types/components.types';
+
 // ─── Design tokens ──────────────────────────────────────────────────
 
 const FOCUS_RING_COLOR = '#EDEFF5';
 const FOCUS_RING_WIDTH = 3;
 const FOCUS_RING_GAP = 1;
 
-type SizeTokens = {
-  box: number;
-  borderRadius: number;
-  stroke: number;
-  checkLong: number;
-  checkShort: number;
-};
-
-const SIZE_TOKENS: Record<CheckboxSize, SizeTokens> = {
+const SIZE_TOKENS: Record<CheckboxSize, CheckboxSizeTokens> = {
   default: {
     box: moderateScale(20),
     borderRadius: moderateScale(2),
@@ -77,7 +71,7 @@ export const Checkbox = ({
     : focused && !isActive
     ? colors.PrimaryMain
     : isActive
-    ? 'transparent'
+    ? colors.Transparent
     : colors.SurfaceSecondaryHover;
 
   const iconColor = disabled ? colors.TextPrimaryDisabled : colors.StatesWhite;
@@ -147,7 +141,7 @@ export const Checkbox = ({
       <View style={styles.controlWrapper}>
         <View style={boxStyle}>
           {/* Checkmark */}
-          {checked && !mixed && (
+          {checked && !mixed ? (
             <View
               style={{
                 width: tokens.checkLong,
@@ -159,10 +153,10 @@ export const Checkbox = ({
                 marginTop: -tokens.checkShort * 0.2,
               }}
             />
-          )}
+          ) : null}
 
           {/* Indeterminate dash */}
-          {mixed && (
+          {mixed ? (
             <View
               style={{
                 width: tokens.box * 0.5,
@@ -171,10 +165,10 @@ export const Checkbox = ({
                 borderRadius: tokens.stroke / 2,
               }}
             />
-          )}
+          ) : null}
         </View>
 
-        {showFocusRing && (
+        {showFocusRing ? (
           <View
             style={[
               styles.focusRing,
@@ -189,18 +183,18 @@ export const Checkbox = ({
             ]}
             pointerEvents="none"
           />
-        )}
+        ) : null}
       </View>
 
       {/* Label + description */}
-      {hasLabel && (
+      {hasLabel ? (
         <View style={styles.labelColumn}>
           <Text style={[labelStyle, { color: labelColor }]}>{label}</Text>
-          {description !== undefined && (
+          {description !== undefined ? (
             <Text style={[descStyle, { color: descColor }]}>{description}</Text>
-          )}
+          ) : null}
         </View>
-      )}
+      ) : null}
     </Pressable>
   );
 };

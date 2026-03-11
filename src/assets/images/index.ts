@@ -5,15 +5,25 @@ import LogoWhite from './png/logo-white.png';
 import ProfilePng from './png/profile.jpg';
 // svgs
 import BackIconSvg from './svg/back-icon.svg';
+import BlackBackgroundCheckSvg from './svg/BlackBackgroundCheck.svg';
 import CalendarIconSvg from './svg/calendar-icon.svg';
 import CheckCircleIconSvg from './svg/check-circle-icon.svg';
+import CheckedcircleWithBlackBgSvg from './svg/CheckedcircleWithBlackBg.svg';
 import ChevronDownIconSvg from './svg/chevron-down-icon.svg';
+import ContactSvg from './svg/contact.svg';
+import ContactBookSvg from './svg/contactbook.svg';
 import CreditIconSvg from './svg/credit.svg';
+import EmptyRadioCircleSvg from './svg/emptyRadioCircle.svg';
+import GreenShieldSvg from './svg/greenshield.svg';
+import InfoIconSvg from './svg/infoicon.svg';
 import LogoWhiteSvg from './svg/logo-WhiteSvg.svg';
 import NotificationBellSvg from './svg/notification-icon.svg';
 import NotificationIconSvg from './svg/notification.svg';
 import ProfileIconSvg from './svg/profile.svg';
+import RightIndicationArrowSvg from './svg/rightindicationarrow.svg';
 import SearchIconSvg from './svg/search.svg';
+import SearchiconSvg from './svg/searchicon.svg';
+import ShieldIconSvg from './svg/shield.svg';
 import StarIconSvg from './svg/star-icon.svg';
 
 export {
@@ -26,10 +36,20 @@ export {
   CheckCircleIconSvg,
   CalendarIconSvg,
   ChevronDownIconSvg,
+  InfoIconSvg,
   NotificationIconSvg,
   NotificationBellSvg,
   ProfileIconSvg,
   CreditIconSvg,
   SearchIconSvg,
+  ContactBookSvg,
+  ContactSvg,
+  GreenShieldSvg,
+  RightIndicationArrowSvg,
+  ShieldIconSvg,
   StarIconSvg,
+  BlackBackgroundCheckSvg,
+  CheckedcircleWithBlackBgSvg,
+  EmptyRadioCircleSvg,
+  SearchiconSvg,
 };

@@ -1,0 +1,1 @@
+export { SelectedContactsHeader } from './SelectedContactsHeader';

@@ -5,7 +5,7 @@ import { type StyleProp, type ViewStyle } from 'react-native';
 export type AccordionSize = 'default' | 'small';
 
 /** Props for the Accordion component. */
-export type AccordionProps = {
+export interface AccordionProps {
   // ── Content ─────────────────────────────────────────────────────
 
   /** Title text displayed in the accordion header. */
@@ -45,4 +45,4 @@ export type AccordionProps = {
 
   /** Accessibility label. Falls back to `title` when omitted. */
   accessibilityLabel?: string;
-};
+}

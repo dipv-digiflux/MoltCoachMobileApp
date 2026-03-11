@@ -1,9 +1,16 @@
+import type {
+  HomeScreenWithId,
+  TabName,
+} from '@/types/notificationNavigation.types';
 import type { ParsedNotificationPayload } from '@/types/pushNotification.types';
 import type {
   AppStackParamList,
+  HomeScreenName,
   HomeStackParamList,
+  ProfileScreenName,
   ProfileStackParamList,
   RootStackParamList,
+  ShopScreenName,
   ShopStackParamList,
 } from '@navigation/types';
 import type {
@@ -26,17 +33,13 @@ const CATEGORY_TO_TAB: Record<
   general: 'HomeTab',
 };
 
-type TabName = 'HomeTab' | 'ShopTab' | 'ProfileTab';
-
-/** Screens that accept an id param (e.g. taskId). */
-const SCREENS_WITH_ID = new Set([
+/** Screens that accept an id param (e.g. taskId). Includes AppStack screens. */
+const SCREENS_WITH_ID = new Set<string>([
   'TaskDetails',
   'TaskProgress',
   'TaskCompletion',
   'EditTask',
 ]);
-
-type HomeScreenWithId = 'TaskDetails' | 'TaskProgress' | 'TaskCompletion';
 
 /**
  * Handles navigation when user opens the app from a push notification.
@@ -66,7 +69,7 @@ export const handleNotificationOpen = (
       screen && id && SCREENS_WITH_ID.has(screen)
         ? { screen: screen as HomeScreenWithId, params: { taskId: id } }
         : screen
-        ? { screen: screen as keyof HomeStackParamList }
+        ? { screen: screen as HomeScreenName }
         : { screen: 'HomeDashboard' };
     const params: AppStackParamList['BottomTabs'] = {
       screen: 'HomeTab',
@@ -78,7 +81,7 @@ export const handleNotificationOpen = (
 
   if (tab === 'ShopTab') {
     const shopParams: NavigatorScreenParams<ShopStackParamList> = screen
-      ? { screen: screen as keyof ShopStackParamList }
+      ? { screen: screen as ShopScreenName }
       : { screen: 'MealsHome' };
     const params: AppStackParamList['BottomTabs'] = {
       screen: 'ShopTab',
@@ -90,7 +93,7 @@ export const handleNotificationOpen = (
 
   // ProfileTab
   const profileParams: NavigatorScreenParams<ProfileStackParamList> = screen
-    ? { screen: screen as keyof ProfileStackParamList }
+    ? { screen: screen as ProfileScreenName }
     : { screen: 'ProfileHome' };
   const params: AppStackParamList['BottomTabs'] = {
     screen: 'ProfileTab',

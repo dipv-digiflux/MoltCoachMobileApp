@@ -1,34 +1,11 @@
 import React, { useEffect, useState, type ReactElement } from 'react';
 
-import { BottomSheet, type BottomSheetProps } from '@/components';
+import { BottomSheet } from '@/components';
 import { DateSelectionCalendar } from '@/components/DateSelectionCalendar';
 
-export type DateSelectionBottomSheetProps = {
-  /** Controls visibility of the bottom sheet. */
-  visible: boolean;
-  /** Called when the sheet should close. */
-  onClose: () => void;
-  /** Pre-selected date in ISO format 'YYYY-MM-DD'. */
-  initialSelectedDate?: string;
-  /** Minimum selectable date in ISO format 'YYYY-MM-DD'. */
-  minDate?: string;
-  /** Maximum selectable date in ISO format 'YYYY-MM-DD'. */
-  maxDate?: string;
-  /**
-   * Called when user confirms selection via the sheet footer.
-   * Receives the final selected date in ISO format 'YYYY-MM-DD'.
-   */
-  onDateSelect: (date: string) => void;
-  /** Optional header override; defaults to \"Select date\". */
-  headerTitle?: string;
-} & Pick<
-  BottomSheetProps,
-  | 'variant'
-  | 'snapPoints'
-  | 'initialSnapIndex'
-  | 'stickyHeader'
-  | 'stickyFooter'
->;
+import type { DateSelectionBottomSheetProps } from '@/types/components.types';
+
+export type { DateSelectionBottomSheetProps };
 
 export const DateSelectionBottomSheet = ({
   visible,

@@ -19,6 +19,7 @@ import {
   ClientCard,
   type ClientTag,
 } from '@/components';
+import { ProfileCompletionCard } from '@/screens/home/components/ProfileCompletionCard';
 import { useAppSelector } from '@/store/hooks';
 import { colors, iconScale, moderateScale, spacing, typography } from '@/theme';
 
@@ -210,6 +211,10 @@ export const HomeDashboardScreen = (): ReactElement => {
         ),
       }}
     >
+      <View style={styles.profileCardSection}>
+        <ProfileCompletionCard />
+      </View>
+
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Overview</Text>
         <ScrollView
@@ -306,6 +311,11 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flexGrow: 1,
+  },
+  profileCardSection: {
+    marginTop: spacing['Spacing-3xl'],
+    marginBottom: spacing['Spacing-xl'],
+    marginHorizontal: spacing['Spacing-5xl'],
   },
 
   // ── Header right (Molt Credit + bell) ───────────────────────────────

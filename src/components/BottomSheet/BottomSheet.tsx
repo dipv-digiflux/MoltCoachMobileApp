@@ -4,8 +4,6 @@ import React, {
   useEffect,
   useImperativeHandle,
   useRef,
-  type ReactElement,
-  type ReactNode,
 } from 'react';
 import {
   ActivityIndicator,
@@ -21,9 +19,6 @@ import {
   Text,
   TextInput,
   View,
-  type StyleProp,
-  type TextStyle,
-  type ViewStyle,
 } from 'react-native';
 import {
   Gesture,
@@ -42,124 +37,26 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors, moderateScale, iconScale, spacing, typography } from '@/theme';
 
-// ─── Types ───────────────────────────────────────────────────────────
+import type {
+  BottomSheetFooterProps,
+  BottomSheetHeaderProps,
+  BottomSheetProps,
+  BottomSheetRef,
+  BottomSheetSearchProps,
+  BottomSheetVariant,
+  LoadingType,
+  SnapPoint,
+} from '@/types/bottomSheet.types';
 
-/** Layout variant of the bottom sheet. */
-export type BottomSheetVariant = 'default' | 'form' | 'list' | 'fullscreen';
-
-/**
- * Snap points expressed as percentage strings (e.g. '50%', '90%')
- * or absolute pixel numbers.
- */
-export type SnapPoint = string | number;
-
-/** Header configuration for the bottom sheet. */
-export type BottomSheetHeaderProps = {
-  /** Primary title text. */
-  title: string;
-  /** Subtitle or description text below the title. */
-  subtitle?: string;
-  /** Whether to show the close (X) button above the header. @default true */
-  showCloseButton?: boolean;
-  /** Custom element rendered to the right of the title row. */
-  rightElement?: ReactElement;
-  /** Extra styles for the header container. */
-  style?: StyleProp<ViewStyle>;
-  /** Extra styles for the title text. */
-  titleStyle?: StyleProp<TextStyle>;
-  /** Extra styles for the subtitle text. */
-  subtitleStyle?: StyleProp<TextStyle>;
-};
-
-/** Footer configuration for the bottom sheet. */
-export type BottomSheetFooterProps = {
-  /** Primary action button label. */
-  primaryLabel?: string;
-  /** Primary action handler. */
-  onPrimaryPress?: () => void;
-  /** Whether the primary button is in a loading state. */
-  primaryLoading?: boolean;
-  /** Whether the primary button is disabled. */
-  primaryDisabled?: boolean;
-  /** Secondary action button label. */
-  secondaryLabel?: string;
-  /** Secondary action handler. */
-  onSecondaryPress?: () => void;
-  /** Custom footer content (overrides button config). */
-  children?: ReactNode;
-  /** Extra styles for the footer container. */
-  style?: StyleProp<ViewStyle>;
-};
-
-/** Search bar configuration for list variant. */
-export type BottomSheetSearchProps = {
-  /** Placeholder text for the search input. */
-  placeholder?: string;
-  /** Current search value. */
-  value: string;
-  /** Callback when the search text changes. */
-  onChangeText: (text: string) => void;
-  /** Extra styles for the search container. */
-  style?: StyleProp<ViewStyle>;
-};
-
-/** State to show when the sheet is loading data. */
-export type LoadingType = 'spinner' | 'skeleton';
-
-/** Props for the BottomSheet component. */
-export type BottomSheetProps = {
-  /** Controls visibility of the bottom sheet. */
-  visible: boolean;
-  /** Called when the bottom sheet requests to close. */
-  onClose: () => void;
-  /** Layout variant. @default 'default' */
-  variant?: BottomSheetVariant;
-  /** Snap points (kept for API compatibility). */
-  snapPoints?: SnapPoint[];
-  /** Initial snap point index (kept for API compatibility). */
-  initialSnapIndex?: number;
-  /** Header configuration. */
-  header?: BottomSheetHeaderProps;
-  /** Footer configuration. Renders as a sticky footer. */
-  footer?: BottomSheetFooterProps;
-  /** Search bar configuration (used with 'list' variant). */
-  search?: BottomSheetSearchProps;
-  /** Whether data is loading. Shows loading indicator in content area. */
-  loading?: boolean;
-  /** Loading display type. @default 'spinner' */
-  loadingType?: LoadingType;
-  /** Message displayed when content is empty and not loading. */
-  emptyMessage?: string;
-  /** Whether to show the overlay backdrop. @default true */
-  showOverlay?: boolean;
-  /** Whether the sheet can be dismissed by tapping the overlay. @default true */
-  dismissOnOverlayTap?: boolean;
-  /** Whether the sheet can be dismissed by dragging down. @default true */
-  dismissOnDragDown?: boolean;
-  /** Whether pressing the Android back button dismisses the sheet. @default true */
-  dismissOnBackButton?: boolean;
-  /** Whether the header is sticky (fixed while content scrolls). @default true */
-  stickyHeader?: boolean;
-  /** Whether the footer is sticky (fixed while content scrolls). @default true */
-  stickyFooter?: boolean;
-  /** Content rendered inside the sheet body. */
-  children?: ReactNode;
-  /** Extra styles for the outer container. */
-  style?: StyleProp<ViewStyle>;
-  /** Extra styles for the content scroll area. */
-  contentStyle?: StyleProp<ViewStyle>;
-  /** Test identifier. */
-  testID?: string;
-};
-
-/** Ref handle exposed by the BottomSheet via forwardRef. */
-export type BottomSheetRef = {
-  /** Open the sheet. */
-  open: (snapIndex?: number) => void;
-  /** Close the sheet. */
-  close: () => void;
-  /** Snap to a specific index (kept for API compatibility). */
-  snapTo: (index: number) => void;
+export type {
+  BottomSheetFooterProps,
+  BottomSheetHeaderProps,
+  BottomSheetProps,
+  BottomSheetRef,
+  BottomSheetSearchProps,
+  BottomSheetVariant,
+  LoadingType,
+  SnapPoint,
 };
 
 // ─── Constants ───────────────────────────────────────────────────────
@@ -247,18 +144,18 @@ const SheetHeader = ({
         <Text style={[styles.headerTitle, config.titleStyle]} numberOfLines={2}>
           {config.title}
         </Text>
-        {config.subtitle !== undefined && (
+        {config.subtitle !== undefined ? (
           <Text
             style={[styles.headerSubtitle, config.subtitleStyle]}
             numberOfLines={2}
           >
             {config.subtitle}
           </Text>
-        )}
+        ) : null}
       </View>
-      {config.rightElement !== undefined && (
+      {config.rightElement !== undefined ? (
         <View style={styles.headerRight}>{config.rightElement}</View>
-      )}
+      ) : null}
     </View>
   </View>
 );
@@ -285,7 +182,7 @@ const SearchBar = ({
         autoCorrect={false}
         returnKeyType="search"
       />
-      {config.value.length > 0 && (
+      {config.value.length > 0 ? (
         <Pressable
           onPress={(): void => config.onChangeText('')}
           hitSlop={spacing['Spacing-xl']}
@@ -297,7 +194,7 @@ const SearchBar = ({
             <View style={[styles.clearLine, styles.clearLineRight]} />
           </View>
         </Pressable>
-      )}
+      ) : null}
     </View>
   </View>
 );
@@ -320,7 +217,7 @@ const SheetFooter = ({
 
   return (
     <View style={[styles.footerContainer, config.style]}>
-      {config.primaryLabel !== undefined && (
+      {config.primaryLabel !== undefined ? (
         <Pressable
           style={[
             styles.footerPrimaryButton,
@@ -340,8 +237,8 @@ const SheetFooter = ({
             <Text style={styles.footerPrimaryLabel}>{config.primaryLabel}</Text>
           )}
         </Pressable>
-      )}
-      {config.secondaryLabel !== undefined && (
+      ) : null}
+      {config.secondaryLabel !== undefined ? (
         <Pressable
           style={styles.footerSecondaryButton}
           onPress={config.onSecondaryPress ?? onClose}
@@ -352,7 +249,7 @@ const SheetFooter = ({
             {config.secondaryLabel}
           </Text>
         </Pressable>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -675,7 +572,7 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
       >
         <GestureHandlerRootView style={styles.modalRoot} testID={testID}>
           {/* Overlay */}
-          {showOverlay && (
+          {showOverlay ? (
             <Animated.View style={[styles.overlay, overlayAnimatedStyle]}>
               <Pressable
                 style={StyleSheet.absoluteFill}
@@ -684,18 +581,18 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
                 accessibilityLabel="Close bottom sheet"
               />
             </Animated.View>
-          )}
+          ) : null}
 
           {/* Sheet — positioned at the bottom, slides via translateY */}
           <Animated.View
             style={[styles.sheetContainer, style, sheetAnimatedStyle]}
           >
             {/* Close button above the sheet */}
-            {header?.showCloseButton !== false && (
+            {header?.showCloseButton !== false ? (
               <View style={styles.closeButtonRow}>
                 <CloseButton onPress={closeSheet} />
               </View>
-            )}
+            ) : null}
 
             {/* Sheet body — dynamic height, capped at 85 % screen */}
             <Animated.View style={[styles.sheetBody, bodyAnimatedStyle]}>
@@ -705,12 +602,12 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
                   <DragHandle />
 
                   {/* Sticky header */}
-                  {header !== undefined && stickyHeader && (
+                  {header !== undefined && stickyHeader ? (
                     <SheetHeader config={header} />
-                  )}
+                  ) : null}
 
                   {/* Search bar (list variant) */}
-                  {search !== undefined && <SearchBar config={search} />}
+                  {search !== undefined ? <SearchBar config={search} /> : null}
                 </Animated.View>
               </GestureDetector>
 
@@ -726,23 +623,23 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
                 keyboardShouldPersistTaps="handled"
                 nestedScrollEnabled
               >
-                {header !== undefined && !stickyHeader && (
+                {header !== undefined && !stickyHeader ? (
                   <SheetHeader config={header} />
-                )}
-                {showLoading && <LoadingContent type={loadingType} />}
-                {showEmpty && <EmptyContent message={emptyMessage} />}
-                {showContent && children}
-                {footer !== undefined && !stickyFooter && (
+                ) : null}
+                {showLoading ? <LoadingContent type={loadingType} /> : null}
+                {showEmpty ? <EmptyContent message={emptyMessage} /> : null}
+                {showContent ? children : null}
+                {footer !== undefined && !stickyFooter ? (
                   <SheetFooter config={footer} onClose={closeSheet} />
-                )}
+                ) : null}
                 {/* Extra space so the last input can scroll above the keyboard */}
                 <Animated.View style={keyboardSpacerStyle} />
               </ScrollView>
 
               {/* Sticky footer — always visible at the bottom */}
-              {footer !== undefined && stickyFooter && (
+              {footer !== undefined && stickyFooter ? (
                 <SheetFooter config={footer} onClose={closeSheet} />
-              )}
+              ) : null}
             </Animated.View>
           </Animated.View>
         </GestureHandlerRootView>
@@ -762,7 +659,7 @@ const styles = StyleSheet.create({
 
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#000000',
+    backgroundColor: colors.OverlayDark,
   },
 
   /**
@@ -790,7 +687,7 @@ const styles = StyleSheet.create({
     width: CLOSE_BUTTON_SIZE,
     height: CLOSE_BUTTON_SIZE,
     borderRadius: CLOSE_BUTTON_SIZE / 2,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: colors.OverlayLightGlass,
     alignItems: 'center',
     justifyContent: 'center',
   },

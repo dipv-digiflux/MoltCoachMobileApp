@@ -121,21 +121,21 @@ export const TextArea = ({
   return (
     <View style={[styles.wrapper, style]} testID={testID}>
       {/* ── Label row ────────────────────────────────────────── */}
-      {label !== undefined && (
+      {label !== undefined ? (
         <View style={styles.labelRow}>
           <Text style={[typography.b1Medium, styles.labelText]}>{label}</Text>
 
-          {labelHint !== undefined && (
+          {labelHint !== undefined ? (
             <Text style={[typography.b1Regular, styles.labelHint]}>
               {labelHint}
             </Text>
-          )}
+          ) : null}
 
-          {required && (
+          {required ? (
             <Text style={[typography.b1Regular, styles.requiredStar]}>*</Text>
-          )}
+          ) : null}
 
-          {showInfoIcon && (
+          {showInfoIcon ? (
             <Pressable
               onPress={onInfoPress}
               hitSlop={spacing['Spacing-xl']}
@@ -147,9 +147,9 @@ export const TextArea = ({
                 <Text style={styles.infoLetter}>i</Text>
               </View>
             </Pressable>
-          )}
+          ) : null}
         </View>
-      )}
+      ) : null}
 
       {/* ── Textarea container ──────────────────────────────────── */}
       <Pressable
@@ -178,18 +178,18 @@ export const TextArea = ({
           maxLength={maxLength}
           returnKeyType={returnKeyType}
           onSubmitEditing={onSubmitEditing}
-          underlineColorAndroid="transparent"
+          underlineColorAndroid={colors.Transparent}
         />
       </Pressable>
 
       {/* ── Helper / error text ──────────────────────────────── */}
-      {bottomText !== undefined && (
+      {bottomText !== undefined ? (
         <Text
           style={[typography.bodySmall1Regular, { color: bottomTextColor }]}
         >
           {bottomText}
         </Text>
-      )}
+      ) : null}
     </View>
   );
 };

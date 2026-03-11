@@ -5,18 +5,15 @@ import { colors, moderateScale, spacing, typography } from '@/theme';
 
 import { type RadioProps, type RadioSize } from './Radio.types';
 
+import type { RadioSizeTokens } from '@/types/components.types';
+
 // ─── Design tokens ──────────────────────────────────────────────────
 
 const FOCUS_RING_COLOR = '#EDEFF5';
 const FOCUS_RING_WIDTH = 3;
 const FOCUS_RING_GAP = 1;
 
-type SizeTokens = {
-  outer: number;
-  dot: number;
-};
-
-const SIZE_TOKENS: Record<RadioSize, SizeTokens> = {
+const SIZE_TOKENS: Record<RadioSize, RadioSizeTokens> = {
   default: {
     outer: moderateScale(20),
     dot: moderateScale(8),
@@ -66,7 +63,7 @@ export const Radio = ({
     : focused && !selected
     ? colors.PrimaryMain
     : selected
-    ? 'transparent'
+    ? colors.Transparent
     : colors.BorderPrimaryDefault;
 
   const dotColor = disabled ? colors.TextPrimaryDisabled : colors.StatesWhite;
@@ -144,9 +141,11 @@ export const Radio = ({
     >
       {/* Control + focus ring */}
       <View style={styles.controlWrapper}>
-        <View style={outerStyle}>{selected && <View style={dotStyle} />}</View>
+        <View style={outerStyle}>
+          {selected ? <View style={dotStyle} /> : null}
+        </View>
 
-        {showFocusRing && (
+        {showFocusRing ? (
           <View
             style={[
               styles.focusRing,
@@ -161,18 +160,18 @@ export const Radio = ({
             ]}
             pointerEvents="none"
           />
-        )}
+        ) : null}
       </View>
 
       {/* Label + description */}
-      {hasLabel && (
+      {hasLabel ? (
         <View style={styles.labelColumn}>
           <Text style={[labelStyle, { color: labelColor }]}>{label}</Text>
-          {description !== undefined && (
+          {description !== undefined ? (
             <Text style={[descStyle, { color: descColor }]}>{description}</Text>
-          )}
+          ) : null}
         </View>
-      )}
+      ) : null}
     </Pressable>
   );
 };

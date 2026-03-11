@@ -10,14 +10,11 @@ import type { ReactElement } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { z } from 'zod';
 
-const exampleSchema = z.object({
-  email: z.string().min(1, 'Required').email('Invalid email'),
-  password: z.string().min(8, 'At least 8 characters'),
-});
+import { spacing } from '@/theme';
+import { exampleSchema } from '@/utils/form.example.types';
 
-type ExampleFormData = z.infer<typeof exampleSchema>;
+import type { ExampleFormData } from '@/utils/form.example.types';
 
 export const ExampleFormScreen = (): ReactElement => {
   const {
@@ -84,7 +81,14 @@ export const ExampleFormScreen = (): ReactElement => {
 };
 
 const styles = StyleSheet.create({
-  container: { padding: 16 },
-  input: { borderWidth: 1, padding: 12, marginBottom: 8 },
-  error: { color: 'red', marginBottom: 8 },
+  container: { padding: spacing['Spacing-5xl'] },
+  input: {
+    borderWidth: 1,
+    padding: spacing['Spacing-3xl'],
+    marginBottom: spacing['Spacing-xl'],
+  },
+  error: {
+    color: 'red',
+    marginBottom: spacing['Spacing-xl'],
+  },
 });

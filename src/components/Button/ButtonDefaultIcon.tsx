@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { type ButtonDefaultIconName } from './Button.types';
+import type { ButtonDefaultIconProps } from '@/types/button.types';
 
 // ─── Shared constants ───────────────────────────────────────────────
 
@@ -201,12 +201,6 @@ const SearchIcon = ({
 };
 
 // ─── Dispatcher ─────────────────────────────────────────────────────
-
-type ButtonDefaultIconProps = {
-  name: ButtonDefaultIconName;
-  size: number;
-  color: string;
-};
 
 /**
  * Renders one of the built-in button icons by name.

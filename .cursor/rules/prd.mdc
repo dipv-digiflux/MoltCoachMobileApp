@@ -1,0 +1,36 @@
+---
+description: Product requirements — use PRD when creating components or implementing features
+alwaysApply: true
+---
+
+# PRD as Source of Truth
+
+When **creating new components**, **adding screens**, or **implementing features**, Cursor MUST use the Product Requirements Document as the authority for scope, UX, and behavior.
+
+## PRD location
+
+- **File:** `docs/PRD.md`
+- Read it at the start of any task that adds or changes user-facing behavior.
+
+## Rules
+
+1. **New components**
+   - Prefer component names and responsibilities described in the PRD (e.g. **Components & UI**).
+   - Place global components in `src/components/`; feature-specific ones next to their screens (see `react-native-architect.mdc`).
+   - Align with project theme: typography (`@/theme/typography`), spacing (`@/theme/spacing`), scaling where applicable.
+
+2. **New screens and flows**
+   - Only add screens/flows that are in the PRD (or that the user explicitly requests).
+   - Put screens in the correct stack (HomeStack, ShopStack, ProfileStack, OnboardingStack, or ActionFlows) per PRD **Screens & Flows** and project `navigation.mdc`.
+
+3. **Features and scope**
+   - Implement behavior and acceptance criteria as stated in the PRD (user stories, goals, non-functional requirements).
+   - Do not add scope that is listed under **Out of scope** unless the user asks for it.
+
+4. **If the PRD is missing or vague**
+   - If a section is empty or unclear, ask the user for clarification or assume minimal scope and note the assumption.
+
+## Summary
+
+- **PRD = product authority.** Use `docs/PRD.md` for what to build and how it should behave.
+- **Other rules = how to build.** Follow `navigation.mdc`, `react-native-architect.mdc`, `Typescript-md.mdc`, and theme rules for structure, patterns, and code quality.

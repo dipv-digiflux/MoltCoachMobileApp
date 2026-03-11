@@ -1,12 +1,12 @@
 export type UserId = string;
 
-export type User = {
+export interface User {
   id: UserId;
   name: string;
   email: string;
-};
+}
 
-export type AuthTokens = {
+export interface AuthTokens {
   accessToken: string;
   refreshToken?: string;
-};
+}

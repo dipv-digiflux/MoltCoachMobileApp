@@ -13,10 +13,7 @@ import ShopIconSvg from '@/assets/images/svg/shop-icon.svg';
 import { colors, typography, spacing, moderateScale, iconScale } from '@/theme';
 import PlusIcon from '@assets/images/svg/plus-icon.svg';
 
-type TabBarOptionsWithTestID =
-  BottomTabBarProps['descriptors'][string]['options'] & {
-    tabBarTestID?: string;
-  };
+import type { TabBarOptionsWithTestID } from '@/types/components.types';
 
 export const CustomTabBar = ({
   state,
@@ -90,28 +87,28 @@ export const CustomTabBar = ({
                 onLongPress={onLongPress}
                 style={[styles.tabButton, isFocused && styles.tabButtonActive]}
               >
-                {route.name === 'HomeTab' && (
+                {route.name === 'HomeTab' ? (
                   <HomeIconSvg
                     width={iconScale(24)}
                     height={iconScale(24)}
                     color={iconColor}
                   />
-                )}
+                ) : null}
 
-                {route.name === 'ProfileTab' && (
+                {route.name === 'ProfileTab' ? (
                   <ProfileIconSvg
                     width={iconScale(24)}
                     height={iconScale(24)}
                     color={iconColor}
                   />
-                )}
-                {route.name === 'ShopTab' && (
+                ) : null}
+                {route.name === 'ShopTab' ? (
                   <ShopIconSvg
                     width={iconScale(24)}
                     height={iconScale(24)}
                     color={iconColor}
                   />
-                )}
+                ) : null}
                 <Text
                   style={[
                     styles.tabText,

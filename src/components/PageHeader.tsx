@@ -1,4 +1,4 @@
-import React, { type ReactElement, ReactNode, useCallback } from 'react';
+import React, { type ReactElement, useCallback } from 'react';
 import {
   TouchableOpacity,
   type StyleProp,
@@ -17,40 +17,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BackIconSvg } from '@/assets/images';
 import { colors, moderateScale, spacing, typography } from '@/theme';
 
+import type { PageHeaderProps } from '@/types/components.types';
 import type { NavigationProp, ParamListBase } from '@react-navigation/native';
-
-type PageHeaderProps = {
-  title: string;
-  children?: ReactNode;
-  subtitle?: string;
-
-  /** Optional custom left icon (back button). */
-  leftIcon?: ReactElement;
-
-  /** Optional custom right icon (e.g., Skip, Settings). */
-  rightIcon?: ReactElement;
-
-  /** Called when back button is pressed. Falls back to navigation.goBack(). */
-  onPressBack?: () => void;
-
-  /** Hide the back button entirely. @default false */
-  hideBackButton?: boolean;
-
-  /** Align title/start content to the left instead of center. @default true */
-  alignTitleLeft?: boolean;
-
-  /** Show a subtle bottom border under the header. @default false */
-  showBottomBorder?: boolean;
-
-  /** Optional background color when LiquidGlass is not supported. */
-  fallbackBackgroundColor?: string;
-
-  /** Show a subtitle either above or below the title. @default 'bottom' */
-  subtitlePosition?: 'top' | 'bottom';
-
-  /** Extra styles on the container. */
-  style?: StyleProp<ViewStyle>;
-};
 
 /**
  * PageHeader
@@ -98,7 +66,7 @@ export const PageHeader = ({
     },
     showBottomBorder && styles.bottomBorder,
     !isLiquidGlassSupported && {
-      backgroundColor: fallbackBackgroundColor ?? 'rgba(255, 255, 255, 0.9)',
+      backgroundColor: fallbackBackgroundColor ?? colors.OverlayLight,
     },
     style,
   ];
@@ -112,7 +80,7 @@ export const PageHeader = ({
         ]}
       >
         <View style={styles.leftSection}>
-          {shouldShowBackButton && (
+          {shouldShowBackButton ? (
             <TouchableOpacity
               style={styles.backButton}
               onPress={handleBackPress}
@@ -125,16 +93,16 @@ export const PageHeader = ({
                 color={colors.IconPrimaryDefault}
               />
             </TouchableOpacity>
-          )}
+          ) : null}
 
           <View style={styles.titleBlock}>
             {subtitle !== undefined &&
-              subtitle.length > 0 &&
-              subtitlePosition === 'top' && (
-                <Text style={styles.subtitleText} numberOfLines={2}>
-                  {subtitle}
-                </Text>
-              )}
+            subtitle.length > 0 &&
+            subtitlePosition === 'top' ? (
+              <Text style={styles.subtitleText} numberOfLines={2}>
+                {subtitle}
+              </Text>
+            ) : null}
             <Text
               style={styles.titleText}
               numberOfLines={1}
@@ -143,18 +111,18 @@ export const PageHeader = ({
               {title}
             </Text>
             {subtitle !== undefined &&
-              subtitle.length > 0 &&
-              subtitlePosition === 'bottom' && (
-                <Text style={styles.subtitleText} numberOfLines={2}>
-                  {subtitle}
-                </Text>
-              )}
+            subtitle.length > 0 &&
+            subtitlePosition === 'bottom' ? (
+              <Text style={styles.subtitleText} numberOfLines={2}>
+                {subtitle}
+              </Text>
+            ) : null}
           </View>
         </View>
 
-        {rightIcon !== undefined && (
+        {rightIcon !== undefined ? (
           <View style={styles.rightSection}>{rightIcon}</View>
-        )}
+        ) : null}
       </View>
       {children}
     </LiquidGlassView>

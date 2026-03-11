@@ -1,0 +1,34 @@
+---
+description: Advanced file structure for decomposing large components and screens
+alwaysApply: true
+---
+
+# COMPONENT COLOCATION RULE
+
+## 1. The Component Folder Pattern
+
+When a component or screen grows beyond a single simple file (approaching the 150-line decomposition limit), it MUST be converted into a folder containing colocated files:
+
+`src/components/organisms/TaskCard/`
+├── `index.ts` # Barrel export: `export { default } from './TaskCard';`
+├── `TaskCard.tsx` # Main UI component
+├── `TaskCard.styles.ts` # StyleSheet definitions
+├── `TaskCard.types.ts` # Interfaces (e.g., `TaskCardProps`)
+└── `TaskCard.test.tsx` # Unit tests
+
+## 2. Export Standards
+
+- The `index.ts` file is mandatory for folders so that parent imports remain clean: `import TaskCard from '@/components/organisms/TaskCard';`
+- Interfaces MUST be exported from the `.types.ts` file and imported into the `.tsx` file.
+
+## 3. Screen Structure (`@screens/`)
+
+- Screens MUST follow the exact same colocation pattern.
+- The screen file (e.g., `HomeDashboardScreen.tsx`) should ONLY contain layout and JSX.
+- Complex state calculations MUST live in a hook (e.g., `useHomeDashboard.ts`) stored in a sibling `hooks/` directory.
+
+## 4. TypeScript Typing Strategy (Local vs. Global)
+
+- **Local Types (`.types.ts`):** Colocated type files MUST only contain component-specific interfaces, such as `[ComponentName]Props` and local UI state shapes.
+- **Global Types:** Domain models (e.g., `Task`, `User`) and API responses MUST NOT be defined in component folders. The AI must import these from the global `@/types` or `@/api` directories.
+- **Exporting:** Interfaces MUST be exported from the `.types.ts` file and imported into the `.tsx` file.
