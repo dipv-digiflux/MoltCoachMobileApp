@@ -7,61 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:31980184670:android:8da5ee59561c6647eac0cf",
-        "android_client_info": {
-          "package_name": "com.molt.app"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "31980184670-172h986q1t599jkut0entmpniuuh4t22.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.molt.app",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "31980184670-ju013bhet88flt0lodit131ujl6rif6v.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBT5v1lcpz3uWdErV7wu30sR5RBvf-Q1gk"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "31980184670-ju013bhet88flt0lodit131ujl6rif6v.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "31980184670-blmctpdta4s42bq67q14dgdr9ta6qdko.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.muser.app"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:31980184670:android:8bdc20b170bffd76eac0cf",
         "android_client_info": {
           "package_name": "com.molt.coach"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "31980184670-ju013bhet88flt0lodit131ujl6rif6v.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyBT5v1lcpz3uWdErV7wu30sR5RBvf-Q1gk"
@@ -69,19 +20,26 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "31980184670-ju013bhet88flt0lodit131ujl6rif6v.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "31980184670-blmctpdta4s42bq67q14dgdr9ta6qdko.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.muser.app"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31980184670:android:582f65fa3c2a0756eac0cf",
+        "android_client_info": {
+          "package_name": "com.molt.user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT5v1lcpz3uWdErV7wu30sR5RBvf-Q1gk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
         }
       }
     }
