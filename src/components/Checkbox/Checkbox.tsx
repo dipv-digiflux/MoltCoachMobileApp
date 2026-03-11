@@ -5,21 +5,15 @@ import { colors, moderateScale, spacing, typography } from '@/theme';
 
 import { type CheckboxProps, type CheckboxSize } from './Checkbox.types';
 
+import type { CheckboxSizeTokens } from '@/types/components.types';
+
 // ─── Design tokens ──────────────────────────────────────────────────
 
 const FOCUS_RING_COLOR = '#EDEFF5';
 const FOCUS_RING_WIDTH = 3;
 const FOCUS_RING_GAP = 1;
 
-type SizeTokens = {
-  box: number;
-  borderRadius: number;
-  stroke: number;
-  checkLong: number;
-  checkShort: number;
-};
-
-const SIZE_TOKENS: Record<CheckboxSize, SizeTokens> = {
+const SIZE_TOKENS: Record<CheckboxSize, CheckboxSizeTokens> = {
   default: {
     box: moderateScale(20),
     borderRadius: moderateScale(2),

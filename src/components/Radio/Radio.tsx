@@ -5,18 +5,15 @@ import { colors, moderateScale, spacing, typography } from '@/theme';
 
 import { type RadioProps, type RadioSize } from './Radio.types';
 
+import type { RadioSizeTokens } from '@/types/components.types';
+
 // ─── Design tokens ──────────────────────────────────────────────────
 
 const FOCUS_RING_COLOR = '#EDEFF5';
 const FOCUS_RING_WIDTH = 3;
 const FOCUS_RING_GAP = 1;
 
-type SizeTokens = {
-  outer: number;
-  dot: number;
-};
-
-const SIZE_TOKENS: Record<RadioSize, SizeTokens> = {
+const SIZE_TOKENS: Record<RadioSize, RadioSizeTokens> = {
   default: {
     outer: moderateScale(20),
     dot: moderateScale(8),

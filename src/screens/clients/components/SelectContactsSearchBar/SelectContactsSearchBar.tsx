@@ -5,11 +5,7 @@ import { SearchiconSvg } from '@/assets/images';
 import { Input } from '@/components';
 import { colors, radius, spacing } from '@/theme';
 
-interface SelectContactsSearchBarProps {
-  value: string;
-  onChangeText: (text: string) => void;
-  placeholder: string;
-}
+import type { SelectContactsSearchBarProps } from './SelectContactsSearchBar.types';
 
 export const SelectContactsSearchBar = ({
   value,

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 /** Props for the Input component. */
-export type InputProps = {
+export interface InputProps {
   containerPress?: () => void;
   autoFocus?: boolean;
   caretHidden?: boolean;
@@ -135,4 +135,4 @@ export type InputProps = {
 
   /** Accessibility label. Falls back to `label` when omitted. */
   accessibilityLabel?: string;
-};
+}

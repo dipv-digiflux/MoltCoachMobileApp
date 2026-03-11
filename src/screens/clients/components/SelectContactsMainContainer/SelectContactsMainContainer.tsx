@@ -1,11 +1,9 @@
-import React, { type ReactElement, type ReactNode } from 'react';
+import React, { type ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { colors, radius, spacing } from '@/theme';
 
-interface SelectContactsMainContainerProps {
-  children: ReactNode;
-}
+import type { SelectContactsMainContainerProps } from './SelectContactsMainContainer.types';
 
 export const SelectContactsMainContainer = ({
   children,

@@ -4,17 +4,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useAppSelector } from '@/store/hooks';
 import { colors, radius, spacing, typography } from '@/theme';
 
-const FILTER_TAB_KEYS = [
-  'addClientFilterExistingClient',
-  'addClientFilterPotentialLead',
-] as const;
+import {
+  type AddClientFilterProps,
+  FILTER_TAB_KEYS,
+} from './AddClientFilter.types';
 
-export type AddClientFilterTabId = (typeof FILTER_TAB_KEYS)[number];
-
-interface AddClientFilterProps {
-  activeTab: AddClientFilterTabId;
-  onTabChange: (tab: AddClientFilterTabId) => void;
-}
+export { type AddClientFilterTabId } from './AddClientFilter.types';
 
 export const AddClientFilter = ({
   activeTab,

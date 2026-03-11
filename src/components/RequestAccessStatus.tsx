@@ -1,10 +1,9 @@
 import React, { type ReactElement } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { StatusDot } from '@/components/StatusDot';
 import { useAppSelector } from '@/store/hooks';
 import { colors, spacing, typography } from '@/theme';
-
-import { StatusDot } from './StatusDot';
 
 export const RequestAccessStatus = (): ReactElement => {
   const translation = useAppSelector(state => state.translation);

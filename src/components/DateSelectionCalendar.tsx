@@ -24,6 +24,7 @@ import {
   typography,
 } from '@/theme';
 
+import type { DateSelectionCalendarProps } from '@/types/components.types';
 import type { DateData, MarkedDates } from 'react-native-calendars/src/types';
 
 const TODAY_ISO = ((): string => {
@@ -39,30 +40,7 @@ const formatMonthYear = (isoDate: string): string => {
   return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 };
 
-export type DateSelectionCalendarProps = {
-  /** Pre-selected date in ISO format 'YYYY-MM-DD'. */
-  initialSelectedDate?: string;
-  /** Minimum selectable date in ISO format 'YYYY-MM-DD'. */
-  minDate?: string;
-  /** Maximum selectable date in ISO format 'YYYY-MM-DD'. */
-  maxDate?: string;
-  /**
-   * Called when user presses the inline Select button (when shown).
-   * Receives the final selected date in ISO format 'YYYY-MM-DD'.
-   */
-  onDateSelect?: (date: string) => void;
-  /**
-   * Called whenever the active selected date changes (user taps a day).
-   * Useful when the parent owns the confirm button (e.g. BottomSheet footer).
-   */
-  onActiveDateChange?: (date: string | undefined) => void;
-  /**
-   * Whether to render the inline Select button.
-   * Set to false when using a parent-controlled footer button.
-   * @default true
-   */
-  showInlineSelectButton?: boolean;
-};
+export type { DateSelectionCalendarProps };
 
 export const DateSelectionCalendar = ({
   initialSelectedDate,

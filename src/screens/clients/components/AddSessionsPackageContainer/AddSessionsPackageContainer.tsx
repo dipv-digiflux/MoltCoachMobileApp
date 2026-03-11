@@ -13,17 +13,11 @@ import { Switch } from '@/components/Switch';
 import { useAppSelector } from '@/store/hooks';
 import { colors, iconScale, radius, spacing, typography } from '@/theme';
 
-const SESSION_TYPE_KEYS = [
-  'addSessionsPackageOnline',
-  'addSessionsPackagePhysical',
-] as const;
-
-type SessionTypeId = (typeof SESSION_TYPE_KEYS)[number];
-
-export interface AddSessionsPackageContainerProps {
-  /** When true, shows the sessions toggle next to the title. @default true */
-  showToggle?: boolean;
-}
+import {
+  type AddSessionsPackageContainerProps,
+  type SessionTypeId,
+  SESSION_TYPE_KEYS,
+} from './AddSessionsPackageContainer.types';
 
 export const AddSessionsPackageContainer = ({
   showToggle = true,

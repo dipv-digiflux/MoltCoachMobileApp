@@ -2,17 +2,17 @@ import { type ReactElement } from 'react';
 import { type StyleProp, type ViewStyle } from 'react-native';
 
 /** Single option in the dropdown list. */
-export type DropdownOption = {
+export interface DropdownOption {
   label: string;
   value: string | number;
   disabled?: boolean;
-};
+}
 
 /** Type alias for a single selected value. */
 export type DropdownValue = string | number;
 
 /** Props for the Dropdown component. */
-export type DropdownProps = {
+export interface DropdownProps {
   /** Available options to select from. */
   options: ReadonlyArray<DropdownOption>;
 
@@ -93,29 +93,29 @@ export type DropdownProps = {
 
   /** Accessibility label. Falls back to `label` when omitted. */
   accessibilityLabel?: string;
-};
+}
 
 /** Props for the DropdownItem subcomponent. */
-export type DropdownItemProps = {
+export interface DropdownItemProps {
   option: DropdownOption;
   selected: boolean;
   multiple: boolean;
   onSelect: (value: DropdownValue) => void;
   testID?: string;
-};
+}
 
 /** Config passed to useDropdown. */
-export type UseDropdownConfig = {
+export interface UseDropdownConfig {
   options: ReadonlyArray<DropdownOption>;
   multiple: boolean;
   value?: DropdownValue | ReadonlyArray<DropdownValue>;
   defaultValue?: DropdownValue | ReadonlyArray<DropdownValue>;
   onChange: (value: DropdownValue | ReadonlyArray<DropdownValue>) => void;
   closeOnSelect: boolean;
-};
+}
 
 /** Return type of useDropdown. */
-export type UseDropdownReturn = {
+export interface UseDropdownReturn {
   isOpen: boolean;
   open: () => void;
   close: () => void;
@@ -128,4 +128,4 @@ export type UseDropdownReturn = {
   selectAll: () => void;
   clearSelection: () => void;
   displayText: string;
-};
+}

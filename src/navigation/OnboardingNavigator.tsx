@@ -19,7 +19,7 @@ export const OnboardingNavigator = (): ReactElement => (
       animation: 'slide_from_right',
       animationDuration: 230,
     }}
-    initialRouteName="BookingConfirm"
+    initialRouteName="ApplicationNotApproved"
   >
     <Stack.Screen name="BookingConfirm" component={BookingConfirmScreen} />
     <Stack.Screen

@@ -11,6 +11,8 @@ import { colors, iconScale, moderateScale, spacing, typography } from '@/theme';
 
 import { type AccordionProps, type AccordionSize } from './Accordion.types';
 
+import type { ChevronIconProps } from '@/types/components.types';
+
 // ─── Design tokens (from Figma) ────────────────────────────────────
 
 const ICON_SIZE = iconScale(24);
@@ -45,11 +47,6 @@ const SIZE_CONFIG: Record<
 };
 
 // ─── Chevron icon component ────────────────────────────────────────
-
-type ChevronIconProps = {
-  expanded: boolean;
-  disabled: boolean;
-};
 
 const ChevronIcon = ({
   expanded,

@@ -1,10 +1,9 @@
 import React, { type ReactElement } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { Badge } from '@/components/Badge';
 import { useAppSelector } from '@/store/hooks';
 import { colors, radius, spacing, typography } from '@/theme';
-
-import { Badge } from './Badge/Badge';
 
 export const EarningsTotalCard = (): ReactElement => {
   const translation = useAppSelector(state => state.translation);

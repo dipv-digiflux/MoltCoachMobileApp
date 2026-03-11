@@ -2,11 +2,10 @@ import React, { type ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { PageHeaderScrollView } from '@/components';
+import { ImportContactsButtonGroup } from '@/screens/onboarding/components/ImportContactsButtonGroup';
+import { ImportContactsContent } from '@/screens/onboarding/components/ImportContactsContent';
 import { useAppSelector } from '@/store/hooks';
 import { colors } from '@/theme';
-
-import { ImportContactsButtonGroup } from './components/ImportContactsButtonGroup';
-import { ImportContactsContent } from './components/ImportContactsContent';
 
 export const ImportContactsScreen = (): ReactElement => {
   const translation = useAppSelector(state => state.translation);
