@@ -53,6 +53,9 @@ export const colors = {
   TextSecondaryActive: '#1E293B',
   TextSecondaryDisabled: '#94A3B8',
 
+  /** Label text (e.g. form field labels). */
+  TextLabelDefault: '#374151',
+
   // ── Icon Primary ────────────────────────────────────────
   IconPrimaryDefault: '#4B5563',
   IconPrimaryHover: '#374151',
@@ -64,6 +67,9 @@ export const colors = {
   IconSecondaryHover: '#475569',
   IconSecondaryActive: '#1E293B',
   IconSecondaryDisabled: '#94A3B8',
+
+  /** Calendar/date picker icon tint (e.g. Start Date input). */
+  IconCalendarDefault: '#0F172B',
 
   // ── Icon Tertiary / Subtle ──────────────────────────────
   IconTertiarySubtle: '#919191',

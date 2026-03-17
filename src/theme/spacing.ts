@@ -18,6 +18,7 @@ export const spacing = {
   'Spacing-3xl': spacingScale(12),
   'Spacing-4xl': spacingScale(14),
   'Spacing-5xl': spacingScale(16),
+  'Spacing-5_5xl': spacingScale(19),
   'Spacing-6xl': spacingScale(18),
   'Spacing-7xl': spacingScale(20),
   'Spacing-8xl': spacingScale(22),
