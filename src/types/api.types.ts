@@ -145,3 +145,47 @@ export interface GetCoachBookingsResponse {
     bookings: Booking[];
   };
 }
+
+export interface ClientItem {
+  type: string;
+  phone_number: string;
+  country_code: string;
+  mode: string;
+  total_sessions: number | string;
+  sessions_left: number | string;
+  number_of_month: number | string;
+  start_date: string;
+  name: string;
+  sessions_required?: boolean;
+  // added inviter_id, invitee_id, referral_id, referral_code, etc from payload
+  inviter_id?: string;
+  invitee_id?: string;
+  referral_id?: string;
+  referral_code?: string;
+  status?: string;
+  sex?: string;
+  birth_date?: string;
+  height?: number;
+  height_unit?: string;
+  weight?: number;
+  weight_unit?: string;
+  daily_activity?: string;
+  primary_goal?: string;
+  chronic_condition?: string;
+  enabled?: boolean;
+}
+
+export interface InviteBulkClientsPayload {
+  items: ClientItem[];
+}
+
+export interface InviteSmsPayload {
+  phone_numbers: string[];
+  country_code: string;
+}
+
+export interface ApiResponse<T = unknown> {
+  status: boolean;
+  message: string;
+  data?: T;
+}

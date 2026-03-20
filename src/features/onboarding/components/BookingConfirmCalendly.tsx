@@ -2,6 +2,8 @@ import React, { type ReactElement, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
+import { colors } from '@/theme';
+
 import type { BookingConfirmCalendlyProps } from './BookingConfirmCalendly.types';
 import type { CalendlyEvent } from '@/types/calendly.types';
 
@@ -112,7 +114,7 @@ export const BookingConfirmCalendly = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.StatesWhite,
   },
   webviewWrapper: {
     flex: 1,

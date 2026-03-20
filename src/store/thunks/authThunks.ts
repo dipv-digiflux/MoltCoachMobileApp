@@ -38,17 +38,19 @@ export const signInWithGoogleThunk =
 
     try {
       const idToken = await getGoogleIdToken();
+      console.log('handleGoogleSignIn 1', idToken);
       const response = await postAuthenticate({
-        type: 'google_mobile',
+        type: 'google_web',
         token: idToken,
       });
 
       if (response.status && response.token) {
         setAccessToken(response.token);
         dispatch(setOperationIdle('googleSignIn'));
-        void dispatch(getCoachBookingsThunk());
+        await dispatch(getCoachBookingsThunk());
         return response;
       }
+      console.log('handleGoogleSignIn 2');
       await GoogleSignin.clearCachedAccessToken(idToken);
       await GoogleSignin.signOut();
       const errorMsg = response.message || 'Google sign-in failed';
@@ -58,6 +60,7 @@ export const signInWithGoogleThunk =
       showErrorToast(errorMsg);
       return null;
     } catch (error) {
+      console.log('handleGoogleSignIn 3', error);
       if (isGoogleSignInCancelled(error)) {
         dispatch(setOperationIdle('googleSignIn'));
         return null;
@@ -66,6 +69,7 @@ export const signInWithGoogleThunk =
       dispatch(
         setOperationError({ operation: 'googleSignIn', message: errorMsg }),
       );
+      console.log('handleGoogleSignIn 4');
       showErrorToast(errorMsg);
       throw error;
     }
@@ -106,7 +110,7 @@ export const verifyOTPThunk =
         setAccessToken(response.token);
         await saveAuth({ token: response.token });
         dispatch(setOperationIdle('verifyOTP'));
-        void dispatch(getCoachBookingsThunk());
+        await dispatch(getCoachBookingsThunk());
         return response;
       }
 

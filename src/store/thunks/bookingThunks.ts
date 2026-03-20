@@ -6,6 +6,7 @@ import {
   setOperationError,
   setOperationLoading,
   setOperationSuccess,
+  setNotApprovedVisible,
 } from '@/store/slices/bookingSlice';
 import { getApiErrorMessage } from '@/utils/apiError';
 import { rootNavigationRef } from '@navigation/navigationRef';
@@ -90,8 +91,30 @@ export const getCoachBookingsThunk =
           const state = rootNavigationRef.getState();
           const currentRoute = state?.routes[state.index]?.name;
 
+          // Stage 4: Onboarding complete (Prioritize verified state)
+          if (is_verified) {
+            if (currentRoute !== 'AppStack' && currentRoute !== 'BottomTabs') {
+              rootNavigationRef.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [
+                    {
+                      name: 'AppStack',
+                      params: {
+                        screen: 'BottomTabs',
+                        params: {
+                          screen: 'HomeTab',
+                          params: { screen: 'HomeDashboard' },
+                        },
+                      },
+                    },
+                  ],
+                }),
+              );
+            }
+          }
           // Stage 1: Request Access
-          if (is_request_access === false) {
+          else if (is_request_access === false) {
             if (currentRoute !== 'RequestAccessScreen') {
               rootNavigationRef.reset({
                 index: 0,
@@ -132,8 +155,9 @@ export const getCoachBookingsThunk =
             }
           }
           // Stage 3: Verification (Approval)
-          else if (is_verified === false) {
-            if (currentRoute !== 'ApplicationNotApproved') {
+          else {
+            dispatch(setNotApprovedVisible(true));
+            if (currentRoute !== 'GetStarted') {
               rootNavigationRef.reset({
                 index: 0,
                 routes: [
@@ -141,33 +165,11 @@ export const getCoachBookingsThunk =
                     name: 'OnboardingStack',
                     state: {
                       index: 0,
-                      routes: [{ name: 'ApplicationNotApproved' }],
+                      routes: [{ name: 'GetStarted' }],
                     },
                   },
                 ],
               });
-            }
-          }
-          // Stage 4: Onboarding complete
-          else if (is_request_access && is_booking_confirmed && is_verified) {
-            if (currentRoute !== 'AppStack' && currentRoute !== 'BottomTabs') {
-              rootNavigationRef.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [
-                    {
-                      name: 'AppStack',
-                      params: {
-                        screen: 'BottomTabs',
-                        params: {
-                          screen: 'HomeTab',
-                          params: { screen: 'HomeDashboard' },
-                        },
-                      },
-                    },
-                  ],
-                }),
-              );
             }
           }
         }

@@ -105,7 +105,10 @@ export interface PageHeaderScrollViewProps extends BaseScrollViewProps {
 // ─── InfoCard, ProgressStepper, FilterTabs, StatusTabs ────────────────
 
 export interface InfoCardProps {
-  text: string;
+  title: string;
+  description: string;
+  icon?: ReactElement;
+  style?: StyleProp<ViewStyle>;
 }
 
 export interface ProgressStepperProps {

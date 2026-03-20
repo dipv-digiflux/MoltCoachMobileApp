@@ -9,7 +9,6 @@ import {
   OTPVerificationScreen,
   PlanPreviewScreen,
   BookingConfirmScreen,
-  ApplicationNotApprovedScreen,
 } from '@/screens/onboarding';
 import { RequestAccessScreen } from '@/screens/profile/RequestAccessScreen';
 
@@ -46,10 +45,5 @@ export const OnboardingNavigator = (): ReactElement => (
     <Stack.Screen name="PlanPreview" component={PlanPreviewScreen} />
     <Stack.Screen name="RequestAccessScreen" component={RequestAccessScreen} />
     <Stack.Screen name="BookSchedule" component={BookingConfirmScreen} />
-
-    <Stack.Screen
-      name="ApplicationNotApproved"
-      component={ApplicationNotApprovedScreen}
-    />
   </Stack.Navigator>
 );

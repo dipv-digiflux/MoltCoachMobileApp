@@ -5,4 +5,6 @@ export const ENDPOINTS = {
   CALENDLY_BOOKING: 'v1/calendly-booking',
   BOOK_CALL: 'v1/coach/calendly-booking/store',
   COACH_BOOKINGS: 'v1/coach/bookings',
+  COACH_BULK_INVITE: 'v1/coach/invite-link/bulk',
+  COACH_INVITE_SMS: 'v1/coach/invite-link/invite-customer-sms',
 } as const;

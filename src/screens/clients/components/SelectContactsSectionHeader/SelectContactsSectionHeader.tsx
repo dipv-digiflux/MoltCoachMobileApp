@@ -17,8 +17,8 @@ export const SelectContactsSectionHeader = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: spacing['Spacing-1'], // 4px
-    paddingBottom: spacing['Spacing-1'], // 4px
+    paddingTop: spacing['Spacing-3xl'],
+    paddingBottom: spacing['Spacing-3xl'],
     paddingHorizontal: spacing['Spacing-5xl'], // 16px
     borderBottomWidth: borderWidth.hairline,
     borderTopWidth: borderWidth.hairline,

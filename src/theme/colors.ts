@@ -9,6 +9,7 @@ export const colors = {
   StatesFill1: '#F5F6F5',
   StatesFill2: '#FDFDFD',
   StatesWhite: '#FFFFFF',
+  TabBarGlassFallback: '#FDFDFD',
 
   // ── Main ───────────────────────────────────────────────
   MatrixMain: '#159945',
@@ -85,6 +86,7 @@ export const colors = {
 
   // ── Focus / Shadow ──────────────────────────────────────
   FocusRingBrand: '#CEDAFA',
+  FocusRingSubtle: '#EDEFF5',
   FocusRingDestructive: 'rgba(240, 62, 63, 0.3)',
   ShadowDefault: '#000000',
 
@@ -134,6 +136,7 @@ export const colors = {
   // ── Tags ────────────────────────────────────────────────
   TagSuccessSurface: '#DCFCE7',
   TagWarningSurface: '#FFEDF1',
+  NeutralTealGrayIcon: '#6B7575',
 } as const;
 
 export type ColorToken = keyof typeof colors;

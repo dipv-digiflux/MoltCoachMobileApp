@@ -23,6 +23,7 @@ import { colors, typography, spacing, iconScale } from '@/theme';
 import { getApiErrorMessage } from '@/utils/apiError';
 import { showErrorToast } from '@/utils/toast';
 
+import { ApplicationNotApprovedBottomSheet } from './components/ApplicationNotApprovedBottomSheet';
 import {
   getStartedSchema,
   type GetStartedFormData,
@@ -121,7 +122,7 @@ export const GetStartedScreen = (): ReactElement => {
         }
       })();
     },
-    [dispatch, navigation],
+    [dispatch, navigation, setError],
   );
 
   const handleTermsPress = useCallback((): void => {
@@ -288,6 +289,7 @@ export const GetStartedScreen = (): ReactElement => {
           </View>
         </KeyboardAvoidingView>
       </PageHeaderScrollView>
+      <ApplicationNotApprovedBottomSheet />
     </View>
   );
 };

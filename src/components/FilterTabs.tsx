@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing['Spacing-m'],
     marginHorizontal: spacing['Spacing-5xl'],
     borderWidth: 1,
-    borderColor: '#F3F3F3', // Very light border
+    borderColor: colors.StatesDivider, // Very light border
   },
   tabsWrapper: {
     flexDirection: 'row',
@@ -84,9 +84,9 @@ const styles = StyleSheet.create({
   activeTabButton: {
     backgroundColor: colors.StatesWhite,
     borderWidth: 1,
-    borderColor: '#EBEBEB',
+    borderColor: colors.StatesOutline,
     // Add subtle shadow
-    shadowColor: '#000',
+    shadowColor: colors.ShadowDefault,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,

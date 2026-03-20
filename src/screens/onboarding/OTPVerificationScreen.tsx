@@ -131,7 +131,7 @@ export const OTPVerificationScreen = (): ReactElement => {
                 };
           const result = await dispatch(verifyOTPThunk(request));
           if (result.status) {
-            navigation.navigate('RequestAccessScreen');
+            // Navigation is handled globally by getCoachBookingsThunk called inside verifyOTPThunk
           }
         } catch (error) {
           const message = getApiErrorMessage(error);

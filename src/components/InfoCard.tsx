@@ -1,31 +1,49 @@
 import React, { type ReactElement } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { colors, spacing, typography, radius, moderateScale } from '@/theme';
+import { colors, moderateScale, radius, spacing, typography } from '@/theme';
 
 import type { InfoCardProps } from '@/types/components.types';
 
-export const InfoCard = ({ text }: InfoCardProps): ReactElement => {
+export const InfoCard = ({
+  title,
+  description,
+  icon,
+  style,
+}: InfoCardProps): ReactElement => {
   return (
-    <View style={styles.container}>
-      <View style={styles.dot} />
-      <Text style={styles.text}>{text}</Text>
+    <View style={[styles.container, style]}>
+      <View style={styles.headerRow}>
+        {icon !== undefined ? (
+          <View style={styles.icon}>{icon}</View>
+        ) : (
+          <View style={styles.dot} />
+        )}
+        <Text style={styles.title}>{title}</Text>
+      </View>
+      <Text style={styles.description}>{description}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.BorderSecondaryDefault,
+    padding: spacing['Spacing-5xl'],
+    gap: spacing['Spacing-xl'],
+    backgroundColor: colors.StatesWhite,
+    alignSelf: 'stretch',
+  },
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'stretch',
-    paddingVertical: spacing['Spacing-l'],
-    paddingHorizontal: spacing['Spacing-2xl'],
     gap: spacing['Spacing-xl'],
-    borderWidth: 1,
-    borderColor: colors.BorderPrimaryDisabled,
-    backgroundColor: colors.SurfacePrimaryDefault,
-    borderRadius: radius.sm,
+  },
+  icon: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   dot: {
     width: moderateScale(8),
@@ -33,9 +51,13 @@ const styles = StyleSheet.create({
     borderRadius: radius.full,
     backgroundColor: colors.MatrixMain,
   },
-  text: {
-    ...typography.bodySmall2Medium,
-    color: colors.PrimaryMain,
+  title: {
+    ...typography.bodySmall1SemiBold,
+    color: colors.TextPrimaryDefault,
     flex: 1,
+  },
+  description: {
+    ...typography.bodySmall4TallRegular,
+    color: colors.IconTertiarySubtle,
   },
 });

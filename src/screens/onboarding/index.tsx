@@ -7,5 +7,4 @@ export * from './PhoneInputScreen';
 export * from './PlanConfirmationScreen';
 export * from './QRScanScreen';
 export * from './SplashScreen';
-export * from './ApplicationNotApprovedScreen';
 export * from './BookingConfirmScreen';

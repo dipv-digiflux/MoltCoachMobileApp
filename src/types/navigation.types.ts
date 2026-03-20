@@ -1,5 +1,6 @@
 import type { NavigatorScreenParams } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { Contact } from 'react-native-contacts';
 
 export type OTPVerificationParams =
   | { mode: 'email'; email: string }
@@ -16,7 +17,6 @@ export interface OnboardingStackParamList extends ParamListIndexSignature {
   PlanPreview: undefined;
   GettingThingsReady: undefined;
   RequestAccessScreen: undefined;
-  ApplicationNotApproved: undefined;
 }
 
 export interface HomeStackParamList extends ParamListIndexSignature {
@@ -45,7 +45,7 @@ export interface AppStackParamList extends ParamListIndexSignature {
   BottomTabs: NavigatorScreenParams<BottomTabParamList>;
   Earnings: undefined;
   AddClient: undefined;
-  AddedClients: undefined;
+  AddedClients: { selectedContacts: Contact[] } | undefined;
   ImportContacts: undefined;
   SelectContact: undefined;
   CreateTask: { fromScreen?: string } | undefined;
@@ -68,8 +68,7 @@ export type OnboardingScreenName =
   | 'OTPVerification'
   | 'PlanPreview'
   | 'GettingThingsReady'
-  | 'RequestAccessScreen'
-  | 'ApplicationNotApproved';
+  | 'RequestAccessScreen';
 export type HomeScreenName =
   | 'HomeDashboard'
   | 'ExampleForm'

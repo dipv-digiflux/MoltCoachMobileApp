@@ -1,10 +1,6 @@
-import React, {
-  useCallback,
-  useMemo,
-  useState,
-  type ReactElement,
-} from 'react';
+import React, { useCallback, useState, type ReactElement } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Controller } from 'react-hook-form';
 
 import { CalendarDaysIconSvg } from '@/assets/images';
 import { DateSelectionBottomSheet } from '@/components';
@@ -13,23 +9,16 @@ import { Switch } from '@/components/Switch';
 import { useAppSelector } from '@/store/hooks';
 import { colors, iconScale, radius, spacing, typography } from '@/theme';
 
-import {
-  type AddSessionsPackageContainerProps,
-  type SessionTypeId,
-  SESSION_TYPE_KEYS,
-} from './AddSessionsPackageContainer.types';
+import { type AddSessionsPackageContainerProps } from './AddSessionsPackageContainer.types';
+
+const FORM_BG = '#F5F7F8';
 
 export const AddSessionsPackageContainer = ({
+  control,
+  errors,
   showToggle = true,
 }: AddSessionsPackageContainerProps): ReactElement => {
   const translation = useAppSelector(state => state.translation);
-  const [sessionType, setSessionType] = useState<SessionTypeId>(
-    'addSessionsPackageOnline',
-  );
-  const [totalSessions, setTotalSessions] = useState<string>('');
-  const [sessionsLeft, setSessionsLeft] = useState<string>('');
-  const [sessionsEnabled, setSessionsEnabled] = useState<boolean>(false);
-  const [startDateIso, setStartDateIso] = useState<string | undefined>();
   const [dateSheetVisible, setDateSheetVisible] = useState<boolean>(false);
 
   const formatIsoToDisplay = useCallback((iso: string): string => {
@@ -41,131 +30,188 @@ export const AddSessionsPackageContainer = ({
     });
   }, []);
 
-  const startDateDisplay = useMemo(
-    () => (startDateIso ? formatIsoToDisplay(startDateIso) : ''),
-    [startDateIso, formatIsoToDisplay],
-  );
-
-  const handleTotalSessionsChange = useCallback((text: string): void => {
-    setTotalSessions(text);
-  }, []);
-
-  const handleSessionsLeftChange = useCallback((text: string): void => {
-    setSessionsLeft(text);
-  }, []);
-
-  const openDateSheet = useCallback((): void => {
-    setDateSheetVisible(true);
-  }, []);
-
-  const closeDateSheet = useCallback((): void => {
-    setDateSheetVisible(false);
-  }, []);
-
-  const handleDateSelect = useCallback((iso: string): void => {
-    setStartDateIso(iso);
-    setDateSheetVisible(false);
-  }, []);
-
-  const isOnline = sessionType === 'addSessionsPackageOnline';
-
-  const firstLabel = isOnline
-    ? translation.addSessionsPackageNumberOfMonths
-    : translation.addSessionsPackageTotalSessions;
-  const secondLabel = isOnline
-    ? translation.addSessionsPackageStartDate
-    : translation.addSessionsPackageSessionsLeft;
-  const secondValue = isOnline ? startDateDisplay : sessionsLeft;
-  const secondOnChange = isOnline ? (): void => {} : handleSessionsLeftChange;
-
   return (
     <View style={styles.outer}>
       <View style={styles.titleRow}>
         <Text style={styles.title}>{translation.addSessionsPackageTitle}</Text>
         {showToggle ? (
-          <Switch
-            on={sessionsEnabled}
-            onChange={setSessionsEnabled}
-            size="default"
+          <Controller
+            control={control}
+            name="sessionsEnabled"
+            render={({ field: { value, onChange } }) => (
+              <Switch on={value} onChange={onChange} size="default" />
+            )}
           />
         ) : null}
       </View>
 
-      <View style={styles.chipRow}>
-        {SESSION_TYPE_KEYS.map(tabId => {
-          const isActive = tabId === sessionType;
-          const label = translation[tabId];
-          return (
-            <Pressable
-              key={tabId}
-              onPress={() => setSessionType(tabId)}
-              style={[styles.chip, isActive ? styles.chipActive : undefined]}
-            >
-              <Text
-                style={[
-                  styles.chipText,
-                  isActive ? styles.chipTextActive : undefined,
-                ]}
-                numberOfLines={1}
-              >
-                {label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
+      <Controller
+        control={control}
+        name="sessionsEnabled"
+        render={({ field: { value: sessionsEnabled } }) =>
+          sessionsEnabled ? (
+            <View style={styles.formContent}>
+              <Controller
+                control={control}
+                name="sessions.type"
+                render={({ field: { value: sessionType, onChange } }) => (
+                  <>
+                    <View style={styles.chipRow}>
+                      {[
+                        'addSessionsPackageOnline',
+                        'addSessionsPackagePhysical',
+                      ].map(tabId => {
+                        const isActive = tabId === sessionType;
+                        const label =
+                          translation[tabId as keyof typeof translation];
+                        return (
+                          <Pressable
+                            key={tabId}
+                            onPress={() => onChange(tabId)}
+                            style={[
+                              styles.chip,
+                              isActive ? styles.chipActive : undefined,
+                            ]}
+                          >
+                            <Text
+                              style={[
+                                styles.chipText,
+                                isActive ? styles.chipTextActive : undefined,
+                              ]}
+                              numberOfLines={1}
+                            >
+                              {label}
+                            </Text>
+                          </Pressable>
+                        );
+                      })}
+                    </View>
 
-      <View style={styles.inputsRow}>
-        <View style={styles.inputWrapper}>
-          <Input
-            label={firstLabel}
-            value={totalSessions}
-            onChangeText={handleTotalSessionsChange}
-            placeholder="0"
-            keyboardType="number-pad"
-            inputContainerStyle={{
-              backgroundColor: '#F5F7F8',
-            }}
-            textInputStyle={[{ color: colors.TextPrimaryStrong }]}
-          />
-        </View>
-        <View style={styles.inputWrapper}>
-          <Input
-            label={secondLabel}
-            value={secondValue}
-            onChangeText={secondOnChange}
-            placeholder={isOnline ? '' : '0'}
-            keyboardType={isOnline ? 'default' : 'number-pad'}
-            editable={!isOnline}
-            rightIcon={
-              isOnline ? (
-                <View style={styles.calendarIconWrap}>
-                  <CalendarDaysIconSvg
-                    width={iconScale(20)}
-                    height={iconScale(20)}
-                    color={colors.IconCalendarDefault}
-                  />
-                </View>
-              ) : undefined
-            }
-            containerPress={isOnline ? openDateSheet : undefined}
-            inputContainerStyle={{
-              backgroundColor: '#F5F7F8',
-            }}
-            textInputStyle={[
-              {
-                color: colors.TextPrimaryStrong,
-              },
-            ]}
-          />
-        </View>
-      </View>
-
-      <DateSelectionBottomSheet
-        visible={dateSheetVisible}
-        onClose={closeDateSheet}
-        onDateSelect={handleDateSelect}
-        initialSelectedDate={startDateIso}
+                    <View style={styles.inputsRow}>
+                      <View style={styles.inputWrapper}>
+                        <Controller
+                          control={control}
+                          name="sessions.total"
+                          render={({
+                            field: {
+                              value: totalValue,
+                              onChange: onTotalChange,
+                            },
+                          }) => (
+                            <Input
+                              label={
+                                sessionType === 'addSessionsPackageOnline'
+                                  ? translation.addSessionsPackageNumberOfMonths
+                                  : translation.addSessionsPackageTotalSessions
+                              }
+                              value={totalValue}
+                              onChangeText={onTotalChange}
+                              placeholder="0"
+                              keyboardType="number-pad"
+                              inputContainerStyle={styles.inputBgStyle}
+                              textInputStyle={{
+                                color: colors.TextPrimaryStrong,
+                              }}
+                              error={!!errors.sessions?.total}
+                              errorMessage={errors.sessions?.total?.message}
+                            />
+                          )}
+                        />
+                      </View>
+                      <View style={styles.inputWrapper}>
+                        {sessionType === 'addSessionsPackageOnline' ? (
+                          <Controller
+                            control={control}
+                            name="sessions.startDate"
+                            render={({
+                              field: {
+                                value: dateValue,
+                                onChange: onDateChange,
+                              },
+                            }) => (
+                              <>
+                                <Input
+                                  label={
+                                    translation.addSessionsPackageStartDate
+                                  }
+                                  value={
+                                    dateValue
+                                      ? formatIsoToDisplay(dateValue)
+                                      : ''
+                                  }
+                                  placeholder=""
+                                  editable={false}
+                                  rightIcon={
+                                    <View style={styles.calendarIconWrap}>
+                                      <CalendarDaysIconSvg
+                                        width={iconScale(20)}
+                                        height={iconScale(20)}
+                                        color={colors.IconCalendarDefault}
+                                      />
+                                    </View>
+                                  }
+                                  containerPress={() =>
+                                    setDateSheetVisible(true)
+                                  }
+                                  inputContainerStyle={styles.inputBgStyle}
+                                  textInputStyle={{
+                                    color: colors.TextPrimaryStrong,
+                                  }}
+                                  error={!!errors.sessions?.startDate}
+                                  errorMessage={
+                                    errors.sessions?.startDate?.message
+                                  }
+                                />
+                                <DateSelectionBottomSheet
+                                  visible={dateSheetVisible}
+                                  onClose={() => setDateSheetVisible(false)}
+                                  onDateSelect={iso => {
+                                    onDateChange(iso);
+                                    setDateSheetVisible(false);
+                                  }}
+                                  initialSelectedDate={dateValue}
+                                />
+                              </>
+                            )}
+                          />
+                        ) : (
+                          <Controller
+                            control={control}
+                            name="sessions.left"
+                            render={({
+                              field: {
+                                value: leftValue,
+                                onChange: onLeftChange,
+                              },
+                            }) => (
+                              <Input
+                                label={
+                                  translation.addSessionsPackageSessionsLeft
+                                }
+                                value={leftValue}
+                                onChangeText={onLeftChange}
+                                placeholder="0"
+                                keyboardType="number-pad"
+                                inputContainerStyle={styles.inputBgStyle}
+                                textInputStyle={{
+                                  color: colors.TextPrimaryStrong,
+                                }}
+                                error={!!errors.sessions?.left}
+                                errorMessage={errors.sessions?.left?.message}
+                              />
+                            )}
+                          />
+                        )}
+                      </View>
+                    </View>
+                  </>
+                )}
+              />
+            </View>
+          ) : (
+            <></>
+          )
+        }
       />
     </View>
   );
@@ -180,6 +226,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.StatesOutline,
     borderRadius: radius.xs,
+    backgroundColor: colors.StatesWhite,
   },
   titleRow: {
     flexDirection: 'row',
@@ -191,9 +238,12 @@ const styles = StyleSheet.create({
     ...typography.bodySmall1TallSemiBold,
     color: colors.TextPrimaryStrong,
   },
+  formContent: {
+    width: '100%',
+    gap: spacing['Spacing-5_5xl'],
+  },
   chipRow: {
     flexDirection: 'row',
-    // paddingHorizontal: spacing['Spacing-3xl'],
     gap: spacing['Spacing-3xl'],
   },
   chip: {
@@ -226,5 +276,9 @@ const styles = StyleSheet.create({
   },
   calendarIconWrap: {
     paddingRight: spacing['Spacing-xl'],
+  },
+  inputBgStyle: {
+    backgroundColor: FORM_BG,
+    borderWidth: 0,
   },
 });

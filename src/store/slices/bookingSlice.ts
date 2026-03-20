@@ -9,6 +9,7 @@ export type BookingState = {
   operations: {
     getBookings: OperationState;
   };
+  notApprovedVisible: boolean;
 };
 
 const createInitialOperation = (): OperationState => ({
@@ -22,6 +23,7 @@ const initialState: BookingState = {
   operations: {
     getBookings: createInitialOperation(),
   },
+  notApprovedVisible: false,
 };
 
 const bookingSlice = createSlice({
@@ -47,6 +49,9 @@ const bookingSlice = createSlice({
     setOperationIdle: state => {
       state.operations.getBookings = { status: 'idle', error: null };
     },
+    setNotApprovedVisible: (state, action: PayloadAction<boolean>) => {
+      state.notApprovedVisible = action.payload;
+    },
   },
 });
 
@@ -56,6 +61,7 @@ export const {
   setOperationSuccess,
   setOperationError,
   setOperationIdle,
+  setNotApprovedVisible,
 } = bookingSlice.actions;
 
 export const bookingReducer = bookingSlice.reducer;

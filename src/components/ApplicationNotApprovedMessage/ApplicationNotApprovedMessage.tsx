@@ -1,7 +1,7 @@
 import React, { type ReactElement } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { colors, lineHeightScale, spacing, typography } from '@/theme';
+import { colors, spacing, typography } from '@/theme';
 
 import type { ApplicationNotApprovedMessageProps } from '@/types/components.types';
 
@@ -19,19 +19,15 @@ export const ApplicationNotApprovedMessage = ({
 
 const styles = StyleSheet.create({
   container: {
-    gap: spacing['Spacing-xl'], // 8px
-    textAlign: 'center',
-    paddingHorizontal: spacing['Spacing-3xl'], // 12px
+    gap: spacing['Spacing-xl'],
+    textAlign: 'left',
   },
   title: {
-    ...typography.h7Bold,
-    lineHeight: lineHeightScale(24), // 100% of 24px
-    textAlign: 'center',
+    ...typography.h8SemiBold,
     color: colors.TextPrimaryDefault,
   },
   description: {
     ...typography.bodySmall1Regular,
-    textAlign: 'center',
-    color: colors.TextSecondaryDefault,
+    color: colors.NeutralTealGrayIcon,
   },
 });

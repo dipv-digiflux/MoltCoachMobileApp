@@ -1,10 +1,12 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   Pressable,
+  StyleProp,
   StyleSheet,
   Text,
   TextInput as RNTextInput,
   View,
+  ViewStyle,
 } from 'react-native';
 
 import { colors, moderateScale, spacing, typography } from '@/theme';
@@ -126,8 +128,7 @@ export const Input = ({
 
   // ── Computed styles ────────────────────────────────────────────
   const inputContainerStyle = useMemo(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    () => [
+    (): StyleProp<ViewStyle> => [
       styles.inputContainer,
       {
         backgroundColor: inputBg,

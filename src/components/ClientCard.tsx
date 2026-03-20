@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.StatesWhite,
     borderWidth: 1,
-    borderColor: '#EBEBEB',
+    borderColor: colors.StatesOutline,
     borderRadius: moderateScale(12),
     padding: spacing['Spacing-5xl'], // 16px
     marginBottom: spacing['Spacing-xl'], // 16px
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     width: moderateScale(56),
     height: moderateScale(56),
     borderRadius: moderateScale(12),
-    backgroundColor: '#F0F0F0',
+    backgroundColor: colors.StatesDivider,
   },
   starBadge: {
     position: 'absolute',
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     color: colors.TextPrimaryDefault,
   },
   scorePill: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.SurfaceSubtleDisabled,
     paddingHorizontal: spacing['Spacing-m'],
     paddingVertical: moderateScale(2),
     borderRadius: moderateScale(4),

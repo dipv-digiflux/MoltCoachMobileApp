@@ -5,6 +5,9 @@ export { DailyNutritionTargetCard } from './DailyNutritionTargetCard';
 
 export { InfoCard } from './InfoCard';
 
+export * from './DailyActivityBottomSheet';
+export * from './PrimaryGoalBottomSheet';
+
 export { Button } from './Button';
 export type {
   ButtonDefaultIconName,
@@ -88,3 +91,6 @@ export { RequestAccessStatus } from './RequestAccessStatus';
 
 export { StatusDot } from './StatusDot';
 export { BookingConfirmHeader } from './BookingConfirmHeader';
+export { ScreenHeader } from './ScreenHeader';
+export type { ScreenHeaderProps } from './ScreenHeader';
+export { LiquidFooter } from './LiquidFooter';

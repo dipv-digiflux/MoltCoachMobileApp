@@ -1,20 +1,21 @@
-import React, { useState, type ReactElement } from 'react';
+import React, { type ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { Controller } from 'react-hook-form';
 
 import { Input } from '@/components/Input';
+import { AddHealthFitnessDataContainer } from '@/screens/clients/components/AddHealthFitnessDataContainer/AddHealthFitnessDataContainer';
 import { AddSessionsPackageContainer } from '@/screens/clients/components/AddSessionsPackageContainer';
 import { useAppSelector } from '@/store/hooks';
 import { colors, radius, spacing, typography } from '@/theme';
 
-import { AddClientFilter, type AddClientFilterTabId } from './AddClientFilter';
+import { AddClientContainerProps } from './AddClientContainer.types';
+import { AddClientFilter } from './AddClientFilter';
 
-export const AddClientContainer = (): ReactElement => {
+export const AddClientContainer = ({
+  control,
+  errors,
+}: AddClientContainerProps): ReactElement => {
   const translation = useAppSelector(state => state.translation);
-  const [activeTab, setActiveTab] = useState<AddClientFilterTabId>(
-    'addClientFilterExistingClient',
-  );
-  const [clientName, setClientName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
 
   const labelStyle = [
     typography.bodySmall4TallSemiBold,
@@ -31,26 +32,50 @@ export const AddClientContainer = (): ReactElement => {
 
   return (
     <View style={styles.container}>
-      <AddClientFilter activeTab={activeTab} onTabChange={setActiveTab} />
-
-      <Input
-        label={translation.addClientNameLabel}
-        value={clientName}
-        onChangeText={setClientName}
-        labelTextStyle={labelStyle}
-        textInputStyle={inputStyle}
+      <Controller
+        control={control}
+        name="clientType"
+        render={({ field: { value, onChange } }) => (
+          <AddClientFilter activeTab={value} onTabChange={onChange} />
+        )}
       />
 
-      <Input
-        label={translation.addClientPhoneNumberLabel}
-        value={phoneNumber}
-        onChangeText={setPhoneNumber}
-        labelTextStyle={labelStyle}
-        textInputStyle={inputStyle}
-        keyboardType="phone-pad"
+      <Controller
+        control={control}
+        name="name"
+        render={({ field: { value, onChange } }) => (
+          <Input
+            label={translation.addClientNameLabel}
+            value={value}
+            onChangeText={onChange}
+            labelTextStyle={labelStyle}
+            textInputStyle={inputStyle}
+            error={!!errors.name}
+            errorMessage={errors.name?.message}
+          />
+        )}
       />
 
-      <AddSessionsPackageContainer />
+      <Controller
+        control={control}
+        name="phone"
+        render={({ field: { value, onChange } }) => (
+          <Input
+            label={translation.addClientPhoneNumberLabel}
+            value={value}
+            onChangeText={onChange}
+            labelTextStyle={labelStyle}
+            textInputStyle={inputStyle}
+            keyboardType="phone-pad"
+            error={!!errors.phone}
+            errorMessage={errors.phone?.message}
+          />
+        )}
+      />
+
+      <AddSessionsPackageContainer control={control} errors={errors} />
+
+      <AddHealthFitnessDataContainer control={control} errors={errors} />
     </View>
   );
 };

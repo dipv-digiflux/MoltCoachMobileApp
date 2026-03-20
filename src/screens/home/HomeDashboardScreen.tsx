@@ -21,7 +21,8 @@ import {
   type ClientTag,
 } from '@/components';
 import { ProfileCompletionCard } from '@/screens/home/components/ProfileCompletionCard';
-import { useAppSelector } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { logoutThunk } from '@/store/thunks';
 import { colors, iconScale, moderateScale, spacing, typography } from '@/theme';
 
 import type { AppStackNavigationProp } from '@navigation/types';
@@ -56,7 +57,11 @@ export const HomeDashboardScreen = (): ReactElement => {
     () => insets.bottom + spacing['Spacing-15xl'],
     [insets.bottom],
   );
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = (): void => {
+    void dispatch(logoutThunk());
+  };
   /*
   const handleDateSelect = useCallback((date: Date): void => {
     const year = date.getFullYear();
@@ -208,6 +213,7 @@ export const HomeDashboardScreen = (): ReactElement => {
               style={styles.profileButton}
               accessibilityRole="button"
               accessibilityLabel="Profile"
+              onPress={handleLogout}
             >
               <ProfileIconSvg width={iconScale(36)} height={iconScale(36)} />
             </Pressable>
@@ -406,7 +412,7 @@ const styles = StyleSheet.create({
     height: moderateScale(36),
     borderRadius: moderateScale(18),
     borderWidth: 1,
-    borderColor: '#EBEBEB',
+    borderColor: colors.StatesOutline,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -414,7 +420,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#EBEBEB',
+    borderColor: colors.StatesOutline,
     borderRadius: moderateScale(26), // Pill shape
     paddingHorizontal: spacing['Spacing-2xl'], // 10px
     paddingVertical: spacing['Spacing-xl'], // 8px
@@ -426,7 +432,7 @@ const styles = StyleSheet.create({
   },
   addClientPill: {
     borderWidth: 1,
-    borderColor: '#EBEBEB',
+    borderColor: colors.StatesOutline,
     borderRadius: moderateScale(20),
     paddingHorizontal: spacing['Spacing-2xl'], // 10px
     paddingVertical: spacing['Spacing-xl'], // 8px

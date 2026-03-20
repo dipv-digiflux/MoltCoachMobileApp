@@ -1,37 +1,12 @@
 import React, { type ReactElement } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Pressable, Text, View } from 'react-native';
+
+import { Checkbox } from '@/components/Checkbox';
+import { getInitials } from '@/utils/avatar';
 
 import { contactInfoRowStyles as styles } from './ContactInfoRow.styles';
 
 import type { ContactInfoRowProps } from './ContactInfoRow.types';
-
-/**
- * Compact row for showing a contact avatar, name and phone number.
- *
- * Default design:
- * - Avatar: circular, sized and padded via `ContactInfoRow.styles` using theme tokens
- * - Name: 15px Inter SemiBold (`typography.b2TallSemiBold`)
- * - Phone: 13px Inter Regular (`typography.bodySmall4TallRegular`)
- *
- * Recommended usage:
- * ```tsx
- * <ContactInfoRow
- *   avatarSource={{ uri: 'https://...' }}
- *   name={contact.name}
- *   phoneNumber={contact.phone}
- * />
- *
- * // Optionally override layout or typography:
- * <ContactInfoRow
- *   avatarSource={photo}
- *   name={name}
- *   phoneNumber={phone}
- *   containerStyle={{ marginTop: 12 }}
- *   nameTextStyle={{ color: colors.TextPrimaryStrong }}
- *   phoneTextStyle={{ color: colors.TextSecondaryDefault }}
- * />
- * ```
- */
 
 export const ContactInfoRow = ({
   avatarSource,
@@ -43,20 +18,46 @@ export const ContactInfoRow = ({
   imageStyle,
   nameTextStyle,
   phoneTextStyle,
+  showCheckbox,
+  selected,
+  onPress,
 }: ContactInfoRowProps): ReactElement => {
+  const isPressable = onPress !== undefined;
+  const initials = getInitials(name);
+
   return (
-    <View style={[styles.container, containerStyle]}>
-      <View style={[styles.imageContainer, imageContainerStyle]}>
-        <Image source={avatarSource} style={[styles.image, imageStyle]} />
+    <Pressable
+      style={[styles.container, containerStyle]}
+      onPress={onPress}
+      disabled={!isPressable}
+    >
+      <View style={styles.leftContent}>
+        <View style={[styles.imageContainer, imageContainerStyle]}>
+          {avatarSource ? (
+            <Image source={avatarSource} style={[styles.image, imageStyle]} />
+          ) : (
+            <View style={[styles.placeholderContainer, imageContainerStyle]}>
+              <Text style={styles.initialsText}>{initials || '?'}</Text>
+            </View>
+          )}
+        </View>
+        <View style={[styles.textContainer, contentContainerStyle]}>
+          <Text style={[styles.nameText, nameTextStyle]} numberOfLines={1}>
+            {name}
+          </Text>
+          <Text style={[styles.phoneText, phoneTextStyle]} numberOfLines={1}>
+            {phoneNumber}
+          </Text>
+        </View>
       </View>
-      <View style={[styles.textContainer, contentContainerStyle]}>
-        <Text style={[styles.nameText, nameTextStyle]} numberOfLines={1}>
-          {name}
-        </Text>
-        <Text style={[styles.phoneText, phoneTextStyle]} numberOfLines={1}>
-          {phoneNumber}
-        </Text>
-      </View>
-    </View>
+
+      {showCheckbox && (
+        <Checkbox
+          checked={selected}
+          onChange={onPress}
+          style={styles.checkbox}
+        />
+      )}
+    </Pressable>
   );
 };

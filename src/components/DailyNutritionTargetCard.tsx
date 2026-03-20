@@ -130,7 +130,7 @@ export const DailyNutritionTargetCard = ({
         </View>
       </View>
 
-      <InfoCard text={planTip} />
+      <InfoCard title="Plan Tip" description={planTip} />
     </View>
   );
 };

@@ -28,7 +28,7 @@ export const RequestAccessStatus = (): ReactElement => {
 
 const styles = StyleSheet.create({
   statusBox: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.SurfacePrimaryDefault,
     paddingHorizontal: spacing['Spacing-2xl'],
     paddingVertical: spacing['Spacing-l'],
     flexDirection: 'row',
