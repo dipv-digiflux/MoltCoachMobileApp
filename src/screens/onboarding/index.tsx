@@ -8,3 +8,4 @@ export * from './PlanConfirmationScreen';
 export * from './QRScanScreen';
 export * from './SplashScreen';
 export * from './BookingConfirmScreen';
+export { default as BookingConfirmedScreen } from './BookingConfirmed';

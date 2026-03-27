@@ -21,8 +21,8 @@ export const defaultAddClientValues: AddClientFormValues = {
     dob: undefined,
     height: '',
     weight: '',
-    activity: 'activityModerate',
-    goal: 'goalFatLoss',
+    activity: 'Moderate Activity',
+    goal: 'Burn Fat',
     conditions: '',
   },
 };

@@ -139,10 +139,10 @@ export const GetStartedScreen = (): ReactElement => {
       try {
         const result = await dispatch(signInWithGoogleThunk());
         if (result != null && result.status && result.customer) {
-          if (
-            result?.customer?.status?.on_boarding ||
-            result?.customer?.status?.on_boarding_skip
-          ) {
+          const customerStatus = result.customer.status as
+            | { on_boarding?: boolean; on_boarding_skip?: boolean }
+            | undefined;
+          if (customerStatus?.on_boarding || customerStatus?.on_boarding_skip) {
             enterAppStack(navigation);
           } else {
             navigation.navigate('YourDetails');

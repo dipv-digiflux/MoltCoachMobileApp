@@ -18,10 +18,21 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
   activeTabButtonStyle,
   tabTextStyle,
   activeTabTextStyle,
+  variant = 'pill',
 }) => {
+  const isOutlined = variant === 'outlined';
+
   return (
-    <View style={[styles.container, style]}>
-      <View style={[styles.tabsWrapper, tabsWrapperStyle]}>
+    <View
+      style={[styles.container, isOutlined && styles.containerOutlined, style]}
+    >
+      <View
+        style={[
+          styles.tabsWrapper,
+          isOutlined && styles.tabsWrapperOutlined,
+          tabsWrapperStyle,
+        ]}
+      >
         {tabs.map(tab => {
           const isActive = tab === activeTab;
           return (
@@ -30,8 +41,10 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
               onPress={() => onTabChange(tab)}
               style={[
                 styles.tabButton,
+                isOutlined && styles.tabButtonOutlined,
                 tabButtonStyle,
                 isActive && styles.activeTabButton,
+                isActive && isOutlined && styles.activeTabButtonOutlined,
                 isActive && activeTabButtonStyle,
               ]}
             >
@@ -67,6 +80,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.StatesDivider, // Very light border
   },
+  containerOutlined: {
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    marginHorizontal: 0,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+  },
   tabsWrapper: {
     flexDirection: 'row',
     backgroundColor: colors.SurfaceSecondaryDefault,
@@ -74,12 +94,26 @@ const styles = StyleSheet.create({
     padding: moderateScale(2),
     gap: spacing['Spacing-m'],
   },
+  tabsWrapperOutlined: {
+    backgroundColor: 'transparent',
+    borderRadius: 0,
+    padding: 0,
+    gap: spacing['Spacing-l'],
+  },
   tabButton: {
     paddingHorizontal: spacing['Spacing-2xl'], // 10px
     paddingVertical: spacing['Spacing-l'], // 6px
     borderRadius: moderateScale(6),
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  tabButtonOutlined: {
+    borderWidth: 1,
+    borderColor: colors.StatesDivider,
+    borderRadius: moderateScale(4),
+    paddingHorizontal: spacing['Spacing-4xl'],
+    paddingVertical: spacing['Spacing-xl'],
+    backgroundColor: colors.StatesWhite,
   },
   activeTabButton: {
     backgroundColor: colors.StatesWhite,
@@ -91,6 +125,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 1,
+  },
+  activeTabButtonOutlined: {
+    borderColor: colors.TextPrimaryDefault,
+    borderWidth: 1.5,
+    shadowOpacity: 0,
+    elevation: 0,
   },
   tabText: {
     ...typography.bodySmall2Regular,

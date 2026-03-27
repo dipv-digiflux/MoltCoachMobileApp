@@ -4,8 +4,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BottomTabs } from '@navigation/BottomTabs';
 import { AddClientScreen } from '@screens/clients/AddClientScreen';
 import { AddedClientsScreen } from '@screens/clients/AddedClientsScreen';
+import { GeneratingPlanScreen } from '@screens/clients/GeneratingPlanScreen';
 import { InviteSentScreen } from '@screens/clients/InviteSentScreen';
 import { SelectContactScreen } from '@screens/clients/SelectContactScreen';
+import { SuggestedPlanScreen } from '@screens/clients/SuggestedPlanScreen';
 import { EarningsScreen } from '@screens/earnings/EarningsScreen';
 import { ImportContactsScreen } from '@screens/onboarding/ImportContactsScreen';
 import {
@@ -39,6 +41,8 @@ export const AppNavigator = (): ReactElement => (
     <Stack.Screen name="ImportContacts" component={ImportContactsScreen} />
     <Stack.Screen name="SelectContact" component={SelectContactScreen} />
     <Stack.Screen name="InviteSent" component={InviteSentScreen} />
+    <Stack.Screen name="GeneratingPlan" component={GeneratingPlanScreen} />
+    <Stack.Screen name="SuggestedPlan" component={SuggestedPlanScreen} />
 
     {/* Task ActionFlows (tabs hidden) */}
     <Stack.Screen name="CreateTask" component={CreateTaskScreen} />

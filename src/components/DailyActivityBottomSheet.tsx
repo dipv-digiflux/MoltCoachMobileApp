@@ -19,10 +19,12 @@ export const DailyActivityBottomSheet = ({
   );
 
   const options = [
-    { label: translation.activityNotActive, value: 'activityNotActive' },
-    { label: translation.activityLight, value: 'activityLight' },
-    { label: translation.activityModerate, value: 'activityModerate' },
-    { label: translation.activityVery, value: 'activityVery' },
+    { label: 'High Output', value: 'High Output' },
+    { label: 'Get Stronger', value: 'Get Stronger' },
+    { label: 'Moderate Activity', value: 'Moderate Activity' },
+    { label: 'Sedentary', value: 'Sedentary' },
+    { label: 'Lightly Active', value: 'Lightly Active' },
+    { label: 'Athlete Mode', value: 'Athlete Mode' },
   ];
 
   const handleSave = (): void => {

@@ -6,6 +6,7 @@ import {
   BottomSheet,
   WhyNotApprovedInfo,
   ApplicationNotApprovedMessage,
+  Button,
 } from '@/components';
 import { clearAuth } from '@/services/authStorage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -35,10 +36,22 @@ export const ApplicationNotApprovedBottomSheet = (): ReactElement => {
         showCloseButton: true,
       }}
       footer={{
-        primaryLabel: 'Contact Support',
-        onPrimaryPress: () => {},
-        secondaryLabel: 'Read our Guidelines',
-        onSecondaryPress: () => {},
+        children: (
+          <View style={styles.footerButtons}>
+            <Button
+              label="Contact Support"
+              variant="primary"
+              fullWidth
+              onPress={() => {}}
+            />
+            <Button
+              label="Read our Guidelines"
+              variant="outline"
+              fullWidth
+              onPress={() => {}}
+            />
+          </View>
+        ),
       }}
     >
       <View style={styles.content}>
@@ -70,5 +83,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.FeedbackWarningSurface,
     borderRadius: ICON_CONTAINER_RADIUS,
     padding: spacing['Spacing-4xl'],
+  },
+  footerButtons: {
+    gap: spacing['Spacing-xl'],
+    paddingBottom: spacing['Spacing-xl'],
   },
 });

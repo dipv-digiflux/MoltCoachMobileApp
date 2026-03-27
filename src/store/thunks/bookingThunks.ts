@@ -43,6 +43,7 @@ export const bookCallThunk =
           ''
         ).trim(),
         phone_number: coach.phone_number ?? '',
+        country_code: coach.country_code,
         event_uuid: calendlyData.payload?.event?.uuid,
         invitee_uuid: calendlyData.payload?.invitee?.uuid,
         timezone: calendlyData.payload?.invitee?.timezone,
@@ -84,12 +85,32 @@ export const getCoachBookingsThunk =
         dispatch(setOperationSuccess());
 
         // Global Redirection Logic
-        const { is_request_access, is_booking_confirmed, is_verified } =
+        const { is_request_access, is_booking_confirmed, is_verified, status } =
           response.data.coach;
 
         if (rootNavigationRef.isReady()) {
           const state = rootNavigationRef.getState();
           const currentRoute = state?.routes[state.index]?.name;
+
+          // Stage 0: Rejection (Global override)
+          if (status?.toLowerCase() === 'reject') {
+            dispatch(setNotApprovedVisible(true));
+            if (currentRoute !== 'GetStarted') {
+              rootNavigationRef.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: 'OnboardingStack',
+                    state: {
+                      index: 0,
+                      routes: [{ name: 'GetStarted' }],
+                    },
+                  },
+                ],
+              });
+            }
+            return response;
+          }
 
           // Stage 4: Onboarding complete (Prioritize verified state)
           if (is_verified) {
@@ -155,8 +176,61 @@ export const getCoachBookingsThunk =
             }
           }
           // Stage 3: Verification (Approval)
+          else if (is_booking_confirmed === true) {
+            const lastBooking = response.data.bookings[0];
+            const bookingStatus = lastBooking?.status?.toLowerCase();
+
+            if (bookingStatus === 'pending') {
+              if (currentRoute !== 'BookingConfirmed') {
+                rootNavigationRef.reset({
+                  index: 0,
+                  routes: [
+                    {
+                      name: 'OnboardingStack',
+                      state: {
+                        index: 0,
+                        routes: [{ name: 'BookingConfirmed' }],
+                      },
+                    },
+                  ],
+                });
+              }
+            } else if (bookingStatus === 'rejected') {
+              dispatch(setNotApprovedVisible(true));
+              if (currentRoute !== 'GetStarted') {
+                rootNavigationRef.reset({
+                  index: 0,
+                  routes: [
+                    {
+                      name: 'OnboardingStack',
+                      state: {
+                        index: 0,
+                        routes: [{ name: 'GetStarted' }],
+                      },
+                    },
+                  ],
+                });
+              }
+            } else {
+              // Default fallback if status is something else
+              if (currentRoute !== 'GetStarted') {
+                rootNavigationRef.reset({
+                  index: 0,
+                  routes: [
+                    {
+                      name: 'OnboardingStack',
+                      state: {
+                        index: 0,
+                        routes: [{ name: 'GetStarted' }],
+                      },
+                    },
+                  ],
+                });
+              }
+            }
+          }
+          // Default Stage: Should not happen normally if above conditions cover all stages
           else {
-            dispatch(setNotApprovedVisible(true));
             if (currentRoute !== 'GetStarted') {
               rootNavigationRef.reset({
                 index: 0,

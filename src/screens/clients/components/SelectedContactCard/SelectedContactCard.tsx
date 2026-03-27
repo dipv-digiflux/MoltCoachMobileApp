@@ -1,4 +1,9 @@
-import React, { type ReactElement, useMemo } from 'react';
+import React, {
+  type ReactElement,
+  useMemo,
+  useState,
+  useCallback,
+} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {
   Controller,
@@ -8,7 +13,12 @@ import {
 } from 'react-hook-form';
 
 import { CalendarIconSvg } from '@/assets/images';
-import { FilterTabs, Input, Switch } from '@/components';
+import {
+  FilterTabs,
+  Input,
+  Switch,
+  DateSelectionBottomSheet,
+} from '@/components';
 import { useAppSelector } from '@/store/hooks';
 import { colors, radius, spacing, typography } from '@/theme';
 
@@ -29,6 +39,17 @@ export const SelectedContactCard = ({
   } = useFormContext<AddedClientsFormValues>();
   const translation = useAppSelector(state => state.translation);
   const fieldPath = `contacts.${index}`;
+  const [dateSheetVisible, setDateSheetVisible] = useState(false);
+
+  const formatIsoToDisplay = useCallback((iso: string): string => {
+    if (!iso) return '';
+    const [y, m, d] = iso.split('-').map(Number);
+    const date = new Date(y, (m ?? 1) - 1, d);
+    return date.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+    });
+  }, []);
 
   const relationship = useWatch({
     control,
@@ -155,22 +176,36 @@ export const SelectedContactCard = ({
                       `${fieldPath}.startDate` as FieldPath<AddedClientsFormValues>
                     }
                     render={({ field: { onChange, value } }) => (
-                      <Input
-                        value={value as string}
-                        onChangeText={onChange}
-                        placeholder="24 Feb"
-                        error={contactErrors?.startDate !== undefined}
-                        errorMessage={contactErrors?.startDate?.message}
-                        rightIcon={
-                          <CalendarIconSvg
-                            width={20}
-                            height={20}
-                            color={colors.IconPrimaryActive}
-                          />
-                        }
-                        style={styles.inputContainer}
-                        textInputStyle={styles.textInput}
-                      />
+                      <>
+                        <Input
+                          value={
+                            value ? formatIsoToDisplay(value as string) : ''
+                          }
+                          placeholder="24 Feb"
+                          editable={false}
+                          containerPress={() => setDateSheetVisible(true)}
+                          error={contactErrors?.startDate !== undefined}
+                          errorMessage={contactErrors?.startDate?.message}
+                          rightIcon={
+                            <CalendarIconSvg
+                              width={20}
+                              height={20}
+                              color={colors.IconPrimaryActive}
+                            />
+                          }
+                          style={styles.inputContainer}
+                          textInputStyle={styles.textInput}
+                        />
+                        <DateSelectionBottomSheet
+                          visible={dateSheetVisible}
+                          onClose={() => setDateSheetVisible(false)}
+                          onDateSelect={iso => {
+                            onChange(iso);
+                            setDateSheetVisible(false);
+                          }}
+                          initialSelectedDate={value as string}
+                        />
+                      </>
                     )}
                   />
                 </View>

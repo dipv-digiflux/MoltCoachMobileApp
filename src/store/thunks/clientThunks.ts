@@ -1,8 +1,16 @@
-import { postCoachBulkInvite, postCoachInviteSms } from '@/api/clientApi';
+import {
+  postCoachBulkInvite,
+  postCoachInviteSms,
+  postCoachInviteStore,
+  getCoachFetchLinks,
+  postCoachUpdateLink,
+} from '@/api/clientApi';
 import {
   setClientOperationError,
   setClientOperationLoading,
   setClientOperationSuccess,
+  setInviteLinks,
+  appendInviteLinks,
 } from '@/store/slices/clientSlice';
 import { getApiErrorMessage } from '@/utils/apiError';
 
@@ -11,11 +19,13 @@ import type {
   InviteBulkClientsPayload,
   InviteSmsPayload,
   ApiResponse,
+  AddClientPayload,
+  InviteWithOnboarding,
 } from '@/types/api.types';
 
 export const inviteBulkClientsThunk =
   (request: InviteBulkClientsPayload) =>
-  async (dispatch: AppDispatch): Promise<ApiResponse> => {
+  async (dispatch: AppDispatch): Promise<ApiResponse<unknown>> => {
     dispatch(setClientOperationLoading('inviteBulkClients'));
 
     try {
@@ -45,7 +55,7 @@ export const inviteBulkClientsThunk =
 
 export const sendInviteSmsThunk =
   (request: InviteSmsPayload) =>
-  async (dispatch: AppDispatch): Promise<ApiResponse> => {
+  async (dispatch: AppDispatch): Promise<ApiResponse<unknown>> => {
     dispatch(setClientOperationLoading('sendInviteSms'));
 
     try {
@@ -66,6 +76,109 @@ export const sendInviteSmsThunk =
       dispatch(
         setClientOperationError({
           operation: 'sendInviteSms',
+          message: errorMsg,
+        }),
+      );
+      throw error;
+    }
+  };
+
+export const inviteClientThunk =
+  (request: AddClientPayload) =>
+  async (
+    dispatch: AppDispatch,
+  ): Promise<ApiResponse<InviteWithOnboarding[]>> => {
+    dispatch(setClientOperationLoading('inviteClient'));
+
+    try {
+      const response = await postCoachInviteStore(request);
+      if (response && response.status) {
+        dispatch(setClientOperationSuccess('inviteClient'));
+      } else {
+        dispatch(
+          setClientOperationError({
+            operation: 'inviteClient',
+            message: response?.message || 'Invite failed',
+          }),
+        );
+      }
+      return response;
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(
+        setClientOperationError({
+          operation: 'inviteClient',
+          message: errorMsg,
+        }),
+      );
+      throw error;
+    }
+  };
+
+export const fetchInviteLinksThunk =
+  (page: number = 1, limit: number = 10) =>
+  async (dispatch: AppDispatch): Promise<void> => {
+    dispatch(setClientOperationLoading('fetchInviteLinks'));
+
+    try {
+      const response = await getCoachFetchLinks(page, limit);
+      if (response && response.status) {
+        const payload = {
+          list: response.data.list,
+          currentPage: response.data.currentPage,
+          totalPages: response.data.totalPages,
+          totalItems: response.data.totalItems,
+        };
+        if (page === 1) {
+          dispatch(setInviteLinks(payload));
+        } else {
+          dispatch(appendInviteLinks(payload));
+        }
+        dispatch(setClientOperationSuccess('fetchInviteLinks'));
+      } else {
+        dispatch(
+          setClientOperationError({
+            operation: 'fetchInviteLinks',
+            message: response?.message || 'Fetch failed',
+          }),
+        );
+      }
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(
+        setClientOperationError({
+          operation: 'fetchInviteLinks',
+          message: errorMsg,
+        }),
+      );
+      throw error;
+    }
+  };
+export const updateInviteLinkThunk =
+  (payload: { id: string; data: Record<string, unknown> }) =>
+  async (dispatch: AppDispatch): Promise<ApiResponse<unknown>> => {
+    dispatch(setClientOperationLoading('updateInviteLink'));
+
+    try {
+      const response = await postCoachUpdateLink(payload.id, payload.data);
+      if (response && response.status) {
+        dispatch(setClientOperationSuccess('updateInviteLink'));
+        // Refresh the list after update
+        void dispatch(fetchInviteLinksThunk(1, 10));
+      } else {
+        dispatch(
+          setClientOperationError({
+            operation: 'updateInviteLink',
+            message: response?.message || 'Update failed',
+          }),
+        );
+      }
+      return response;
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(
+        setClientOperationError({
+          operation: 'updateInviteLink',
           message: errorMsg,
         }),
       );

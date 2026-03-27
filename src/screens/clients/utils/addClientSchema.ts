@@ -13,46 +13,54 @@ export const SessionTypeSchema = z.enum([
 export const SexSchema = z.enum(['sexFemale', 'sexMale', 'sexOther']);
 
 export const ActivityLevelSchema = z.enum([
-  'activityNotActive',
-  'activityLight',
-  'activityModerate',
-  'activityVery',
-  'activityExtra',
+  'High Output',
+  'Get Stronger',
+  'Moderate Activity',
+  'Sedentary',
+  'Lightly Active',
+  'Athlete Mode',
 ]);
 
 export const GoalSchema = z.enum([
-  'goalFatLoss',
-  'goalMuscleGain',
-  'goalMaintenance',
-  'goalPerformance',
+  'Build Muscle',
+  'Burn Fat',
+  'Performance',
+  'Maintain',
 ]);
 
 export const AddClientSchema = z
   .object({
     clientType: AddClientFilterTabSchema,
-    name: z.string().min(1, 'Name is required'),
-    phone: z.string().min(1, 'Phone number is required'),
+    name: z.string().optional(),
+    phone: z.string().length(9, 'Phone number must be 9 digits'),
     sessionsEnabled: z.boolean(),
     healthEnabled: z.boolean(),
     sessions: z.object({
       type: SessionTypeSchema,
-      total: z.string(), // Number of months or total sessions
-      left: z.string(), // Sessions left or empty for online
+      total: z.string().optional(), // Number of months or total sessions
+      left: z.string().optional(), // Sessions left or empty for online
       startDate: z.string().optional(),
     }),
     health: z.object({
       sex: SexSchema,
       dob: z.string().optional(),
-      height: z.string(),
-      weight: z.string(),
+      height: z.string().optional(),
+      weight: z.string().optional(),
       activity: ActivityLevelSchema,
       goal: GoalSchema,
-      conditions: z.string(),
+      conditions: z.string().optional(),
     }),
   })
   .superRefine((data, ctx) => {
-    // If Existing Client, sessions and health must be enabled
+    // If Existing Client, sessions must be enabled
     if (data.clientType === 'addClientFilterExistingClient') {
+      if (!data.name || data.name.trim().length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Name is required',
+          path: ['name'],
+        });
+      }
       if (!data.sessionsEnabled) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -60,13 +68,7 @@ export const AddClientSchema = z
           path: ['sessionsEnabled'],
         });
       }
-      if (!data.healthEnabled) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Health data is required for existing clients',
-          path: ['healthEnabled'],
-        });
-      }
+      // Health data is now optional for both Client and Lead as per requirement
     }
 
     // Validate sessions if enabled

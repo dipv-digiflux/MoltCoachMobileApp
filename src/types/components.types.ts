@@ -8,8 +8,9 @@ import type {
 } from 'react-native';
 
 import type { SpacingToken } from '@/theme/spacing';
+import type { ClientStatus, ClientType } from '@/types/api.types';
 import type { BottomSheetProps } from '@/types/bottomSheet.types';
-import type { OnboardingScreenName } from '@navigation/types';
+import type { OnboardingScreenName } from '@/types/navigation.types';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
 export interface ApplicationNotApprovedMessageProps {
@@ -60,6 +61,7 @@ export interface DailyNutritionTargetCardProps {
   title: string;
   actionLabel: string;
   kcal: string;
+  subValue?: string;
   tags: readonly string[];
   macroTargets: {
     protein: MacroItem;
@@ -87,6 +89,7 @@ export interface PageHeaderProps {
   fallbackBackgroundColor?: string;
   subtitlePosition?: 'top' | 'bottom';
   style?: StyleProp<ViewStyle>;
+  variant?: 'default' | 'stacked';
 }
 
 // ─── PageHeaderScrollView ─────────────────────────────────────────────
@@ -105,15 +108,25 @@ export interface PageHeaderScrollViewProps extends BaseScrollViewProps {
 // ─── InfoCard, ProgressStepper, FilterTabs, StatusTabs ────────────────
 
 export interface InfoCardProps {
-  title: string;
+  title?: string;
   description: string;
   icon?: ReactElement;
+  variant?: 'default' | 'simple';
   style?: StyleProp<ViewStyle>;
 }
 
 export interface ProgressStepperProps {
   currentStep: number;
   totalSteps: number;
+}
+
+export interface VerticalStepperStep {
+  label: string;
+  status: 'completed' | 'current' | 'pending';
+}
+
+export interface VerticalStepperProps {
+  steps: VerticalStepperStep[];
 }
 
 export interface FilterTabsProps {
@@ -127,6 +140,7 @@ export interface FilterTabsProps {
   activeTabButtonStyle?: StyleProp<ViewStyle>;
   tabTextStyle?: StyleProp<TextStyle>;
   activeTabTextStyle?: StyleProp<TextStyle>;
+  variant?: 'pill' | 'outlined';
 }
 
 export interface StatusTabsProps {
@@ -235,7 +249,7 @@ export interface DayItemComponentProps {
   onPress: (item: DayItem) => void;
 }
 
-// ─── ClientCard ─────────────────────────────────────────────────────
+// ─── Client Cards ───────────────────────────────────────────────────
 
 export type ClientTagType = 'positive' | 'negative' | 'warning';
 
@@ -244,17 +258,39 @@ export interface ClientTag {
   type: ClientTagType;
 }
 
-export interface ClientCardProps {
+export interface ClientStatusRow {
+  label: string;
+  icon?: 'pencil' | 'eye' | 'circle' | 'dot' | 'spinner';
+  iconColor?: string;
+  disabled?: boolean;
+  onPress?: () => void;
+}
+
+export interface ClientCardBaseProps {
   name: string;
+  avatarUrl?: string;
+  onPress?: () => void;
+  onMenuPress?: () => void;
+  style?: StyleProp<ViewStyle>;
+}
+
+export interface ClientStatusCardProps extends ClientCardBaseProps {
+  type: ClientType;
+  status: ClientStatus;
+  rows: ClientStatusRow[];
+}
+
+export interface ClientDetailedCardProps extends ClientCardBaseProps {
   score: number;
-  avatarUrl: string;
   lastSyncedText: string;
   detailsText: string;
   tags: ClientTag[];
   onNudgePress?: () => void;
-  onPress?: () => void;
-  style?: StyleProp<ViewStyle>;
+  onEditSessions?: () => void;
 }
+
+/** @deprecated Use ClientStatusCard or ClientDetailedCard */
+export type ClientCardProps = ClientDetailedCardProps;
 
 // ─── Accordion (internal) ────────────────────────────────────────────
 
@@ -284,4 +320,22 @@ export interface CheckboxSizeTokens {
 export interface RadioSizeTokens {
   outer: number;
   dot: number;
+}
+
+// ─── AddSessionsModal ────────────────────────────────────────────────
+
+export interface AddSessionsModalValues {
+  mode: 'Online' | 'Physical (In-person)';
+  months?: string;
+  startDate?: string;
+  totalSessions?: string;
+  sessionsLeft?: string;
+}
+
+export interface AddSessionsModalProps {
+  visible: boolean;
+  onClose: () => void;
+  onUpdate: (values: AddSessionsModalValues) => void;
+  clientName: string;
+  initialValues?: Partial<AddSessionsModalValues>;
 }

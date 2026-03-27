@@ -19,10 +19,10 @@ export const PrimaryGoalBottomSheet = ({
   );
 
   const options = [
-    { label: translation.goalFatLoss, value: 'goalFatLoss' },
-    { label: translation.goalMuscleGain, value: 'goalMuscleGain' },
-    { label: translation.goalMaintenance, value: 'goalMaintenance' },
-    { label: translation.goalPerformance, value: 'goalPerformance' },
+    { label: 'Build Muscle', value: 'Build Muscle' },
+    { label: 'Burn Fat', value: 'Burn Fat' },
+    { label: 'Performance', value: 'Performance' },
+    { label: 'Maintain', value: 'Maintain' },
   ];
 
   const handleSave = (): void => {

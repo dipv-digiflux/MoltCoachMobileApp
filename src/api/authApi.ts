@@ -45,16 +45,13 @@ export const postOnboarding = async (
 export const postBookCall = async (
   request: BookCallRequest,
 ): Promise<BookCallResponse> => {
+  console.log('checkRQ 1', request);
   return httpPost<BookCallRequest, BookCallResponse>(
     ENDPOINTS.BOOK_CALL,
     request,
   );
 };
 
-/**
- * Get coach bookings.
- * GET /v1/coach/bookings
- */
 export const getCoachBookings = async (): Promise<GetCoachBookingsResponse> => {
   return httpGet<GetCoachBookingsResponse>(ENDPOINTS.COACH_BOOKINGS);
 };

@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...typography.h8SemiBold,
-    color: colors.TextPrimaryDefault,
+    color: '#0B1A1A',
   },
   description: {
     ...typography.bodySmall1Regular,

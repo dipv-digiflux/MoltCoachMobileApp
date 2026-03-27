@@ -9,19 +9,30 @@ export const InfoCard = ({
   title,
   description,
   icon,
+  variant = 'default',
   style,
 }: InfoCardProps): ReactElement => {
+  const isSimple = variant === 'simple';
+
   return (
-    <View style={[styles.container, style]}>
-      <View style={styles.headerRow}>
+    <View style={[styles.container, isSimple && styles.containerSimple, style]}>
+      <View style={[styles.contentRow, isSimple && styles.contentRowSimple]}>
         {icon !== undefined ? (
           <View style={styles.icon}>{icon}</View>
         ) : (
           <View style={styles.dot} />
         )}
-        <Text style={styles.title}>{title}</Text>
+        <View style={styles.textContainer}>
+          {title !== undefined && !isSimple && (
+            <Text style={styles.title}>{title}</Text>
+          )}
+          <Text
+            style={[styles.description, isSimple && styles.descriptionSimple]}
+          >
+            {description}
+          </Text>
+        </View>
       </View>
-      <Text style={styles.description}>{description}</Text>
     </View>
   );
 };
@@ -30,16 +41,30 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: radius.md,
     borderWidth: 1,
-    borderColor: colors.BorderSecondaryDefault,
+    borderColor: colors.StatesOutline,
     padding: spacing['Spacing-5xl'],
     gap: spacing['Spacing-xl'],
     backgroundColor: colors.StatesWhite,
     alignSelf: 'stretch',
   },
-  headerRow: {
+  containerSimple: {
+    paddingVertical: spacing['Spacing-m'],
+    paddingHorizontal: spacing['Spacing-5xl'],
+    gap: 0,
+    minHeight: moderateScale(40),
+    justifyContent: 'center',
+  },
+  contentRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing['Spacing-xl'],
+  },
+  contentRowSimple: {
+    gap: spacing['Spacing-xl'],
+  },
+  textContainer: {
+    flex: 1,
+    gap: spacing['Spacing-xs'],
   },
   icon: {
     alignItems: 'center',
@@ -53,11 +78,15 @@ const styles = StyleSheet.create({
   },
   title: {
     ...typography.bodySmall1SemiBold,
-    color: colors.TextPrimaryDefault,
+    color: colors.TextPrimaryStrong,
     flex: 1,
   },
   description: {
     ...typography.bodySmall4TallRegular,
     color: colors.IconTertiarySubtle,
+  },
+  descriptionSimple: {
+    ...typography.bodySmall1Regular,
+    color: colors.TextPrimaryDefault,
   },
 });

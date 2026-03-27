@@ -3,7 +3,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { postAuthenticate, postBookCall } from '@/api/authApi';
 import { rootNavigationRef } from '@/navigation/navigationRef';
 import {
-  getGoogleIdToken,
+  getGoogleAccessToken,
   isGoogleSignInCancelled,
 } from '@/services/authService';
 import { clearAuth, saveAuth } from '@/services/authStorage';
@@ -37,11 +37,11 @@ export const signInWithGoogleThunk =
     dispatch(setOperationLoading('googleSignIn'));
 
     try {
-      const idToken = await getGoogleIdToken();
-      console.log('handleGoogleSignIn 1', idToken);
+      const accessToken = await getGoogleAccessToken();
+      console.log('handleGoogleSignIn 1', accessToken);
       const response = await postAuthenticate({
         type: 'google_web',
-        token: idToken,
+        token: accessToken,
       });
 
       if (response.status && response.token) {
@@ -51,7 +51,7 @@ export const signInWithGoogleThunk =
         return response;
       }
       console.log('handleGoogleSignIn 2');
-      await GoogleSignin.clearCachedAccessToken(idToken);
+      await GoogleSignin.clearCachedAccessToken(accessToken);
       await GoogleSignin.signOut();
       const errorMsg = response.message || 'Google sign-in failed';
       dispatch(

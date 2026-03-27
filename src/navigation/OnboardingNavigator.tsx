@@ -9,8 +9,9 @@ import {
   OTPVerificationScreen,
   PlanPreviewScreen,
   BookingConfirmScreen,
+  BookingConfirmedScreen,
 } from '@/screens/onboarding';
-import { RequestAccessScreen } from '@/screens/profile/RequestAccessScreen';
+import RequestAccessScreen from '@/screens/profile/RequestAccess';
 
 import type { OnboardingStackParamList } from '@navigation/types';
 
@@ -45,5 +46,6 @@ export const OnboardingNavigator = (): ReactElement => (
     <Stack.Screen name="PlanPreview" component={PlanPreviewScreen} />
     <Stack.Screen name="RequestAccessScreen" component={RequestAccessScreen} />
     <Stack.Screen name="BookSchedule" component={BookingConfirmScreen} />
+    <Stack.Screen name="BookingConfirmed" component={BookingConfirmedScreen} />
   </Stack.Navigator>
 );

@@ -1,6 +1,6 @@
 import React, { useCallback, useState, type ReactElement } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { Controller } from 'react-hook-form';
+import { Pressable, Text, View } from 'react-native';
+import { Control, Controller, FieldErrors } from 'react-hook-form';
 
 import { CalendarDaysIconSvg } from '@/assets/images';
 import {
@@ -11,24 +11,114 @@ import {
   Switch,
 } from '@/components';
 import { useAppSelector } from '@/store/hooks';
-import {
-  colors,
-  iconScale,
-  moderateScale,
-  radius,
-  spacing,
-  typography,
-} from '@/theme';
+import { colors, iconScale } from '@/theme';
 
+import { AddClientFormValues } from '../../utils/addClientSchema.types';
+
+import { styles } from './AddHealthFitnessDataContainer.styles';
 import { AddHealthFitnessDataContainerProps } from './AddHealthFitnessDataContainer.types';
 
-const FORM_BG = '#F5F7F8';
+// ─── Internal Sub-components ──────────────────────────────────────────
+
+const SexSelection = ({
+  control,
+  sexOptions,
+  label,
+}: {
+  control: Control<AddClientFormValues>;
+  sexOptions: { label: string; value: string }[];
+  label: string;
+}): ReactElement => (
+  <View style={styles.inputGroup}>
+    <Text style={styles.label}>{label}</Text>
+    <Controller
+      control={control}
+      name="health.sex"
+      render={({ field: { value, onChange } }) => (
+        <View style={styles.chipRow}>
+          {sexOptions.map(option => {
+            const isActive = value === option.value;
+            return (
+              <Pressable
+                key={option.value}
+                onPress={() => onChange(option.value)}
+                style={[styles.chip, isActive ? styles.chipActive : null]}
+              >
+                <Text
+                  style={[
+                    styles.chipText,
+                    isActive ? styles.chipTextActive : null,
+                  ]}
+                >
+                  {option.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      )}
+    />
+  </View>
+);
+
+const HealthBasicStats = ({
+  control,
+  errors,
+  translation,
+}: {
+  control: Control<AddClientFormValues>;
+  errors: FieldErrors<AddClientFormValues>;
+  translation: Record<string, string>;
+}): ReactElement => (
+  <View style={styles.row}>
+    <View style={styles.flex1}>
+      <Controller
+        control={control}
+        name="health.height"
+        render={({ field: { value, onChange } }) => (
+          <Input
+            label={translation.addHealthFitnessHeightLabel}
+            value={value}
+            onChangeText={onChange}
+            placeholder="0"
+            keyboardType="number-pad"
+            rightText="cm"
+            inputContainerStyle={styles.rowInputContainer}
+            error={!!errors.health?.height}
+            errorMessage={errors.health?.height?.message}
+          />
+        )}
+      />
+    </View>
+    <View style={styles.flex1}>
+      <Controller
+        control={control}
+        name="health.weight"
+        render={({ field: { value, onChange } }) => (
+          <Input
+            label={translation.addHealthFitnessWeightLabel}
+            value={value}
+            onChangeText={onChange}
+            placeholder="0"
+            keyboardType="number-pad"
+            rightText="kg"
+            inputContainerStyle={styles.rowInputContainer}
+            error={!!errors.health?.weight}
+            errorMessage={errors.health?.weight?.message}
+          />
+        )}
+      />
+    </View>
+  </View>
+);
+
+// ─── Main Component ───────────────────────────────────────────────────
 
 export const AddHealthFitnessDataContainer = ({
   control,
   errors,
   showToggle = true,
-}: AddHealthFitnessDataContainerProps): ReactElement => {
+}: AddHealthFitnessDataContainerProps): React.ReactNode => {
   const translation = useAppSelector(state => state.translation);
   const [dateSheetVisible, setDateSheetVisible] = useState(false);
   const [activitySheetVisible, setActivitySheetVisible] = useState(false);
@@ -41,18 +131,19 @@ export const AddHealthFitnessDataContainer = ({
   ];
 
   const activityOptions = [
-    { label: translation.activityNotActive, value: 'activityNotActive' },
-    { label: translation.activityLight, value: 'activityLight' },
-    { label: translation.activityModerate, value: 'activityModerate' },
-    { label: translation.activityVery, value: 'activityVery' },
-    { label: translation.activityExtra, value: 'activityExtra' },
+    { label: 'High Output', value: 'High Output' },
+    { label: 'Get Stronger', value: 'Get Stronger' },
+    { label: 'Moderate Activity', value: 'Moderate Activity' },
+    { label: 'Sedentary', value: 'Sedentary' },
+    { label: 'Lightly Active', value: 'Lightly Active' },
+    { label: 'Athlete Mode', value: 'Athlete Mode' },
   ];
 
   const goalOptions = [
-    { label: translation.goalFatLoss, value: 'goalFatLoss' },
-    { label: translation.goalMuscleGain, value: 'goalMuscleGain' },
-    { label: translation.goalMaintenance, value: 'goalMaintenance' },
-    { label: translation.goalPerformance, value: 'goalPerformance' },
+    { label: 'Build Muscle', value: 'Build Muscle' },
+    { label: 'Burn Fat', value: 'Burn Fat' },
+    { label: 'Performance', value: 'Performance' },
+    { label: 'Maintain', value: 'Maintain' },
   ];
 
   const formatIsoToDisplay = useCallback((iso: string): string => {
@@ -71,7 +162,8 @@ export const AddHealthFitnessDataContainer = ({
         <View style={styles.titleInfo}>
           <Text style={styles.title}>{translation.addHealthFitnessTitle}</Text>
           <Text style={styles.subtitle}>
-            {translation.addHealthFitnessSubtitle}
+            Fill now to generate the plan instantly, or let them fill it and
+            review later.
           </Text>
         </View>
         {showToggle ? (
@@ -93,38 +185,11 @@ export const AddHealthFitnessDataContainer = ({
             <View style={styles.formContent}>
               <View style={styles.divider} />
 
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>
-                  {translation.addHealthFitnessSexLabel}
-                </Text>
-                <Controller
-                  control={control}
-                  name="health.sex"
-                  render={({ field: { value, onChange } }) => (
-                    <View style={styles.chipRow}>
-                      {sexOptions.map(option => {
-                        const isActive = value === option.value;
-                        return (
-                          <Pressable
-                            key={option.value}
-                            onPress={() => onChange(option.value)}
-                            style={[styles.chip, isActive && styles.chipActive]}
-                          >
-                            <Text
-                              style={[
-                                styles.chipText,
-                                isActive && styles.chipTextActive,
-                              ]}
-                            >
-                              {option.label}
-                            </Text>
-                          </Pressable>
-                        );
-                      })}
-                    </View>
-                  )}
-                />
-              </View>
+              <SexSelection
+                control={control}
+                sexOptions={sexOptions}
+                label={translation.addHealthFitnessSexLabel}
+              />
 
               <Controller
                 control={control}
@@ -160,46 +225,11 @@ export const AddHealthFitnessDataContainer = ({
                 )}
               />
 
-              <View style={styles.row}>
-                <View style={styles.flex1}>
-                  <Controller
-                    control={control}
-                    name="health.height"
-                    render={({ field: { value, onChange } }) => (
-                      <Input
-                        label={translation.addHealthFitnessHeightLabel}
-                        value={value}
-                        onChangeText={onChange}
-                        placeholder="0"
-                        keyboardType="number-pad"
-                        rightText="cm"
-                        inputContainerStyle={styles.rowInputContainer}
-                        error={!!errors.health?.height}
-                        errorMessage={errors.health?.height?.message}
-                      />
-                    )}
-                  />
-                </View>
-                <View style={styles.flex1}>
-                  <Controller
-                    control={control}
-                    name="health.weight"
-                    render={({ field: { value, onChange } }) => (
-                      <Input
-                        label={translation.addHealthFitnessWeightLabel}
-                        value={value}
-                        onChangeText={onChange}
-                        placeholder="0"
-                        keyboardType="number-pad"
-                        rightText="kg"
-                        inputContainerStyle={styles.rowInputContainer}
-                        error={!!errors.health?.weight}
-                        errorMessage={errors.health?.weight?.message}
-                      />
-                    )}
-                  />
-                </View>
-              </View>
+              <HealthBasicStats
+                control={control}
+                errors={errors}
+                translation={translation}
+              />
 
               <Controller
                 control={control}
@@ -286,90 +316,3 @@ export const AddHealthFitnessDataContainer = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  outer: {
-    padding: spacing['Spacing-4xl'],
-    borderWidth: 1,
-    borderColor: colors.StatesOutline,
-    borderRadius: radius.xs,
-    backgroundColor: colors.StatesWhite,
-  },
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  titleInfo: {
-    flex: 1,
-    marginRight: spacing['Spacing-xl'],
-    gap: spacing['Spacing-1'],
-  },
-  title: {
-    ...typography.bodySmall1TallSemiBold,
-    color: colors.TextPrimaryStrong,
-  },
-  subtitle: {
-    ...typography.bodySmall4Regular,
-    color: colors.IconTertiarySubtle,
-  },
-  formContent: {
-    marginTop: spacing['Spacing-4xl'],
-    gap: spacing['Spacing-6xl'],
-  },
-  divider: {
-    height: 1,
-    backgroundColor: colors.DividerSubtleOverlay,
-    borderStyle: 'dotted',
-    borderRadius: 1,
-    marginBottom: spacing['Spacing-2xl'],
-  },
-  inputGroup: {
-    gap: spacing['Spacing-xl'],
-  },
-  label: {
-    ...typography.bodySmall1Medium,
-    color: colors.TextPrimaryStrong,
-  },
-  chipRow: {
-    flexDirection: 'row',
-    gap: spacing['Spacing-3xl'],
-  },
-  chip: {
-    flex: 1,
-    paddingVertical: spacing['Spacing-xl'],
-    paddingHorizontal: spacing['Spacing-3xl'],
-    borderRadius: radius.xs,
-    backgroundColor: colors.StatesWhite,
-    borderWidth: 1,
-    borderColor: colors.BorderPrimaryDefault,
-    alignItems: 'center',
-  },
-  chipActive: {
-    backgroundColor: colors.StatesFill2,
-    borderColor: colors.TextPrimaryDefault,
-  },
-  chipText: {
-    ...typography.bodySmall1SemiBold,
-    color: colors.IconTertiarySubtle,
-  },
-  chipTextActive: {
-    color: colors.TextPrimaryStrong,
-  },
-  row: {
-    flexDirection: 'row',
-    gap: spacing['Spacing-4xl'],
-  },
-  flex1: {
-    flex: 1,
-  },
-  rowInputContainer: {
-    backgroundColor: FORM_BG,
-    borderWidth: 0,
-  },
-  conditionsInput: {
-    minHeight: moderateScale(80),
-    alignItems: 'flex-start',
-  },
-});

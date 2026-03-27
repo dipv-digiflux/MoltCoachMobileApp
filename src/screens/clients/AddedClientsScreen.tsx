@@ -13,7 +13,7 @@ import { SelectedContactCard } from '@/screens/clients/components/SelectedContac
 import { SelectedContactsHeader } from '@/screens/clients/components/SelectedContactsHeader';
 import { addedClientsSchema } from '@/screens/clients/utils/addedClientsSchema';
 import { type AddedClientsFormValues } from '@/screens/clients/utils/addedClientsSchema.types';
-import { useAppDispatch } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   inviteBulkClientsThunk,
   sendInviteSmsThunk,
@@ -34,6 +34,8 @@ export const AddedClientsScreen = (): ReactElement => {
   const route = useRoute<AddedClientsRouteProp>();
   const navigation = useNavigation<AppStackNavigationProp>();
   const dispatch = useAppDispatch();
+  const operations = useAppSelector(state => state.client.operations);
+  const loading = Object.values(operations).some(op => op.status === 'loading');
   const selectedContacts = route.params?.selectedContacts || [];
 
   const methods = useForm<AddedClientsFormValues>({
@@ -68,18 +70,49 @@ export const AddedClientsScreen = (): ReactElement => {
   const onSubmit = async (data: AddedClientsFormValues): Promise<void> => {
     try {
       // Map form values to bulk invite payload
-      const clientItems: ClientItem[] = data.contacts.map(c => ({
-        type: c.relationship,
-        phone_number: c.phoneNumber.replace(/\\D/g, ''), // Ensure numbers only, stripping spaces
-        country_code: '', // Assuming standard country code or handled by backend, adding empty string for now
-        mode: c.sessionType,
-        total_sessions: c.totalSessions || 0,
-        sessions_left: c.sessionsLeft || 0,
-        number_of_month: c.months || 0,
-        start_date: c.startDate || new Date().toISOString(),
-        name: c.name,
-        sessions_required: c.addSessions,
-      }));
+      const clientItems: ClientItem[] = data.contacts.map(c => {
+        const isClient = c.relationship === 'Client';
+        const isOnline = c.sessionType === 'Online';
+        const showSessions = isClient || c.addSessions;
+
+        const item: ClientItem = {
+          type: c.relationship,
+          phone_number: c.phoneNumber.replace(/\D/g, ''),
+          country_code: '+971',
+          name: c.name,
+          mode: '',
+          total_sessions: '',
+          sessions_left: '',
+          number_of_month: '',
+          start_date: '',
+          status: 'Invite Send',
+        };
+
+        if (showSessions) {
+          item.mode = c.sessionType;
+          if (isOnline) {
+            if (c.months) item.number_of_month = String(c.months);
+            if (c.startDate) {
+              // Ensure YYYY-MM-DD
+              item.start_date = c.startDate.split('T')[0];
+            }
+          } else {
+            // Physical
+            if (c.relationship !== 'Lead') {
+              if (c.totalSessions)
+                item.total_sessions = Number(c.totalSessions);
+              if (c.sessionsLeft) item.sessions_left = Number(c.sessionsLeft);
+            }
+          }
+        }
+
+        // Filter out empty strings/values
+        return Object.fromEntries(
+          Object.entries(item).filter(
+            ([_, v]) => v !== '' && v !== null && v !== undefined,
+          ),
+        ) as ClientItem;
+      });
 
       const payload: InviteBulkClientsPayload = {
         items: clientItems,
@@ -92,7 +125,7 @@ export const AddedClientsScreen = (): ReactElement => {
         const phoneNumbers = clientItems.map(c => c.phone_number);
         const smsPayload: InviteSmsPayload = {
           phone_numbers: phoneNumbers,
-          country_code: '', // Using empty string or default, ideally comes from user profile
+          country_code: '+971',
         };
 
         const smsResult = await dispatch(sendInviteSmsThunk(smsPayload));
@@ -149,7 +182,11 @@ export const AddedClientsScreen = (): ReactElement => {
           onPress={() => {
             void handleSubmit(onSubmit, onError)();
           }}
-          disabled={fields.length === 0}
+          disabled={fields.length === 0 || loading}
+          loading={
+            operations.inviteBulkClients.status === 'loading' ||
+            operations.sendInviteSms.status === 'loading'
+          }
         />
       </LiquidFooter>
     </View>

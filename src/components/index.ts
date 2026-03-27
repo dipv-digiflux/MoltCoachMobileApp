@@ -79,7 +79,17 @@ export { StatusTabs } from './StatusTabs';
 export type { StatusTabsProps } from './StatusTabs';
 
 export { ClientCard } from './ClientCard';
-export type { ClientCardProps, ClientTag, ClientTagType } from './ClientCard';
+export { ClientStatusCard } from './ClientStatusCard';
+export { ClientDetailedCard } from './ClientDetailedCard';
+export { ClientCardSkeleton } from './ClientCardSkeleton';
+export type {
+  ClientCardProps,
+  ClientTag,
+  ClientTagType,
+  ClientStatusCardProps,
+  ClientDetailedCardProps,
+  ClientStatusRow,
+} from '@/types/components.types';
 
 export { GettingThingsReady } from './GettingThingsReady';
 export { LoadingRing } from './LoadingRing';
@@ -94,3 +104,13 @@ export { BookingConfirmHeader } from './BookingConfirmHeader';
 export { ScreenHeader } from './ScreenHeader';
 export type { ScreenHeaderProps } from './ScreenHeader';
 export { LiquidFooter } from './LiquidFooter';
+export { AnimatedProgressBar } from './AnimatedProgressBar';
+export { default as ConfirmModal } from './ConfirmModal';
+export type { ConfirmModalProps } from './ConfirmModal/ConfirmModal.types';
+export { VerticalStepper } from './VerticalStepper';
+export { default as AddSessionsModal } from './AddSessionsModal';
+export type {
+  VerticalStepperProps,
+  VerticalStepperStep,
+  AddSessionsModalValues,
+} from '@/types/components.types';

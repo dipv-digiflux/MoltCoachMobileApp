@@ -1,6 +1,6 @@
 import React, { type ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 
 import { Input } from '@/components/Input';
 import { AddHealthFitnessDataContainer } from '@/screens/clients/components/AddHealthFitnessDataContainer/AddHealthFitnessDataContainer';
@@ -30,6 +30,9 @@ export const AddClientContainer = ({
     },
   ];
 
+  const clientType = useWatch({ control, name: 'clientType' });
+  const isLead = clientType === 'addClientFilterPotentialLead';
+
   return (
     <View style={styles.container}>
       <Controller
@@ -43,17 +46,23 @@ export const AddClientContainer = ({
       <Controller
         control={control}
         name="name"
-        render={({ field: { value, onChange } }) => (
-          <Input
-            label={translation.addClientNameLabel}
-            value={value}
-            onChangeText={onChange}
-            labelTextStyle={labelStyle}
-            textInputStyle={inputStyle}
-            error={!!errors.name}
-            errorMessage={errors.name?.message}
-          />
-        )}
+        render={({ field: { value, onChange } }) => {
+          const nameLabel = isLead
+            ? `${translation.addClientNameLabel} (Optional)`
+            : translation.addClientNameLabel;
+
+          return (
+            <Input
+              label={nameLabel}
+              value={value}
+              onChangeText={onChange}
+              labelTextStyle={labelStyle}
+              textInputStyle={inputStyle}
+              error={!!errors.name}
+              errorMessage={errors.name?.message}
+            />
+          );
+        }}
       />
 
       <Controller
@@ -69,13 +78,23 @@ export const AddClientContainer = ({
             keyboardType="phone-pad"
             error={!!errors.phone}
             errorMessage={errors.phone?.message}
+            maxLength={9}
+            leftText="+971"
           />
         )}
       />
 
-      <AddSessionsPackageContainer control={control} errors={errors} />
+      <AddSessionsPackageContainer
+        control={control}
+        errors={errors}
+        showToggle={isLead}
+      />
 
-      <AddHealthFitnessDataContainer control={control} errors={errors} />
+      <AddHealthFitnessDataContainer
+        control={control}
+        errors={errors}
+        showToggle={true}
+      />
     </View>
   );
 };
