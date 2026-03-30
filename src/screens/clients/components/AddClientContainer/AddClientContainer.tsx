@@ -1,30 +1,107 @@
-import React, { useState, type ReactElement } from 'react';
+import React, { type ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { Controller, useWatch } from 'react-hook-form';
 
-import { FilterTabs } from '@/components';
-import { colors, radius, spacing } from '@/theme';
+import { Input } from '@/components/Input';
+import { AddHealthFitnessDataContainer } from '@/screens/clients/components/AddHealthFitnessDataContainer/AddHealthFitnessDataContainer';
+import { AddSessionsPackageContainer } from '@/screens/clients/components/AddSessionsPackageContainer';
+import { useAppSelector } from '@/store/hooks';
+import { colors, radius, spacing, typography } from '@/theme';
 
-export const AddClientContainer = (): ReactElement => {
-  const [activeTab, setActiveTab] = useState<string>('Existing Client');
+import { AddClientContainerProps } from './AddClientContainer.types';
+import { AddClientFilter } from './AddClientFilter';
+
+export const AddClientContainer = ({
+  control,
+  errors,
+}: AddClientContainerProps): ReactElement => {
+  const translation = useAppSelector(state => state.translation);
+
+  const labelStyle = [
+    typography.bodySmall4TallSemiBold,
+    { color: colors.TextLabelDefault },
+  ];
+  const inputStyle = [
+    typography.b2Regular,
+    {
+      color: colors.TextPrimaryStrong,
+      paddingVertical: spacing['Spacing-xl'],
+      paddingHorizontal: spacing['Spacing-3xl'],
+    },
+  ];
+
+  const clientType = useWatch({ control, name: 'clientType' });
+  const isLead = clientType === 'addClientFilterPotentialLead';
 
   return (
     <View style={styles.container}>
-      <FilterTabs
-        tabs={['Existing Client', 'Potential Lead']}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
+      <Controller
+        control={control}
+        name="clientType"
+        render={({ field: { value, onChange } }) => (
+          <AddClientFilter activeTab={value} onTabChange={onChange} />
+        )}
       />
 
-      <View>
-        {/* TODO: Replace with actual tab content once forms are implemented */}
-      </View>
+      <Controller
+        control={control}
+        name="name"
+        render={({ field: { value, onChange } }) => {
+          const nameLabel = isLead
+            ? `${translation.addClientNameLabel} (Optional)`
+            : translation.addClientNameLabel;
+
+          return (
+            <Input
+              label={nameLabel}
+              value={value}
+              onChangeText={onChange}
+              labelTextStyle={labelStyle}
+              textInputStyle={inputStyle}
+              error={!!errors.name}
+              errorMessage={errors.name?.message}
+            />
+          );
+        }}
+      />
+
+      <Controller
+        control={control}
+        name="phone"
+        render={({ field: { value, onChange } }) => (
+          <Input
+            label={translation.addClientPhoneNumberLabel}
+            value={value}
+            onChangeText={onChange}
+            labelTextStyle={labelStyle}
+            textInputStyle={inputStyle}
+            keyboardType="phone-pad"
+            error={!!errors.phone}
+            errorMessage={errors.phone?.message}
+            maxLength={9}
+            leftText="+971"
+          />
+        )}
+      />
+
+      <AddSessionsPackageContainer
+        control={control}
+        errors={errors}
+        showToggle={isLead}
+      />
+
+      <AddHealthFitnessDataContainer
+        control={control}
+        errors={errors}
+        showToggle={true}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: radius.lg,
+    borderRadius: radius['xs'],
     borderWidth: 1,
     padding: spacing['Spacing-4xl'],
     gap: spacing['Spacing-6xl'],

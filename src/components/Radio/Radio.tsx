@@ -9,7 +9,7 @@ import type { RadioSizeTokens } from '@/types/components.types';
 
 // ─── Design tokens ──────────────────────────────────────────────────
 
-const FOCUS_RING_COLOR = '#EDEFF5';
+const FOCUS_RING_COLOR = colors.FocusRingSubtle;
 const FOCUS_RING_WIDTH = 3;
 const FOCUS_RING_GAP = 1;
 

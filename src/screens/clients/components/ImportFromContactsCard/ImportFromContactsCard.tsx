@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: spacing['Spacing-5xl'], // spacingScale(16) → 16px container padding
-    borderRadius: radius['lg'], // Figma: 12px card radius
+    borderRadius: radius['xs'], // Figma: 12px card radius
     borderWidth: 1,
     borderColor: colors.StatesDivider, // closest system token to #00000014 (border subtle)
     backgroundColor: colors.StatesWhite, // '#FFFFFF' — main card background

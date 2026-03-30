@@ -58,6 +58,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "31980184670-uuvqcr0nop3u53rri8aca1plk6ea2n9e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.molt.coach",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "31980184670-ju013bhet88flt0lodit131ujl6rif6v.apps.googleusercontent.com",
           "client_type": 3
         }

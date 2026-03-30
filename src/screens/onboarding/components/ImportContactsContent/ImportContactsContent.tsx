@@ -1,10 +1,7 @@
 import React, { type ReactElement } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import {
-  ContactBookSvg,
-  GreenShieldSvg,
-} from '@/assets/images';
+import { ContactBookSvg, GreenShieldSvg } from '@/assets/images';
 import { useAppSelector } from '@/store/hooks';
 import { colors, radius, spacing, typography } from '@/theme';
 

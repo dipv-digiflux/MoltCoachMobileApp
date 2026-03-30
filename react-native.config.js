@@ -6,7 +6,7 @@ module.exports = {
   project: {
     ios: {},
     android: {
-      packageName: 'com.molt.app',
+      packageName: 'com.molt.coach',
     },
   },
   assets: ['./assets/fonts'],

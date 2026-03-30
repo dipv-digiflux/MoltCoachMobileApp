@@ -8,11 +8,11 @@ const hasNonEmptyObject = (value: object | undefined): boolean =>
  * status/body_metrics, with a legacy fallback to user_register_flag.
  */
 export const hasCompletedOnboarding = (customer: Customer): boolean => {
-  if (hasNonEmptyObject(customer.body_metrics)) {
+  if (hasNonEmptyObject(customer.body_metrics as object)) {
     return true;
   }
 
-  if (hasNonEmptyObject(customer.status)) {
+  if (hasNonEmptyObject(customer.status as object)) {
     return true;
   }
 

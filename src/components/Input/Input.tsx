@@ -1,10 +1,12 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   Pressable,
+  StyleProp,
   StyleSheet,
   Text,
   TextInput as RNTextInput,
   View,
+  ViewStyle,
 } from 'react-native';
 
 import { colors, moderateScale, spacing, typography } from '@/theme';
@@ -68,6 +70,7 @@ export const Input = ({
   accessibilityLabel,
   caretHidden,
   containerPress,
+  labelTextStyle,
   inputContainerStyle: inputContainerStyleProp,
   textInputStyle,
 }: InputProps): React.ReactElement => {
@@ -125,8 +128,7 @@ export const Input = ({
 
   // ── Computed styles ────────────────────────────────────────────
   const inputContainerStyle = useMemo(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    () => [
+    (): StyleProp<ViewStyle> => [
       styles.inputContainer,
       {
         backgroundColor: inputBg,
@@ -143,7 +145,9 @@ export const Input = ({
       {/* ── Label row ────────────────────────────────────────── */}
       {label !== undefined ? (
         <View style={styles.labelRow}>
-          <Text style={[typography.b1Medium, styles.labelText]}>{label}</Text>
+          <Text style={[typography.b1Medium, styles.labelText, labelTextStyle]}>
+            {label}
+          </Text>
 
           {labelHint !== undefined ? (
             <Text style={[typography.b1Regular, styles.labelHint]}>

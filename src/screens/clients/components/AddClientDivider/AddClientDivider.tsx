@@ -41,5 +41,6 @@ const styles = StyleSheet.create({
     ...typography.bodySmall2SemiBold, // 12px Inter SemiBold, matches spec for small strong label
     letterSpacing: 0.6, // Slight tracking to match design letter-spacing
     textAlign: 'center', // Center-align text within the chip
+    color: colors.IconTertiarySubtle,
   },
 });

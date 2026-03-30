@@ -13,6 +13,7 @@ import {
   setupPushNotificationListeners,
 } from '@/services/pushNotificationService';
 import { store } from '@/store/store';
+import { getCoachBookingsThunk } from '@/store/thunks/bookingThunks';
 import { rootNavigationRef } from '@navigation/navigationRef';
 import { handleNotificationOpen } from '@navigation/notificationNavigation';
 import { RootNavigator } from '@navigation/RootNavigator';
@@ -45,10 +46,25 @@ const App = (): ReactElement => {
 };
 
 const AppContent = (): ReactElement => {
+  React.useEffect(() => {
+    const token = store.getState().auth.token;
+    if (token) {
+      void store.dispatch(getCoachBookingsThunk());
+    }
+  }, []);
+
   return (
     <Provider store={store}>
       <View style={styles.container}>
-        <NavigationContainer ref={rootNavigationRef}>
+        <NavigationContainer
+          ref={rootNavigationRef}
+          onStateChange={() => {
+            const token = store.getState().auth.token;
+            if (token) {
+              void store.dispatch(getCoachBookingsThunk());
+            }
+          }}
+        >
           <RootNavigator />
         </NavigationContainer>
         <Toast />

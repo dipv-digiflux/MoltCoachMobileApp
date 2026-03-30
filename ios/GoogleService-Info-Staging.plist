@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.muser.app</string>
+	<string>com.molt.coach</string>
 	<key>PROJECT_ID</key>
 	<string>molt-staging</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,5 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:31980184670:ios:6bc156ee05bbac81eac0cf</string>
+	<string>1:31980184670:ios:b4411b2c5270453beac0cf</string>
 </dict>
-</plist>

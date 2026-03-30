@@ -15,20 +15,11 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BackIconSvg } from '@/assets/images';
-import { colors, moderateScale, spacing, typography } from '@/theme';
+import { colors, moderateScale, radius, spacing, typography } from '@/theme';
 
 import type { PageHeaderProps } from '@/types/components.types';
 import type { NavigationProp, ParamListBase } from '@react-navigation/native';
 
-/**
- * PageHeader
- *
- * Header component matching the onboarding header from Figma:
- * - Back button on the left in a pill
- * - Title (h6) and optional subtitle
- * - Optional right action (e.g., Skip)
- * - Uses LiquidGlassView when supported, falls back to solid background otherwise
- */
 export const PageHeader = ({
   title,
   subtitle,
@@ -41,6 +32,7 @@ export const PageHeader = ({
   fallbackBackgroundColor,
   subtitlePosition = 'bottom',
   style,
+  variant = 'default',
   children,
 }: PageHeaderProps): ReactElement => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
@@ -62,7 +54,7 @@ export const PageHeader = ({
   const containerStyle: StyleProp<ViewStyle> = [
     styles.container,
     {
-      paddingTop: insets.top + spacing['Spacing-xl'],
+      paddingTop: insets.top + spacing['Spacing-6xl'],
     },
     showBottomBorder && styles.bottomBorder,
     !isLiquidGlassSupported && {
@@ -76,10 +68,21 @@ export const PageHeader = ({
       <View
         style={[
           styles.headerRow,
-          alignTitleLeft ? styles.headerRowAlignLeft : styles.headerRowCenter,
+          variant === 'stacked'
+            ? styles.headerRowStacked
+            : alignTitleLeft
+            ? styles.headerRowAlignLeft
+            : styles.headerRowCenter,
         ]}
       >
-        <View style={styles.leftSection}>
+        <View
+          style={[
+            styles.leftSection,
+            variant === 'stacked'
+              ? styles.leftSectionStacked
+              : styles.leftSectionDefault,
+          ]}
+        >
           {shouldShowBackButton ? (
             <TouchableOpacity
               style={styles.backButton}
@@ -95,7 +98,12 @@ export const PageHeader = ({
             </TouchableOpacity>
           ) : null}
 
-          <View style={styles.titleBlock}>
+          <View
+            style={[
+              styles.titleBlock,
+              variant !== 'stacked' && styles.titleBlockDefault,
+            ]}
+          >
             {subtitle !== undefined &&
             subtitle.length > 0 &&
             subtitlePosition === 'top' ? (
@@ -104,8 +112,11 @@ export const PageHeader = ({
               </Text>
             ) : null}
             <Text
-              style={styles.titleText}
-              numberOfLines={1}
+              style={[
+                styles.titleText,
+                variant === 'stacked' && styles.titleTextStacked,
+              ]}
+              numberOfLines={variant === 'stacked' ? 0 : 1}
               accessibilityRole="header"
             >
               {title}
@@ -132,7 +143,7 @@ export const PageHeader = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    paddingHorizontal: spacing['Spacing-3xl'], // 12px from Figma
+    paddingHorizontal: spacing['Spacing-5xl'],
     paddingBottom: spacing['Spacing-xl'],
     gap: spacing['Spacing-xl'],
   },
@@ -153,8 +164,10 @@ const styles = StyleSheet.create({
   leftSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
     gap: spacing['Spacing-3xl'],
+  },
+  leftSectionDefault: {
+    flex: 1,
   },
   rightSection: {
     marginLeft: spacing['Spacing-3xl'],
@@ -163,7 +176,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.StatesWhite,
     borderColor: colors.StatesFill1,
     borderWidth: 1,
-    borderRadius: moderateScale(42),
+    borderRadius: radius.xs, // Square-ish with rounded corners to match image
     padding: spacing['Spacing-l'],
     justifyContent: 'center',
     alignItems: 'center',
@@ -173,9 +186,11 @@ const styles = StyleSheet.create({
     color: colors.IconPrimaryDefault,
   },
   titleBlock: {
-    flex: 1,
     justifyContent: 'center',
-    gap: spacing['Spacing-sm'],
+    gap: spacing['Spacing-m'], // Increased gap to match image
+  },
+  titleBlockDefault: {
+    flex: 1,
   },
   titleText: {
     ...typography.h10Bold,
@@ -184,5 +199,17 @@ const styles = StyleSheet.create({
   subtitleText: {
     ...typography.bodySmall1Regular,
     color: colors.TextSecondaryDefault,
+  },
+  headerRowStacked: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  leftSectionStacked: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: spacing['Spacing-5xl'], // More space between back button and title
+  },
+  titleTextStacked: {
+    ...typography.h7Bold,
   },
 });

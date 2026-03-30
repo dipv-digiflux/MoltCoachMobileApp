@@ -4,11 +4,11 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import {
   ChevronDownIconSvg,
   NotificationBellSvg,
-  ProfilePng,
   StarIconSvg,
 } from '@/assets/images';
 import { Button } from '@/components/Button';
 import { colors, iconScale, moderateScale, spacing, typography } from '@/theme';
+import { getInitials } from '@/utils/avatar';
 
 import type {
   ClientCardProps,
@@ -33,7 +33,13 @@ export const ClientCard: React.FC<ClientCardProps> = ({
     <Pressable style={[styles.card, style]} onPress={onPress}>
       <View style={styles.headerRow}>
         <View style={styles.avatarContainer}>
-          <Image source={ProfilePng} style={styles.avatar} />
+          {_avatarUrl ? (
+            <Image source={{ uri: _avatarUrl }} style={styles.avatar} />
+          ) : (
+            <View style={styles.avatarPlaceholder}>
+              <Text style={styles.avatarInitials}>{getInitials(name)}</Text>
+            </View>
+          )}
           <View style={styles.starBadge}>
             <StarIconSvg
               width={iconScale(10)}
@@ -107,7 +113,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.StatesWhite,
     borderWidth: 1,
-    borderColor: '#EBEBEB',
+    borderColor: colors.StatesOutline,
     borderRadius: moderateScale(12),
     padding: spacing['Spacing-5xl'], // 16px
     marginBottom: spacing['Spacing-xl'], // 16px
@@ -126,7 +132,20 @@ const styles = StyleSheet.create({
     width: moderateScale(56),
     height: moderateScale(56),
     borderRadius: moderateScale(12),
-    backgroundColor: '#F0F0F0',
+    backgroundColor: colors.StatesDivider,
+  },
+  avatarPlaceholder: {
+    width: moderateScale(56),
+    height: moderateScale(56),
+    borderRadius: moderateScale(12),
+    backgroundColor: colors.AccentBlueLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatarInitials: {
+    ...typography.h0SemiBold,
+    fontSize: moderateScale(18),
+    color: colors.TextSecondaryDefault,
   },
   starBadge: {
     position: 'absolute',
@@ -156,7 +175,7 @@ const styles = StyleSheet.create({
     color: colors.TextPrimaryDefault,
   },
   scorePill: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.SurfaceSubtleDisabled,
     paddingHorizontal: spacing['Spacing-m'],
     paddingVertical: moderateScale(2),
     borderRadius: moderateScale(4),

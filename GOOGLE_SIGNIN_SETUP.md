@@ -23,7 +23,7 @@ This app uses `@react-native-google-signin/google-signin` for Google SSO. Follow
 1. In [Google Cloud Console](https://console.cloud.google.com/apis/credentials) → **Credentials** → **Create Credentials** → **OAuth client ID**
 2. Application type: **iOS**
 3. Name: e.g. "Molt iOS" or "Molt Staging iOS"
-4. Bundle ID: must match your app (e.g. `com.molt.app` for staging)
+4. Bundle ID: must match your app (e.g. `com.molt.coach` for staging)
 5. Create. Copy the **Client ID** (e.g. `31980184670-abcdefg.apps.googleusercontent.com`).
 
 ## 2. Environment Variables
