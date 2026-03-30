@@ -7,9 +7,13 @@ import type {
 } from 'react-native';
 
 export interface ContactInfoRowProps {
-  avatarSource: ImageSourcePropType;
+  avatarSource?: ImageSourcePropType;
   name: string;
   phoneNumber: string;
+
+  showCheckbox?: boolean;
+  selected?: boolean;
+  onPress?: () => void;
 
   containerStyle?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;

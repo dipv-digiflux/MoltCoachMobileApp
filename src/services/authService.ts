@@ -48,22 +48,23 @@ export const configureGoogleSignIn = (): void => {
 };
 
 /**
- * Initiates Google Sign-In flow. Returns idToken for backend exchange.
+ * Initiates Google Sign-In flow. Returns accessToken for backend exchange.
  * Throws GoogleSignInCancelledError when user cancels; GoogleSignInError otherwise.
  */
-export const getGoogleIdToken = async (): Promise<string> => {
+export const getGoogleAccessToken = async (): Promise<string> => {
   await GoogleSignin.hasPlayServices();
 
   const result: SignInResponse = await GoogleSignin.signIn();
   if (result.type === 'cancelled' || result.data === null) {
     throw new GoogleSignInCancelledError('User cancelled sign-in');
   }
-  const idToken = result.data.idToken;
-  if (!idToken) {
-    throw new GoogleSignInError('No idToken received from Google');
+
+  const { accessToken } = await GoogleSignin.getTokens();
+  if (!accessToken) {
+    throw new GoogleSignInError('No accessToken received from Google');
   }
 
-  return idToken;
+  return accessToken;
 };
 
 /**

@@ -1,4 +1,4 @@
-package com.molt.app
+package com.molt.coach
 
 import android.app.Application
 import com.facebook.react.PackageList

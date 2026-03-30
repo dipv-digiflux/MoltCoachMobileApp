@@ -4,8 +4,11 @@ import HeaderCurvedBg from './png/header-curved-bg.png';
 import LogoWhite from './png/logo-white.png';
 import ProfilePng from './png/profile.jpg';
 // svgs
+import AttendeesSvg from './svg/attendees.svg';
 import BackIconSvg from './svg/back-icon.svg';
 import BlackBackgroundCheckSvg from './svg/BlackBackgroundCheck.svg';
+import CalanderSvg from './svg/calander.svg';
+import CalendarDaysIconSvg from './svg/calendar-days.svg';
 import CalendarIconSvg from './svg/calendar-icon.svg';
 import CheckCircleIconSvg from './svg/check-circle-icon.svg';
 import CheckedcircleWithBlackBgSvg from './svg/CheckedcircleWithBlackBg.svg';
@@ -16,6 +19,7 @@ import CreditIconSvg from './svg/credit.svg';
 import EmptyRadioCircleSvg from './svg/emptyRadioCircle.svg';
 import GreenShieldSvg from './svg/greenshield.svg';
 import InfoIconSvg from './svg/infoicon.svg';
+import LocationSvg from './svg/Location.svg';
 import LogoWhiteSvg from './svg/logo-WhiteSvg.svg';
 import NotificationBellSvg from './svg/notification-icon.svg';
 import NotificationIconSvg from './svg/notification.svg';
@@ -34,6 +38,7 @@ export {
   HeaderCurvedBg,
   BackIconSvg,
   CheckCircleIconSvg,
+  CalendarDaysIconSvg,
   CalendarIconSvg,
   ChevronDownIconSvg,
   InfoIconSvg,
@@ -52,4 +57,7 @@ export {
   CheckedcircleWithBlackBgSvg,
   EmptyRadioCircleSvg,
   SearchiconSvg,
+  LocationSvg,
+  AttendeesSvg,
+  CalanderSvg,
 };

@@ -5,7 +5,9 @@ import { ENDPOINTS } from './endpoints';
 import type {
   AuthenticateRequest,
   AuthenticateResponse,
-  GetCustomerResponse,
+  BookCallRequest,
+  BookCallResponse,
+  GetCoachBookingsResponse,
   OnboardingRequest,
   OnboardingResponse,
 } from '@/types/api.types';
@@ -37,17 +39,19 @@ export const postOnboarding = async (
 };
 
 /**
- * Get customer data (profile, status, body metrics).
- * GET /v1/auth/customer
+ * Book a call (Calendly booking store).
+ * POST /v1/coach/calendly-booking/store
  */
-export const getCustomer = async (
-  include?: string,
-): Promise<GetCustomerResponse> => {
-  const config = include
-    ? {
-        params: { include },
-      }
-    : undefined;
+export const postBookCall = async (
+  request: BookCallRequest,
+): Promise<BookCallResponse> => {
+  console.log('checkRQ 1', request);
+  return httpPost<BookCallRequest, BookCallResponse>(
+    ENDPOINTS.BOOK_CALL,
+    request,
+  );
+};
 
-  return httpGet<GetCustomerResponse>(ENDPOINTS.AUTH_CUSTOMER, config);
+export const getCoachBookings = async (): Promise<GetCoachBookingsResponse> => {
+  return httpGet<GetCoachBookingsResponse>(ENDPOINTS.COACH_BOOKINGS);
 };

@@ -16,6 +16,7 @@ const baseURL = Config.API_BASE_URL;
 const createClient = (): AxiosInstance => {
   const instance = axios.create({
     baseURL,
+    timeout: 10000,
   });
 
   instance.interceptors.request.use(
@@ -26,11 +27,15 @@ const createClient = (): AxiosInstance => {
       }
       return config;
     },
-    (error: AxiosError) => Promise.reject(error),
+    (error: AxiosError) => {
+      return Promise.reject(error);
+    },
   );
 
   instance.interceptors.response.use(
-    (response: AxiosResponse) => response,
+    (response: AxiosResponse) => {
+      return response;
+    },
     (error: AxiosError<ApiErrorResponse>) => {
       if (error.response?.status === 401) {
         // TODO: dispatch a logout or token refresh action here if needed
@@ -70,6 +75,16 @@ export const httpPut = async <TBody, TResponse>(
   config?: AxiosRequestConfig,
 ): Promise<TResponse> => {
   const response = await client.put<TResponse>(url, body, config);
+
+  return response.data;
+};
+
+export const httpPatch = async <TBody, TResponse>(
+  url: string,
+  body: TBody,
+  config?: AxiosRequestConfig,
+): Promise<TResponse> => {
+  const response = await client.patch<TResponse>(url, body, config);
 
   return response.data;
 };

@@ -7,7 +7,7 @@ import React, { type ComponentProps } from 'react';
 import { Button, Text } from 'react-native';
 import TestRenderer from 'react-test-renderer';
 
-import { HomeDashboardScreen } from '@screens/home/HomeDashboardScreen';
+import HomeDashboardScreen from '@/screens/home/HomeDashboard';
 
 type ButtonPressEvent = Parameters<
   NonNullable<ComponentProps<typeof Button>['onPress']>

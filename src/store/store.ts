@@ -1,12 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import { authReducer } from '@/store/slices/authSlice';
+import { bookingReducer } from '@/store/slices/bookingSlice';
+import { clientReducer } from '@/store/slices/clientSlice';
 import { translationReducer } from '@/store/slices/translationSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     translation: translationReducer,
+    booking: bookingReducer,
+    client: clientReducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware(),
 });

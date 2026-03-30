@@ -18,7 +18,7 @@ export type AuthOperationKey =
   | 'googleSignIn'
   | 'requestOTP'
   | 'verifyOTP'
-  | 'getCustomer';
+  | 'bookCall';
 
 const createInitialOperation = (): OperationState => ({
   status: 'idle',
@@ -29,7 +29,7 @@ const initialOperations: Record<AuthOperationKey, OperationState> = {
   googleSignIn: createInitialOperation(),
   requestOTP: createInitialOperation(),
   verifyOTP: createInitialOperation(),
-  getCustomer: createInitialOperation(),
+  bookCall: createInitialOperation(),
 };
 
 export type AuthState = {

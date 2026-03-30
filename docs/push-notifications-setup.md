@@ -13,16 +13,16 @@ This app uses **Firebase Cloud Messaging (FCM)** with `@react-native-firebase/ap
 
 ### 1.2 Android
 
-- **Add app** (or use existing): register package name `com.molt.app`
+- **Add app** (or use existing): register package name `com.molt.coach`
 - Download **google-services.json** and place it in:
   - `android/app/src/staging/google-services.json`
-  - `android/app/src/production/google-services.json`  
+  - `android/app/src/production/google-services.json`
     (or the single flavor path you use)
 - No extra FCM configuration required for Android; the SDK uses the config in `google-services.json`
 
 ### 1.3 iOS
 
-- **Add app** (or use existing): register your iOS app with the **Bundle ID** that matches Xcode (e.g. `com.molt.app`)
+- **Add app** (or use existing): register your iOS app with the **Bundle ID** that matches Xcode (e.g. `com.molt.coach`)
 - Download **GoogleService-Info.plist** and add it to the `ios/MoltApp` folder in Xcode (drag into the project, ensure “Copy items if needed” and the MoltApp target are selected)
 - **Cloud Messaging (APNs)**:
   - In Firebase: Project Settings → Cloud Messaging → **Apple app configuration**
@@ -40,7 +40,7 @@ This app uses **Firebase Cloud Messaging (FCM)** with `@react-native-firebase/ap
 ### 2.1 Identifiers
 
 - Go to [Certificates, Identifiers & Profiles](https://developer.apple.com/account/resources/identifiers/list) → **Identifiers**
-- Select your **App ID** (e.g. `com.molt.app`)
+- Select your **App ID** (e.g. `com.molt.coach`)
 - Ensure **Push Notifications** is enabled (edit the identifier and check the capability)
 - Save
 
@@ -63,7 +63,7 @@ This app uses **Firebase Cloud Messaging (FCM)** with `@react-native-firebase/ap
 - Under **Apple app configuration** → **APNs Authentication Key**
 - Upload the `.p8` file
 - Enter **Key ID** and **Team ID** (from Apple Developer account)
-- Enter **Bundle ID** (e.g. `com.molt.app`)
+- Enter **Bundle ID** (e.g. `com.molt.coach`)
 - Save
 
 ---
@@ -84,7 +84,7 @@ This app uses **Firebase Cloud Messaging (FCM)** with `@react-native-firebase/ap
 
 ### 3.3 Pods
 
-- From project root:  
+- From project root:
   `cd ios && pod install`
 - Then build and run
 

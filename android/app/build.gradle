@@ -86,9 +86,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.molt.app"
+    namespace "com.molt.coach"
     defaultConfig {
-        applicationId "com.molt.app"
+        applicationId "com.molt.coach"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -100,13 +100,13 @@ android {
         staging {
             dimension "default"
             // Using the same applicationId so Firebase package aliases can be used
-            applicationId "com.molt.app"
+            applicationId "com.molt.coach"
             resValue "string", "firebase_api_key", "STAGING_API_KEY"
         }
         production {
             dimension "default"
             // Using the same applicationId so Firebase package aliases can be used
-            applicationId "com.molt.app"
+            applicationId "com.molt.coach"
             resValue "string", "firebase_api_key", "PRODUCTION_API_KEY"
         }
     }

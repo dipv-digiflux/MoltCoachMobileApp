@@ -1,5 +1,7 @@
+import type { InviteWithOnboarding } from './api.types';
 import type { NavigatorScreenParams } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { Contact } from 'react-native-contacts';
 
 export type OTPVerificationParams =
   | { mode: 'email'; email: string }
@@ -12,11 +14,11 @@ interface ParamListIndexSignature {
 
 export interface OnboardingStackParamList extends ParamListIndexSignature {
   BookingConfirm: undefined;
+  BookingConfirmed: undefined;
   OTPVerification: OTPVerificationParams | undefined;
   PlanPreview: undefined;
   GettingThingsReady: undefined;
   RequestAccessScreen: undefined;
-  ApplicationNotApproved: undefined;
 }
 
 export interface HomeStackParamList extends ParamListIndexSignature {
@@ -45,7 +47,7 @@ export interface AppStackParamList extends ParamListIndexSignature {
   BottomTabs: NavigatorScreenParams<BottomTabParamList>;
   Earnings: undefined;
   AddClient: undefined;
-  AddedClients: undefined;
+  AddedClients: { selectedContacts: Contact[] } | undefined;
   ImportContacts: undefined;
   SelectContact: undefined;
   CreateTask: { fromScreen?: string } | undefined;
@@ -55,6 +57,19 @@ export interface AppStackParamList extends ParamListIndexSignature {
   ReminderSetup: undefined;
   TaskSummary: undefined;
   TaskSuccess: undefined;
+  GeneratingPlan: {
+    clientName: string;
+    inviteData?: InviteWithOnboarding[];
+    phoneNumber?: string;
+    countryCode?: string;
+    skipSuggestedPlan?: boolean;
+  };
+  SuggestedPlan: {
+    clientName: string;
+    inviteData?: InviteWithOnboarding[];
+    phoneNumber?: string;
+    countryCode?: string;
+  };
 }
 
 export interface RootStackParamList extends ParamListIndexSignature {
@@ -62,14 +77,32 @@ export interface RootStackParamList extends ParamListIndexSignature {
   AppStack: NavigatorScreenParams<AppStackParamList>;
 }
 
+export type AppScreenName =
+  | 'BottomTabs'
+  | 'Earnings'
+  | 'AddClient'
+  | 'AddedClients'
+  | 'ImportContacts'
+  | 'SelectContact'
+  | 'InviteSent'
+  | 'CreateTask'
+  | 'EditTask'
+  | 'TaskTypeSelection'
+  | 'FrequencySetup'
+  | 'ReminderSetup'
+  | 'TaskSummary'
+  | 'TaskSuccess'
+  | 'GeneratingPlan'
+  | 'SuggestedPlan';
+
 /** Explicit screen names for type-safe navigate() when param list has an index signature. */
 export type OnboardingScreenName =
   | 'BookingConfirm'
+  | 'BookingConfirmed'
   | 'OTPVerification'
   | 'PlanPreview'
   | 'GettingThingsReady'
-  | 'RequestAccessScreen'
-  | 'ApplicationNotApproved';
+  | 'RequestAccessScreen';
 export type HomeScreenName =
   | 'HomeDashboard'
   | 'ExampleForm'

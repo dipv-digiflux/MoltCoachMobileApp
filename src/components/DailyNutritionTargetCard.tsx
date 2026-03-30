@@ -12,6 +12,7 @@ export const DailyNutritionTargetCard = ({
   title,
   actionLabel,
   kcal,
+  subValue,
   tags,
   macroTargets,
   lifestyleTitle,
@@ -33,6 +34,9 @@ export const DailyNutritionTargetCard = ({
             <Text style={styles.cardAction}>{actionLabel}</Text>
           </View>
           <Text style={styles.cardKcal}>{kcal}</Text>
+          {subValue ? (
+            <Text style={styles.cardSubValue}>{subValue}</Text>
+          ) : null}
           <View style={styles.cardTagRow}>
             {tags.map(tag => (
               <View key={tag} style={styles.tag}>
@@ -130,7 +134,7 @@ export const DailyNutritionTargetCard = ({
         </View>
       </View>
 
-      <InfoCard text={planTip} />
+      <InfoCard description={planTip} variant="simple" />
     </View>
   );
 };
@@ -142,11 +146,12 @@ const styles = StyleSheet.create({
   card: {
     paddingVertical: spacing['Spacing-6xl'],
     paddingHorizontal: spacing['Spacing-5xl'],
-    borderRadius: moderateScale(1),
-    backgroundColor: colors.StatesFill2,
+    borderRadius: radius.md,
+    backgroundColor: colors.StatesWhite,
     borderWidth: 1,
     borderColor: colors.StatesOutline,
     gap: spacing['Spacing-4xl'],
+    alignSelf: 'stretch',
   },
   section: {
     gap: spacing['Spacing-3xl'],
@@ -172,6 +177,11 @@ const styles = StyleSheet.create({
   cardKcal: {
     ...typography.h10SemiBold,
     color: colors.TextPrimaryDefault,
+  },
+  cardSubValue: {
+    ...typography.bodySmall1Regular,
+    color: colors.TextSecondaryDefault,
+    marginTop: spacing['Spacing-xs'],
   },
   cardTagRow: {
     flexDirection: 'row',
@@ -248,6 +258,6 @@ const styles = StyleSheet.create({
   lifestyleValue: {
     ...typography.bodySmall1SemiBold,
     color: colors.TextPrimaryDefault,
-    marginTop: spacing['Spacing-xl'],
+    marginTop: spacing['Spacing-m'],
   },
 });
