@@ -3,7 +3,7 @@ import {
   postCoachInviteSms,
   postCoachInviteStore,
   getCoachFetchLinks,
-  postCoachUpdateLink,
+  patchCoachUpdateRelationship,
 } from '@/api/clientApi';
 import {
   setClientOperationError,
@@ -155,12 +155,20 @@ export const fetchInviteLinksThunk =
     }
   };
 export const updateInviteLinkThunk =
-  (payload: { id: string; data: Record<string, unknown> }) =>
+  (payload: {
+    id: string;
+    update_for: 'user_relationship' | 'invite_link';
+    data: Record<string, unknown>;
+  }) =>
   async (dispatch: AppDispatch): Promise<ApiResponse<unknown>> => {
     dispatch(setClientOperationLoading('updateInviteLink'));
 
     try {
-      const response = await postCoachUpdateLink(payload.id, payload.data);
+      const response = await patchCoachUpdateRelationship(
+        payload.id,
+        payload.update_for,
+        payload.data,
+      );
       if (response && response.status) {
         dispatch(setClientOperationSuccess('updateInviteLink'));
         // Refresh the list after update

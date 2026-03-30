@@ -1,4 +1,4 @@
-import { httpGet, httpPost } from '@/services/apiClient';
+import { httpGet, httpPost, httpPatch } from '@/services/apiClient';
 
 import { ENDPOINTS } from './endpoints';
 
@@ -52,12 +52,13 @@ export const getCoachFetchLinks = async (
     `${ENDPOINTS.COACH_FETCH_LINKS}?page=${page}&limit=${limit}`,
   );
 };
-export const postCoachUpdateLink = async (
+export const patchCoachUpdateRelationship = async (
   id: string,
+  update_for: 'user_relationship' | 'invite_link',
   data: Record<string, unknown>,
 ): Promise<ApiResponse<unknown>> => {
-  return httpPost<Record<string, unknown>, ApiResponse<unknown>>(
-    `v1/coach/user-relationship/${id}/update_for`,
+  return httpPatch<Record<string, unknown>, ApiResponse<unknown>>(
+    `${ENDPOINTS.COACH_USER_RELATIONSHIP}/${id}?update_for=${update_for}`,
     data,
   );
 };

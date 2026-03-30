@@ -117,16 +117,9 @@ export interface CalendarSyncRequest {
 }
 
 export interface BookCallRequest {
-  coach_id: string;
   name: string;
   email: string;
   phone_number: string;
-  country_code: string;
-  event_uuid?: string;
-  invitee_uuid?: string;
-  timezone?: string;
-  url?: string;
-  status?: string;
 }
 
 export type BookCallResponse = BaseResponse & {

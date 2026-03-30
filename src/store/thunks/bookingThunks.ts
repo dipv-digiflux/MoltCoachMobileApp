@@ -31,7 +31,6 @@ export const bookCallThunk =
       }
 
       const bookingPayload: BookCallRequest = {
-        coach_id: coach._id,
         email: (
           calendlyData.payload?.invitee?.email ??
           coach.email ??
@@ -43,12 +42,6 @@ export const bookCallThunk =
           ''
         ).trim(),
         phone_number: coach.phone_number ?? '',
-        country_code: coach.country_code,
-        event_uuid: calendlyData.payload?.event?.uuid,
-        invitee_uuid: calendlyData.payload?.invitee?.uuid,
-        timezone: calendlyData.payload?.invitee?.timezone,
-        url: calendlyData.payload?.event?.uri,
-        status: 'scheduled',
       };
 
       const response = await postBookCall(bookingPayload);

@@ -79,6 +79,16 @@ export const httpPut = async <TBody, TResponse>(
   return response.data;
 };
 
+export const httpPatch = async <TBody, TResponse>(
+  url: string,
+  body: TBody,
+  config?: AxiosRequestConfig,
+): Promise<TResponse> => {
+  const response = await client.patch<TResponse>(url, body, config);
+
+  return response.data;
+};
+
 export const httpDelete = async <TResponse>(
   url: string,
   config?: AxiosRequestConfig,

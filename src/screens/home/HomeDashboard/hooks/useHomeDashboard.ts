@@ -57,9 +57,16 @@ export const useHomeDashboard = (): HomeDashboardHook => {
   ): Promise<void> => {
     if (!selectedLinkForSessions) return;
 
+    const status = selectedLinkForSessions.status?.toLowerCase();
+    const update_for =
+      status === 'invite send' || status === 'invite sent'
+        ? 'invite_link'
+        : 'user_relationship';
+
     await dispatch(
       updateInviteLinkThunk({
         id: selectedLinkForSessions._id,
+        update_for,
         data: {
           subscription:
             values.mode === 'Online'

@@ -35,6 +35,7 @@ export const signInWithGoogleThunk =
   () =>
   async (dispatch: AppDispatch): Promise<AuthenticateResponse | null> => {
     dispatch(setOperationLoading('googleSignIn'));
+    console.log('handleGoogleSignIn 0');
 
     try {
       const accessToken = await getGoogleAccessToken();
@@ -50,7 +51,7 @@ export const signInWithGoogleThunk =
         await dispatch(getCoachBookingsThunk());
         return response;
       }
-      console.log('handleGoogleSignIn 2');
+      console.log('handleGoogleSignIn 2', { response });
       await GoogleSignin.clearCachedAccessToken(accessToken);
       await GoogleSignin.signOut();
       const errorMsg = response.message || 'Google sign-in failed';

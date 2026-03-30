@@ -9,5 +9,5 @@ export const ENDPOINTS = {
   COACH_INVITE_SMS: 'v1/coach/invite-link/invite-customer-sms',
   COACH_INVITE_STORE: 'v1/coach/invite-link/store',
   COACH_FETCH_LINKS: 'v1/coach/invite-link/fetch-links',
-  COACH_USER_RELATIONSHIP: 'v1/coach/user-relationship/${id}/update_for',
+  COACH_USER_RELATIONSHIP: 'v1/coach/user-relationship',
 } as const;
