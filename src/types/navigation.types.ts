@@ -70,6 +70,9 @@ export interface AppStackParamList extends ParamListIndexSignature {
     phoneNumber?: string;
     countryCode?: string;
   };
+  profile: undefined;
+  PaymentMethods: undefined;
+  ContactUs: undefined;
 }
 
 export interface RootStackParamList extends ParamListIndexSignature {
@@ -93,7 +96,10 @@ export type AppScreenName =
   | 'TaskSummary'
   | 'TaskSuccess'
   | 'GeneratingPlan'
-  | 'SuggestedPlan';
+  | 'SuggestedPlan'
+  | 'profile'
+  | 'PaymentMethods'
+  | 'ContactUs';
 
 /** Explicit screen names for type-safe navigate() when param list has an index signature. */
 export type OnboardingScreenName =

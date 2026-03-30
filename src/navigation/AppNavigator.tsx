@@ -10,6 +10,9 @@ import { SelectContactScreen } from '@screens/clients/SelectContactScreen';
 import { SuggestedPlanScreen } from '@screens/clients/SuggestedPlanScreen';
 import { EarningsScreen } from '@screens/earnings/EarningsScreen';
 import { ImportContactsScreen } from '@screens/onboarding/ImportContactsScreen';
+import { ProfileScreen } from '@screens/profile';
+import { ContactUsScreen } from '@screens/profile/ContactUsScreen';
+import { PaymentMethodsScreen } from '@screens/profile/PaymentMethodsScreen';
 import {
   CreateTaskScreen,
   EditTaskScreen,
@@ -31,7 +34,7 @@ export const AppNavigator = (): ReactElement => (
       animation: 'slide_from_right',
       animationDuration: 230,
     }}
-    initialRouteName="BottomTabs"
+    initialRouteName="profile"
   >
     <Stack.Screen name="BottomTabs" component={BottomTabs} />
 
@@ -43,6 +46,7 @@ export const AppNavigator = (): ReactElement => (
     <Stack.Screen name="InviteSent" component={InviteSentScreen} />
     <Stack.Screen name="GeneratingPlan" component={GeneratingPlanScreen} />
     <Stack.Screen name="SuggestedPlan" component={SuggestedPlanScreen} />
+    <Stack.Screen name="profile" component={ProfileScreen} />
 
     {/* Task ActionFlows (tabs hidden) */}
     <Stack.Screen name="CreateTask" component={CreateTaskScreen} />
@@ -61,5 +65,8 @@ export const AppNavigator = (): ReactElement => (
         gestureEnabled: false,
       }}
     />
+
+    <Stack.Screen name="PaymentMethods" component={PaymentMethodsScreen} />
+    <Stack.Screen name="ContactUs" component={ContactUsScreen} />
   </Stack.Navigator>
 );

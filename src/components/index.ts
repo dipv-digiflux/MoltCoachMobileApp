@@ -108,9 +108,32 @@ export { AnimatedProgressBar } from './AnimatedProgressBar';
 export { default as ConfirmModal } from './ConfirmModal';
 export type { ConfirmModalProps } from './ConfirmModal/ConfirmModal.types';
 export { VerticalStepper } from './VerticalStepper';
-export { default as AddSessionsModal } from './AddSessionsModal';
 export type {
   VerticalStepperProps,
   VerticalStepperStep,
+} from '@/types/components.types';
+export { default as AddSessionsModal } from './AddSessionsModal';
+export type {
+  AddSessionsModalProps,
   AddSessionsModalValues,
 } from '@/types/components.types';
+export { CreditBalanceCard } from './CreditBalanceCard';
+export type { CreditBalanceCardProps } from './CreditBalanceCard';
+export { ActionCenter } from './ActionCenter';
+export type {
+  ActionCenterProps,
+  ActionCenterAction,
+  ActionCenterTab,
+  ActionCenterTabType,
+} from './ActionCenter';
+export { SettingsSection } from './Settings';
+export type {
+  SettingsSectionProps,
+  SettingsRowItem,
+  SettingsRowProps,
+  SettingsRowType,
+} from './Settings';
+export { ReferAndEarnCard } from './ReferAndEarnCard/ReferAndEarnCard';
+export type { ReferAndEarnCardProps } from './ReferAndEarnCard/ReferAndEarnCard.types';
+export { EmptyState } from './EmptyState/EmptyState';
+export type { EmptyStateProps } from './EmptyState/EmptyState.types';
