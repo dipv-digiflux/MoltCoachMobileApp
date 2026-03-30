@@ -1,7 +1,7 @@
 import React, { type ReactElement } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { HomeDashboardScreen } from '@screens/home/HomeDashboardScreen';
+import HomeDashboardScreen from '@screens/home/HomeDashboard';
 import { TaskCompletionScreen } from '@screens/home/TaskCompletionScreen';
 import { TaskDetailsScreen } from '@screens/home/TaskDetailsScreen';
 import { TaskProgressScreen } from '@screens/home/TaskProgressScreen';

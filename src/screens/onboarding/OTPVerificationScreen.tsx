@@ -24,14 +24,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button, OTPInput, PageHeaderScrollView } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { requestOTPThunk } from '@/store/thunks';
+import { requestOTPThunk, verifyOTPThunk } from '@/store/thunks';
 import { colors, spacing, typography } from '@/theme';
+import { getApiErrorMessage } from '@/utils/apiError';
 
-import {
-  type OTPFormData,
-  OTP_LENGTH,
-  otpSchema,
-} from './OTPVerification.types';
+import { type OTPFormData, otpSchema } from './OTPVerification.types';
 
 import type {
   OnboardingNavigationProp,
@@ -39,7 +36,8 @@ import type {
   OTPVerificationParams,
 } from '@navigation/types';
 
-const RESEND_SECONDS_START = 30;
+const OTP_LENGTH = 4;
+const RESEND_SECONDS_START = 300;
 
 const formatDestination = (params: OTPVerificationParams): string => {
   if (params.mode === 'email') {
@@ -67,28 +65,7 @@ export const OTPVerificationScreen = (): ReactElement => {
 
   const [secondsLeft, setSecondsLeft] = useState(RESEND_SECONDS_START);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  /*
-  const enterAppStack = (navigation: OnboardingNavigationProp): void => {
-    const root = navigation.getParent();
-    root?.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'AppStack',
-            params: {
-              screen: 'BottomTabs',
-              params: {
-                screen: 'HomeTab',
-                params: { screen: 'HomeDashboard' },
-              },
-            },
-          },
-        ],
-      }),
-    );
-  };
-  */
+
   const destination = useMemo(
     () => (params ? formatDestination(params) : ''),
     [params],
@@ -96,11 +73,11 @@ export const OTPVerificationScreen = (): ReactElement => {
 
   const {
     control,
-    // handleSubmit,
+    handleSubmit,
     watch,
     setValue,
     trigger,
-    // setError,
+    setError,
     clearErrors,
   } = useForm<OTPFormData>({
     resolver: zodResolver(otpSchema),
@@ -131,7 +108,6 @@ export const OTPVerificationScreen = (): ReactElement => {
     return () => clearInterval(timerId);
   }, [secondsLeft]);
 
-  /*
   const handleVerify = useCallback(
     (data: OTPFormData) => {
       if (!params) {
@@ -154,33 +130,17 @@ export const OTPVerificationScreen = (): ReactElement => {
                   otp: data.otp,
                 };
           const result = await dispatch(verifyOTPThunk(request));
-          if (
-            result?.customer?.status?.on_boarding ||
-            result?.customer?.status?.on_boarding_skip
-          ) {
-            enterAppStack(navigation);
-          } else {
-            navigation.navigate('PlanPreview');
+          if (result.status) {
+            // Navigation is handled globally by getCoachBookingsThunk called inside verifyOTPThunk
           }
         } catch (error) {
-          // TypeScript safety: handle error as unknown
-          let message = 'Invalid OTP';
-          if (
-            error &&
-            typeof error === 'object' &&
-            'message' in error &&
-            'message' in error &&
-            typeof (error as { message?: unknown }).message === 'string'
-          ) {
-            message = (error as { message: string }).message;
-          }
+          const message = getApiErrorMessage(error);
           setError('otp', { message });
         }
       })();
     },
     [params, dispatch, navigation, setError],
   );
-  */
 
   const handleChangePress = useCallback((): void => {
     navigation.goBack();
@@ -225,13 +185,12 @@ export const OTPVerificationScreen = (): ReactElement => {
     [footerBottom],
   );
 
-  const formattedCountdown = useMemo(
-    () =>
-      secondsLeft > 0
-        ? `Resend in 0:${secondsLeft.toString().padStart(2, '0')}`
-        : 'Resend code',
-    [secondsLeft],
-  );
+  const formattedCountdown = useMemo(() => {
+    if (secondsLeft <= 0) return 'Resend code';
+    const minutes = Math.floor(secondsLeft / 60);
+    const seconds = secondsLeft % 60;
+    return `Resend in ${minutes}:${seconds.toString().padStart(2, '0')}`;
+  }, [secondsLeft]);
 
   const resendTextStyle = useMemo(
     () =>
@@ -327,8 +286,7 @@ export const OTPVerificationScreen = (): ReactElement => {
             loading={verifyOTPStatus === 'loading'}
             disabled={!canVerify}
             onPress={() => {
-              // void handleSubmit(handleVerify)();
-              navigation.navigate('PlanPreview');
+              void handleSubmit(handleVerify)();
             }}
             style={styles.verifyButton}
           />

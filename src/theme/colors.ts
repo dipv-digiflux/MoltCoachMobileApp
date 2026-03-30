@@ -9,6 +9,7 @@ export const colors = {
   StatesFill1: '#F5F6F5',
   StatesFill2: '#FDFDFD',
   StatesWhite: '#FFFFFF',
+  TabBarGlassFallback: '#FDFDFD',
 
   // ── Main ───────────────────────────────────────────────
   MatrixMain: '#159945',
@@ -53,6 +54,9 @@ export const colors = {
   TextSecondaryActive: '#1E293B',
   TextSecondaryDisabled: '#94A3B8',
 
+  /** Label text (e.g. form field labels). */
+  TextLabelDefault: '#374151',
+
   // ── Icon Primary ────────────────────────────────────────
   IconPrimaryDefault: '#4B5563',
   IconPrimaryHover: '#374151',
@@ -64,6 +68,9 @@ export const colors = {
   IconSecondaryHover: '#475569',
   IconSecondaryActive: '#1E293B',
   IconSecondaryDisabled: '#94A3B8',
+
+  /** Calendar/date picker icon tint (e.g. Start Date input). */
+  IconCalendarDefault: '#0F172B',
 
   // ── Icon Tertiary / Subtle ──────────────────────────────
   IconTertiarySubtle: '#919191',
@@ -79,6 +86,7 @@ export const colors = {
 
   // ── Focus / Shadow ──────────────────────────────────────
   FocusRingBrand: '#CEDAFA',
+  FocusRingSubtle: '#EDEFF5',
   FocusRingDestructive: 'rgba(240, 62, 63, 0.3)',
   ShadowDefault: '#000000',
 
@@ -128,6 +136,7 @@ export const colors = {
   // ── Tags ────────────────────────────────────────────────
   TagSuccessSurface: '#DCFCE7',
   TagWarningSurface: '#FFEDF1',
+  NeutralTealGrayIcon: '#6B7575',
 } as const;
 
 export type ColorToken = keyof typeof colors;

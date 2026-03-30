@@ -1,31 +1,74 @@
 import React, { type ReactElement } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { colors, spacing, typography, radius, moderateScale } from '@/theme';
+import { colors, moderateScale, radius, spacing, typography } from '@/theme';
 
 import type { InfoCardProps } from '@/types/components.types';
 
-export const InfoCard = ({ text }: InfoCardProps): ReactElement => {
+export const InfoCard = ({
+  title,
+  description,
+  icon,
+  variant = 'default',
+  style,
+}: InfoCardProps): ReactElement => {
+  const isSimple = variant === 'simple';
+
   return (
-    <View style={styles.container}>
-      <View style={styles.dot} />
-      <Text style={styles.text}>{text}</Text>
+    <View style={[styles.container, isSimple && styles.containerSimple, style]}>
+      <View style={[styles.contentRow, isSimple && styles.contentRowSimple]}>
+        {icon !== undefined ? (
+          <View style={styles.icon}>{icon}</View>
+        ) : (
+          <View style={styles.dot} />
+        )}
+        <View style={styles.textContainer}>
+          {title !== undefined && !isSimple && (
+            <Text style={styles.title}>{title}</Text>
+          )}
+          <Text
+            style={[styles.description, isSimple && styles.descriptionSimple]}
+          >
+            {description}
+          </Text>
+        </View>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.StatesOutline,
+    padding: spacing['Spacing-5xl'],
+    gap: spacing['Spacing-xl'],
+    backgroundColor: colors.StatesWhite,
+    alignSelf: 'stretch',
+  },
+  containerSimple: {
+    paddingVertical: spacing['Spacing-m'],
+    paddingHorizontal: spacing['Spacing-5xl'],
+    gap: 0,
+    minHeight: moderateScale(40),
+    justifyContent: 'center',
+  },
+  contentRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'stretch',
-    paddingVertical: spacing['Spacing-l'],
-    paddingHorizontal: spacing['Spacing-2xl'],
     gap: spacing['Spacing-xl'],
-    borderWidth: 1,
-    borderColor: colors.BorderPrimaryDisabled,
-    backgroundColor: colors.SurfacePrimaryDefault,
-    borderRadius: radius.sm,
+  },
+  contentRowSimple: {
+    gap: spacing['Spacing-xl'],
+  },
+  textContainer: {
+    flex: 1,
+    gap: spacing['Spacing-xs'],
+  },
+  icon: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   dot: {
     width: moderateScale(8),
@@ -33,9 +76,17 @@ const styles = StyleSheet.create({
     borderRadius: radius.full,
     backgroundColor: colors.MatrixMain,
   },
-  text: {
-    ...typography.bodySmall2Medium,
-    color: colors.PrimaryMain,
+  title: {
+    ...typography.bodySmall1SemiBold,
+    color: colors.TextPrimaryStrong,
     flex: 1,
+  },
+  description: {
+    ...typography.bodySmall4TallRegular,
+    color: colors.IconTertiarySubtle,
+  },
+  descriptionSimple: {
+    ...typography.bodySmall1Regular,
+    color: colors.TextPrimaryDefault,
   },
 });

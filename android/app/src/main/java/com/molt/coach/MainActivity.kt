@@ -1,4 +1,4 @@
-package com.molt.app
+package com.molt.coach
 
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
