@@ -54,7 +54,6 @@ export const SettingsRow = ({
           console.log('SettingsRow pressed:', label);
           onPress?.();
         }}
-        style={({ pressed }) => pressed && styles.pressed}
       >
         {Content}
       </Pressable>

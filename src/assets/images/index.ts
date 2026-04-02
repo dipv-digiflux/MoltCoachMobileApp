@@ -1,5 +1,6 @@
 // pngs
 import Device from './png/Device.png';
+import HandGrabingBanner from './png/hand-grabing-banner.png';
 import HeaderCurvedBg from './png/header-curved-bg.png';
 import LogoWhite from './png/logo-white.png';
 import ProfilePng from './png/profile.jpg';
@@ -60,4 +61,5 @@ export {
   LocationSvg,
   AttendeesSvg,
   CalanderSvg,
+  HandGrabingBanner,
 };

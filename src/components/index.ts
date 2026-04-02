@@ -7,6 +7,7 @@ export { InfoCard } from './InfoCard';
 
 export * from './DailyActivityBottomSheet';
 export * from './PrimaryGoalBottomSheet';
+export * from './ReferOptionBottomSheet';
 
 export { Button } from './Button';
 export type {
@@ -137,3 +138,5 @@ export { ReferAndEarnCard } from './ReferAndEarnCard/ReferAndEarnCard';
 export type { ReferAndEarnCardProps } from './ReferAndEarnCard/ReferAndEarnCard.types';
 export { EmptyState } from './EmptyState/EmptyState';
 export type { EmptyStateProps } from './EmptyState/EmptyState.types';
+
+export * from './common';

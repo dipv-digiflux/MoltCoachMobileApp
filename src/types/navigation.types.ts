@@ -73,6 +73,10 @@ export interface AppStackParamList extends ParamListIndexSignature {
   profile: undefined;
   PaymentMethods: undefined;
   ContactUs: undefined;
+  ReferCoach: undefined;
+  TransactionHistory: undefined;
+  ProfileSettings: undefined;
+  TransactionDetails: undefined;
 }
 
 export interface RootStackParamList extends ParamListIndexSignature {
@@ -99,7 +103,11 @@ export type AppScreenName =
   | 'SuggestedPlan'
   | 'profile'
   | 'PaymentMethods'
-  | 'ContactUs';
+  | 'ContactUs'
+  | 'ReferCoach'
+  | 'TransactionHistory'
+  | 'ProfileSettings'
+  | 'TransactionDetails';
 
 /** Explicit screen names for type-safe navigate() when param list has an index signature. */
 export type OnboardingScreenName =

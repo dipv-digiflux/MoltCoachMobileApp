@@ -45,13 +45,13 @@ export const SettingsSection = ({
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: spacing['Spacing-4xl'],
-    // paddingTop: spacing['Spacing-xl'],
+    paddingVertical: spacing['Spacing-xl'],
     // paddingBottom: spacing['Spacing-4xl'],
     // backgroundColor: colors.StatesWhite,
     borderRadius: radius.xs,
     borderWidth: 1,
     borderColor: colors.StatesOutline,
-    paddingTop: 0,
+    // paddingTop: 0,
   },
   title: {
     ...typography.bodySmall1Medium,

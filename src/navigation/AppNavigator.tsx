@@ -13,6 +13,8 @@ import { ImportContactsScreen } from '@screens/onboarding/ImportContactsScreen';
 import { ProfileScreen } from '@screens/profile';
 import { ContactUsScreen } from '@screens/profile/ContactUsScreen';
 import { PaymentMethodsScreen } from '@screens/profile/PaymentMethodsScreen';
+import { ProfileSettingsScreen } from '@screens/profile/ProfileSettingsScreen';
+import { ReferCoachScreen } from '@screens/profile/ReferCoachScreen';
 import {
   CreateTaskScreen,
   EditTaskScreen,
@@ -22,6 +24,8 @@ import {
   TaskSummaryScreen,
   TaskSuccessScreen,
 } from '@screens/taskFlows';
+import { TransactionDetailsScreen } from '@screens/transaction/TransactionDetailsScreen';
+import { TransactionHistoryScreen } from '@screens/transaction/TransactionHistoryScreen';
 
 import type { AppStackParamList } from '@navigation/types';
 
@@ -68,5 +72,15 @@ export const AppNavigator = (): ReactElement => (
 
     <Stack.Screen name="PaymentMethods" component={PaymentMethodsScreen} />
     <Stack.Screen name="ContactUs" component={ContactUsScreen} />
+    <Stack.Screen name="ReferCoach" component={ReferCoachScreen} />
+    <Stack.Screen
+      name="TransactionHistory"
+      component={TransactionHistoryScreen}
+    />
+    <Stack.Screen name="ProfileSettings" component={ProfileSettingsScreen} />
+    <Stack.Screen
+      name="TransactionDetails"
+      component={TransactionDetailsScreen}
+    />
   </Stack.Navigator>
 );

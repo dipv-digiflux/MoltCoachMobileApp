@@ -21,6 +21,7 @@ import {
   ActionCenter,
   SettingsSection,
   ReferAndEarnCard,
+  ReferOptionBottomSheet,
 } from '@/components';
 import { colors, iconScale, spacing } from '@/theme';
 
@@ -43,6 +44,8 @@ export const ProfileScreen = (): ReactElement => {
 
   const [isLogoutSheetVisible, setIsLogoutSheetVisible] = React.useState(false);
   const [isTermsSheetVisible, setIsTermsSheetVisible] = React.useState(false);
+  const [isReferOptionSheetVisible, setIsReferOptionSheetVisible] =
+    React.useState(false);
 
   const accountSettingsItems = [
     {
@@ -69,7 +72,7 @@ export const ProfileScreen = (): ReactElement => {
         />
       ),
       type: 'link' as const,
-      onPress: () => console.log('Transaction History'),
+      onPress: () => navigation.navigate('TransactionHistory'),
     },
     {
       id: 'payment-methods',
@@ -229,7 +232,7 @@ export const ProfileScreen = (): ReactElement => {
             name="Alex Patel"
             email="John@gmail.com"
             id="129381"
-            onEditPress={() => console.log('Edit profile')}
+            onEditPress={() => navigation.navigate('ProfileSettings')}
             onCopyIdPress={() => console.log('Copy ID')}
           />
 
@@ -279,7 +282,9 @@ export const ProfileScreen = (): ReactElement => {
             <SettingsSection title="App & Support" items={appSupportItems} />
           </View>
 
-          <ReferAndEarnCard onPress={() => console.log('Refer now pressed')} />
+          <ReferAndEarnCard
+            onPress={() => setIsReferOptionSheetVisible(true)}
+          />
         </View>
       </PageHeaderScrollView>
 
@@ -295,6 +300,13 @@ export const ProfileScreen = (): ReactElement => {
       <TermsBottomSheet
         visible={isTermsSheetVisible}
         onClose={() => setIsTermsSheetVisible(false)}
+      />
+
+      <ReferOptionBottomSheet
+        visible={isReferOptionSheetVisible}
+        onClose={() => setIsReferOptionSheetVisible(false)}
+        onReferCoach={() => navigation.navigate('ReferCoach')}
+        onReferClient={() => console.log('Refer a client')}
       />
     </View>
   );
