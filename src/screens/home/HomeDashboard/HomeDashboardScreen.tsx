@@ -114,6 +114,14 @@ export const HomeDashboardScreen = (): ReactElement => {
             tags={tags}
             onNudgePress={() => console.log('Nudge', name)}
             onEditSessions={() => handleEditSessions(link)}
+            onPress={() => {
+              if (isAccepted) {
+                navigation.navigate('ClientDetail', {
+                  clientId: link._id,
+                  clientName: name,
+                });
+              }
+            }}
           />
         );
       }

@@ -82,6 +82,9 @@ export { ClientCard } from './ClientCard';
 export { ClientStatusCard } from './ClientStatusCard';
 export { ClientDetailedCard } from './ClientDetailedCard';
 export { ClientCardSkeleton } from './ClientCardSkeleton';
+export { ClientProfileHeader } from './ClientProfileHeader';
+export { CollapsibleTableCard } from './CollapsibleTableCard';
+export { OngoingTaskCard } from './OngoingTaskCard';
 export type {
   ClientCardProps,
   ClientTag,

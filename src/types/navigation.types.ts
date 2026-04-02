@@ -50,7 +50,7 @@ export interface AppStackParamList extends ParamListIndexSignature {
   AddedClients: { selectedContacts: Contact[] } | undefined;
   ImportContacts: undefined;
   SelectContact: undefined;
-  CreateTask: { fromScreen?: string } | undefined;
+  CreateTask: { fromScreen?: string; clientName?: string } | undefined;
   EditTask: { taskId?: string } | undefined;
   TaskTypeSelection: undefined;
   FrequencySetup: undefined;
@@ -69,6 +69,13 @@ export interface AppStackParamList extends ParamListIndexSignature {
     inviteData?: InviteWithOnboarding[];
     phoneNumber?: string;
     countryCode?: string;
+  };
+  ClientDetail: {
+    clientId: string;
+    clientName: string;
+  };
+  ManageTasks: {
+    clientName: string;
   };
 }
 
@@ -93,7 +100,9 @@ export type AppScreenName =
   | 'TaskSummary'
   | 'TaskSuccess'
   | 'GeneratingPlan'
-  | 'SuggestedPlan';
+  | 'SuggestedPlan'
+  | 'ClientDetail'
+  | 'ManageTasks';
 
 /** Explicit screen names for type-safe navigate() when param list has an index signature. */
 export type OnboardingScreenName =

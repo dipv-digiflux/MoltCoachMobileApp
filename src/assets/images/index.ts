@@ -16,6 +16,8 @@ import ChevronDownIconSvg from './svg/chevron-down-icon.svg';
 import ContactSvg from './svg/contact.svg';
 import ContactBookSvg from './svg/contactbook.svg';
 import CreditIconSvg from './svg/credit.svg';
+import DeleteIconSvg from './svg/delete.svg';
+import EditIconSvg from './svg/edit.svg';
 import EmptyRadioCircleSvg from './svg/emptyRadioCircle.svg';
 import GreenShieldSvg from './svg/greenshield.svg';
 import InfoIconSvg from './svg/infoicon.svg';
@@ -29,6 +31,7 @@ import SearchIconSvg from './svg/search.svg';
 import SearchiconSvg from './svg/searchicon.svg';
 import ShieldIconSvg from './svg/shield.svg';
 import StarIconSvg from './svg/star-icon.svg';
+import VectorIconSvg from './svg/Vector.svg';
 
 export {
   Device,
@@ -60,4 +63,7 @@ export {
   LocationSvg,
   AttendeesSvg,
   CalanderSvg,
+  EditIconSvg,
+  DeleteIconSvg,
+  VectorIconSvg,
 };
