@@ -263,3 +263,11 @@ export interface AddClientPayload {
 export type FetchInviteLinksResponse = ApiResponse<
   PaginatedResponse<InviteLink>
 >;
+
+export type NudgeType = 'text' | 'task';
+
+export interface SendNudgePayload {
+  customer_id: string;
+  text?: string[];
+  task_title?: string[];
+}

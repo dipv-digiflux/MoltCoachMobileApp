@@ -50,7 +50,7 @@ export interface AppStackParamList extends ParamListIndexSignature {
   AddedClients: { selectedContacts: Contact[] } | undefined;
   ImportContacts: undefined;
   SelectContact: undefined;
-  CreateTask: { fromScreen?: string } | undefined;
+  CreateTask: { fromScreen?: string; clientName?: string } | undefined;
   EditTask: { taskId?: string } | undefined;
   TaskTypeSelection: undefined;
   FrequencySetup: undefined;
@@ -77,6 +77,15 @@ export interface AppStackParamList extends ParamListIndexSignature {
   TransactionHistory: undefined;
   ProfileSettings: undefined;
   TransactionDetails: undefined;
+  ClientDetail: {
+    clientId: string;
+    clientName: string;
+  };
+  ManageTasks: {
+    clientName: string;
+  };
+  SendNudge: { clientId: string } | undefined;
+  NudgeSent: { clientId: string; clientName: string; messages: string[] };
 }
 
 export interface RootStackParamList extends ParamListIndexSignature {
@@ -107,7 +116,11 @@ export type AppScreenName =
   | 'ReferCoach'
   | 'TransactionHistory'
   | 'ProfileSettings'
-  | 'TransactionDetails';
+  | 'TransactionDetails'
+  | 'ClientDetail'
+  | 'ManageTasks'
+  | 'SendNudge'
+  | 'NudgeSent';
 
 /** Explicit screen names for type-safe navigate() when param list has an index signature. */
 export type OnboardingScreenName =

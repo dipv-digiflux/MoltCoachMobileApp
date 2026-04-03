@@ -83,6 +83,9 @@ export { ClientCard } from './ClientCard';
 export { ClientStatusCard } from './ClientStatusCard';
 export { ClientDetailedCard } from './ClientDetailedCard';
 export { ClientCardSkeleton } from './ClientCardSkeleton';
+export { ClientProfileHeader } from './ClientProfileHeader';
+export { CollapsibleTableCard } from './CollapsibleTableCard';
+export { OngoingTaskCard } from './OngoingTaskCard';
 export type {
   ClientCardProps,
   ClientTag,
@@ -109,11 +112,13 @@ export { AnimatedProgressBar } from './AnimatedProgressBar';
 export { default as ConfirmModal } from './ConfirmModal';
 export type { ConfirmModalProps } from './ConfirmModal/ConfirmModal.types';
 export { VerticalStepper } from './VerticalStepper';
+export { QuickNudges } from './clients/QuickNudges';
+export { SquareCheckbox } from './SquareCheckbox';
+export { default as AddSessionsModal } from './AddSessionsModal';
 export type {
   VerticalStepperProps,
   VerticalStepperStep,
 } from '@/types/components.types';
-export { default as AddSessionsModal } from './AddSessionsModal';
 export type {
   AddSessionsModalProps,
   AddSessionsModalValues,

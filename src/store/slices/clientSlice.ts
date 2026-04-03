@@ -8,7 +8,8 @@ export type ClientOperationKey =
   | 'sendInviteSms'
   | 'inviteClient'
   | 'fetchInviteLinks'
-  | 'updateInviteLink';
+  | 'updateInviteLink'
+  | 'sendNudge';
 
 export interface ClientState {
   inviteLinks: InviteLink[];
@@ -29,6 +30,7 @@ const initialOperations: Record<ClientOperationKey, OperationState> = {
   inviteClient: createInitialOperation(),
   fetchInviteLinks: createInitialOperation(),
   updateInviteLink: createInitialOperation(),
+  sendNudge: createInitialOperation(),
 };
 
 const initialState: ClientState = {

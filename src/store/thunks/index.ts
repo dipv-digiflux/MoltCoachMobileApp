@@ -12,4 +12,5 @@ export {
   sendInviteSmsThunk,
   inviteClientThunk,
   fetchInviteLinksThunk,
+  sendNudgeThunk,
 } from './clientThunks';

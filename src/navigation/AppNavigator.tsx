@@ -4,9 +4,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BottomTabs } from '@navigation/BottomTabs';
 import { AddClientScreen } from '@screens/clients/AddClientScreen';
 import { AddedClientsScreen } from '@screens/clients/AddedClientsScreen';
+import { ClientDetailScreen } from '@screens/clients/ClientDetailScreen';
 import { GeneratingPlanScreen } from '@screens/clients/GeneratingPlanScreen';
 import { InviteSentScreen } from '@screens/clients/InviteSentScreen';
+import { ManageTasksScreen } from '@screens/clients/ManageTasksScreen';
+import { NudgeSentScreen } from '@screens/clients/NudgeSentScreen';
 import { SelectContactScreen } from '@screens/clients/SelectContactScreen';
+import { SendNudgeScreen } from '@screens/clients/SendNudgeScreen';
 import { SuggestedPlanScreen } from '@screens/clients/SuggestedPlanScreen';
 import { EarningsScreen } from '@screens/earnings/EarningsScreen';
 import { ImportContactsScreen } from '@screens/onboarding/ImportContactsScreen';
@@ -51,6 +55,10 @@ export const AppNavigator = (): ReactElement => (
     <Stack.Screen name="GeneratingPlan" component={GeneratingPlanScreen} />
     <Stack.Screen name="SuggestedPlan" component={SuggestedPlanScreen} />
     <Stack.Screen name="profile" component={ProfileScreen} />
+    <Stack.Screen name="ClientDetail" component={ClientDetailScreen} />
+    <Stack.Screen name="ManageTasks" component={ManageTasksScreen} />
+    <Stack.Screen name="SendNudge" component={SendNudgeScreen} />
+    <Stack.Screen name="NudgeSent" component={NudgeSentScreen} />
 
     {/* Task ActionFlows (tabs hidden) */}
     <Stack.Screen name="CreateTask" component={CreateTaskScreen} />
