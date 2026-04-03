@@ -25,6 +25,7 @@ const createClient = (): AxiosInstance => {
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
+      console.log('config config', config);
       return config;
     },
     (error: AxiosError) => {

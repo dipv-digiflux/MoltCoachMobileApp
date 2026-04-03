@@ -6,7 +6,7 @@ export {
   bookCallThunk,
 } from './authThunks';
 
-export { getCoachBookingsThunk } from './bookingThunks';
+export { getCoachBookingsThunk, getCoachProfileThunk } from './bookingThunks';
 export {
   inviteBulkClientsThunk,
   sendInviteSmsThunk,

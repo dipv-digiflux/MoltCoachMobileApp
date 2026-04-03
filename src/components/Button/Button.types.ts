@@ -9,7 +9,9 @@ export type ButtonVariant =
   | 'secondary'
   | 'minimal'
   | 'destructive'
-  | 'outline';
+  | 'outline'
+  | 'text'
+  | 'destructive-text';
 
 /** Button size preset. */
 export type ButtonSize = 'small' | 'default' | 'large';

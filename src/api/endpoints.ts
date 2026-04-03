@@ -11,4 +11,5 @@ export const ENDPOINTS = {
   COACH_FETCH_LINKS: 'v1/coach/invite-link/fetch-links',
   COACH_USER_RELATIONSHIP: 'v1/coach/user-relationship',
   COACH_NUDGE: 'v1/coach/nudge',
+  COACH_PROFILE: 'v1/coach/profile',
 } as const;

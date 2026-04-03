@@ -4,15 +4,25 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Input, PageHeaderScrollView, Radio, Button } from '@/components';
 import { useAppSelector } from '@/store/hooks';
 import { colors, spacing, typography, moderateScale } from '@/theme';
+import { getInitials } from '@/utils/avatar';
+import { formatFullName } from '@/utils/stringUtils';
 
 import { DeleteAccountBottomSheet } from './components/DeleteAccountBottomSheet';
 
 export const ProfileSettingsScreen = (): ReactElement => {
   const translations = useAppSelector(state => state.translation);
+  const profile = useAppSelector(state => state.booking.profile);
 
-  const [name, setName] = useState('John smith');
-  const [mobile, setMobile] = useState('+1 555 123 4567');
-  const [email, setEmail] = useState('John.smith@newmail.com');
+  const [name, setName] = useState(
+    formatFullName(profile?.first_name, profile?.last_name) || 'John smith',
+  );
+  const [mobile, setMobile] = useState(
+    `${profile?.country_code || ''} ${profile?.phone_number || ''}`.trim() ||
+      '+1 555 123 4567',
+  );
+  const [email, setEmail] = useState(
+    profile?.email || 'John.smith@newmail.com',
+  );
   const [dob, setDob] = useState('12 Jan 1990');
   const [gender, setGender] = useState('Male');
   const [sameAsWhatsapp, setSameAsWhatsapp] = useState(true);
@@ -28,7 +38,7 @@ export const ProfileSettingsScreen = (): ReactElement => {
           {/* Avatar Section */}
           <View style={styles.avatarSection}>
             <View style={styles.avatarContainer}>
-              <Text style={styles.avatarInitials}>Jh</Text>
+              <Text style={styles.avatarInitials}>{getInitials(name)}</Text>
             </View>
             <Pressable style={styles.changeImageButton}>
               <Text style={styles.changeImageText}>
@@ -83,7 +93,7 @@ export const ProfileSettingsScreen = (): ReactElement => {
           <View style={styles.footer}>
             <Button
               label={translations.profileSettingsDeleteAccount}
-              variant="destructive"
+              variant="destructive-text"
               onPress={() => setIsDeleteSheetVisible(true)}
               style={styles.deleteButton}
             />

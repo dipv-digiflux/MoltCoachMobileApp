@@ -74,14 +74,18 @@ export interface Customer {
 export interface CoachProfile {
   _id: string;
   first_name: string;
-  last_name: string;
+  last_name?: string;
   email: string;
   country_code: string;
   phone_number: string;
-  status: 'reject' | 'pending' | 'approve';
+  status: 'reject' | 'pending' | 'approve' | 'approved';
   is_request_access?: boolean;
   is_booking_confirmed?: boolean;
   is_verified?: boolean;
+  referral_code?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
 }
 
 /** Request payload for `COACH_REQUEST_ACCESS` */
@@ -120,6 +124,7 @@ export interface BookCallRequest {
   name: string;
   email: string;
   phone_number: string;
+  country_code: string;
 }
 
 export type BookCallResponse = BaseResponse & {
@@ -271,3 +276,5 @@ export interface SendNudgePayload {
   text?: string[];
   task_title?: string[];
 }
+
+export type GetCoachProfileResponse = ApiResponse<CoachProfile>;
