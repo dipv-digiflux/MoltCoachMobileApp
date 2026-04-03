@@ -6,23 +6,11 @@ import {
   StyleSheet,
   Text,
   View,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
 } from 'react-native';
 
-import { colors, moderateScale, spacing, typography } from '@/theme';
+import { colors, moderateScale, typography } from '@/theme';
 
-export interface WheelProps {
-  data: string[];
-  selectedValue: string;
-  onValueChange: (value: string) => void;
-  width?: number;
-  itemHeight?: number;
-  containerStyle?: StyleProp<ViewStyle>;
-  itemTextStyle?: StyleProp<TextStyle>;
-  activeItemTextStyle?: StyleProp<TextStyle>;
-}
+import type { WheelProps } from './Wheel.types';
 
 export const ITEM_HEIGHT = moderateScale(44);
 
@@ -35,7 +23,7 @@ export const Wheel = ({
   containerStyle,
   itemTextStyle,
   activeItemTextStyle,
-}: WheelProps) => {
+}: WheelProps): React.ReactElement => {
   const scrollRef = useRef<ScrollView>(null);
 
   // Padding items to keep selected value centered in a 5-row layout
@@ -43,7 +31,7 @@ export const Wheel = ({
   const extendedData = useMemo(() => ['', '', ...data, '', ''], [data]);
 
   const onScroll = useCallback(
-    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    (event: NativeSyntheticEvent<NativeScrollEvent>): void => {
       const y = event.nativeEvent.contentOffset.y;
       const index = Math.round(y / itemHeight);
       const safeIndex = Math.max(0, Math.min(index, data.length - 1));
@@ -55,11 +43,11 @@ export const Wheel = ({
     [data, onValueChange, itemHeight],
   );
 
-  useEffect(() => {
+  useEffect((): void => {
     const index = data.indexOf(selectedValue);
     if (index !== -1) {
       // Small delay ensures ScrollView is laid out
-      setTimeout(() => {
+      setTimeout((): void => {
         scrollRef.current?.scrollTo({
           y: index * itemHeight,
           animated: false,

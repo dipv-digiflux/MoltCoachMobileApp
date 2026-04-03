@@ -4,16 +4,13 @@ import {
   postCoachInviteStore,
   getCoachFetchLinks,
   patchCoachUpdateRelationship,
-<<<<<<< HEAD
   postSendNudge,
-=======
   getCoachWeeklySummary,
   getCoachUserRelationship,
   postCoachTaskStore,
   getCoachFetchTasks,
   deleteCoachTask,
   patchCoachUpdateTask,
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 } from '@/api/clientApi';
 import {
   setClientOperationError,
@@ -35,12 +32,9 @@ import type {
   ApiResponse,
   AddClientPayload,
   InviteWithOnboarding,
-<<<<<<< HEAD
   SendNudgePayload,
   NudgeType,
-=======
   CreateTaskPayload,
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 } from '@/types/api.types';
 
 export const inviteBulkClientsThunk =
@@ -213,7 +207,7 @@ export const updateInviteLinkThunk =
       throw error;
     }
   };
-<<<<<<< HEAD
+
 export const sendNudgeThunk =
   (payload: SendNudgePayload, type: NudgeType) =>
   async (dispatch: AppDispatch): Promise<ApiResponse<unknown>> => {
@@ -228,7 +222,21 @@ export const sendNudgeThunk =
           setClientOperationError({
             operation: 'sendNudge',
             message: response?.message || 'Failed to send nudge',
-=======
+          }),
+        );
+      }
+      return response;
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(
+        setClientOperationError({
+          operation: 'sendNudge',
+          message: errorMsg,
+        }),
+      );
+      throw error;
+    }
+  };
 
 export const fetchWeeklySummaryThunk =
   (customerId: string, page: number = 1, limit: number = 10) =>
@@ -311,7 +319,6 @@ export const createTaskThunk =
           setClientOperationError({
             operation: 'createTask',
             message: response?.message || 'Create task failed',
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
           }),
         );
       }
@@ -320,9 +327,6 @@ export const createTaskThunk =
       const errorMsg = getApiErrorMessage(error);
       dispatch(
         setClientOperationError({
-<<<<<<< HEAD
-          operation: 'sendNudge',
-=======
           operation: 'createTask',
           message: errorMsg,
         }),
@@ -419,7 +423,6 @@ export const updateTaskThunk =
       dispatch(
         setClientOperationError({
           operation: 'updateTask',
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
           message: errorMsg,
         }),
       );

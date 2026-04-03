@@ -9,15 +9,12 @@ import type {
   AddClientPayload,
   FetchInviteLinksResponse,
   InviteWithOnboarding,
-<<<<<<< HEAD
   NudgeType,
   SendNudgePayload,
-=======
   WeeklyTaskSummaryResponse,
   UserRelationshipDetailResponse,
   CreateTaskPayload,
   FetchTasksResponse,
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 } from '@/types/api.types';
 
 export const deleteCoachTask = async (
@@ -109,7 +106,6 @@ export const patchCoachUpdateRelationship = async (
   );
 };
 
-<<<<<<< HEAD
 export const postSendNudge = async (
   payload: SendNudgePayload,
   type: NudgeType,
@@ -117,7 +113,9 @@ export const postSendNudge = async (
   return httpPost<SendNudgePayload, ApiResponse<unknown>>(
     `${ENDPOINTS.COACH_NUDGE}?type=${type}`,
     payload,
-=======
+  );
+};
+
 export const getCoachWeeklySummary = async (
   customerId: string,
   page: number = 1,
@@ -126,6 +124,5 @@ export const getCoachWeeklySummary = async (
 ): Promise<WeeklyTaskSummaryResponse> => {
   return httpGet<WeeklyTaskSummaryResponse>(
     `${ENDPOINTS.COACH_WEEKLY_SUMMARY}?page=${page}&limit=${limit}&type=${type}&customer_id=${customerId}`,
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
   );
 };

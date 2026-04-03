@@ -3,15 +3,10 @@ import { StyleSheet, View } from 'react-native';
 
 import { BottomSheet, Button } from '@/components';
 import { spacing } from '@/theme';
+
 import { TimeWheelPicker } from './TimeWheelPicker';
 
-export interface TimeSelectionBottomSheetProps {
-  visible: boolean;
-  onClose: () => void;
-  onSelect: (time: string) => void;
-  initialValue: string;
-  title?: string;
-}
+import type { TimeSelectionBottomSheetProps } from './TimeSelectionBottomSheet.types';
 
 export const TimeSelectionBottomSheet = ({
   visible,
@@ -19,10 +14,10 @@ export const TimeSelectionBottomSheet = ({
   onSelect,
   initialValue,
   title = 'Select reminder time',
-}: TimeSelectionBottomSheetProps) => {
+}: TimeSelectionBottomSheetProps): React.ReactElement => {
   const [time, setTime] = useState(initialValue);
 
-  const handleSelect = () => {
+  const handleSelect = (): void => {
     onSelect(time);
     onClose();
   };

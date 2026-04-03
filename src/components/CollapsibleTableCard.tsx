@@ -85,7 +85,6 @@ export const CollapsibleTableCard = ({
         setExpandedSections({ [sections[0].id]: true });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sections, isAllDatesSelected]);
 
   const toggleSection = (id: string): void => {

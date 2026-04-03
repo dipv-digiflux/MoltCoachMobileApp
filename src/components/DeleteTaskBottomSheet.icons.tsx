@@ -1,7 +1,7 @@
 import React from 'react';
 import Svg, { Path, Rect } from 'react-native-svg';
 
-export const DeleteTaskIcon = ({ size = 48 }) => (
+export const DeleteTaskIcon = ({ size = 48 }): React.ReactElement => (
   <Svg width={size} height={size} viewBox="0 0 48 48" fill="none">
     <Rect width="48" height="48" fill="#FFEDF2" rx={4} />
     <Path

@@ -10,13 +10,10 @@ export const ENDPOINTS = {
   COACH_INVITE_STORE: 'v1/coach/invite-link/store',
   COACH_FETCH_LINKS: 'v1/coach/invite-link/fetch-links',
   COACH_USER_RELATIONSHIP: 'v1/coach/user-relationship',
-<<<<<<< HEAD
   COACH_NUDGE: 'v1/coach/nudge',
-=======
   COACH_WEEKLY_SUMMARY: 'v1/coach/task/weekly-summary',
   COACH_TASK_STORE: 'v1/coach/task/store',
   COACH_FETCH_TASKS: 'v1/coach/task/fetch-tasks',
   COACH_DELETE_TASK: 'v1/coach/task/delete-task',
   COACH_UPDATE_TASK: 'v1/coach/task/update-task',
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 } as const;

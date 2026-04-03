@@ -310,7 +310,6 @@ export type FetchInviteLinksResponse = ApiResponse<
   PaginatedResponse<InviteLink>
 >;
 
-<<<<<<< HEAD
 export type NudgeType = 'text' | 'task';
 
 export interface SendNudgePayload {
@@ -318,7 +317,7 @@ export interface SendNudgePayload {
   text?: string[];
   task_title?: string[];
 }
-=======
+
 // ── Tasks ─────────────────────────────────────────────
 
 export interface WeeklySummaryDay {
@@ -388,4 +387,3 @@ export interface TaskDetail {
 }
 
 export type FetchTasksResponse = ApiResponse<PaginatedResponse<TaskDetail>>;
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)

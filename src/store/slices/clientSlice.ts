@@ -14,16 +14,13 @@ export type ClientOperationKey =
   | 'inviteClient'
   | 'fetchInviteLinks'
   | 'updateInviteLink'
-<<<<<<< HEAD
-  | 'sendNudge';
-=======
+  | 'sendNudge'
   | 'fetchWeeklySummary'
   | 'fetchUserRelationship'
   | 'createTask'
   | 'fetchTasks'
   | 'deleteTask'
   | 'updateTask';
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 
 export interface ClientState {
   inviteLinks: InviteLink[];
@@ -49,16 +46,13 @@ const initialOperations: Record<ClientOperationKey, OperationState> = {
   inviteClient: createInitialOperation(),
   fetchInviteLinks: createInitialOperation(),
   updateInviteLink: createInitialOperation(),
-<<<<<<< HEAD
   sendNudge: createInitialOperation(),
-=======
   fetchWeeklySummary: createInitialOperation(),
   fetchUserRelationship: createInitialOperation(),
   createTask: createInitialOperation(),
   fetchTasks: createInitialOperation(),
   deleteTask: createInitialOperation(),
   updateTask: createInitialOperation(),
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 };
 
 const initialState: ClientState = {

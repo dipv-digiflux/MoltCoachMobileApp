@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { format, parseISO } from 'date-fns';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -16,11 +16,13 @@ import {
   OngoingTaskCard,
   PageHeader,
 } from '@/components';
-import { colors, moderateScale, spacing, typography } from '@/theme';
-import { AppStackParamList } from '@/types/navigation.types';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { deleteTaskThunk, fetchTasksThunk } from '@/store/thunks/clientThunks';
-import { format, parseISO } from 'date-fns';
+import { colors, moderateScale, spacing, typography } from '@/theme';
+
+import type { TaskDetail } from '@/types/api.types';
+import type { AppStackParamList } from '@/types/navigation.types';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export const ManageTasksScreen = ({
   navigation,
@@ -35,7 +37,6 @@ export const ManageTasksScreen = ({
 
   const { tasks, operations } = useAppSelector(state => state.client);
   const isFetching = operations.fetchTasks.status === 'loading';
-  const isDeleting = operations.deleteTask.status === 'loading';
 
   const [isDeleteVisible, setIsDeleteVisible] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
@@ -46,12 +47,12 @@ export const ManageTasksScreen = ({
     }
   }, [clientId, dispatch]);
 
-  const handleDeleteTask = (taskId: string) => {
+  const handleDeleteTask = (taskId: string): void => {
     setSelectedTaskId(taskId);
     setIsDeleteVisible(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = (): void => {
     if (selectedTaskId && clientId) {
       void dispatch(deleteTaskThunk(selectedTaskId, clientId));
       setIsDeleteVisible(false);
@@ -59,7 +60,7 @@ export const ManageTasksScreen = ({
     }
   };
 
-  const getTaskSubtitle = (task: any) => {
+  const getTaskSubtitle = (task: TaskDetail): string => {
     const creatorText = task.creator === 'coach' ? 'you' : 'client';
     const frequency =
       task.frequency.charAt(0).toUpperCase() + task.frequency.slice(1);
@@ -74,14 +75,16 @@ export const ManageTasksScreen = ({
     let freqDetail = '';
     if (
       task.frequency === 'weekly' &&
-      task.schedule?.days_of_week?.length > 0
+      task.schedule?.days_of_week &&
+      task.schedule.days_of_week.length > 0
     ) {
       freqDetail = ` (${task.schedule.days_of_week.join(', ')})`;
     } else if (task.frequency === 'monthly' && task.schedule?.day_of_month) {
       freqDetail = ` (Day ${task.schedule.day_of_month})`;
     } else if (
       task.frequency === 'quarterly' &&
-      task.schedule?.quarters?.length > 0
+      task.schedule?.quarters &&
+      task.schedule.quarters.length > 0
     ) {
       freqDetail = ` (Q${task.schedule.quarters.join(', ')})`;
     }

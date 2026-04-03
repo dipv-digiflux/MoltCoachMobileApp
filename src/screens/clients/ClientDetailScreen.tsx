@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React, { useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-=======
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -12,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import { format, parseISO } from 'date-fns';
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -32,23 +27,16 @@ import { colors, moderateScale, spacing, typography } from '@/theme';
 import { WeeklySummaryDay } from '@/types/api.types';
 
 import { MenuDotsIcon } from './ClientDetailScreen.icons';
-<<<<<<< HEAD
-import { ClientDetailScreenProps } from './ClientDetailScreen.types';
-import { ClientFloatingActions } from './components/ClientFloatingActions';
-=======
 import { ClientDetailScreenProps, TaskData } from './ClientDetailScreen.types';
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
+import { ClientFloatingActions } from './components/ClientFloatingActions';
 
 export const ClientDetailScreen = ({
   navigation,
   route,
 }: ClientDetailScreenProps): React.ReactElement => {
   const insets = useSafeAreaInsets();
-<<<<<<< HEAD
-  const scrollViewRef = useRef<ScrollView>(null);
-  const { clientName, clientId } = route.params;
-=======
   const dispatch = useAppDispatch();
+  const scrollViewRef = useRef<ScrollView>(null);
   const { clientId, clientName } = route.params;
 
   const {
@@ -59,8 +47,6 @@ export const ClientDetailScreen = ({
     operations,
   } = useAppSelector(state => state.client);
   const isFetchingSummary = operations.fetchWeeklySummary.status === 'loading';
-
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
   const [activeTab, setActiveTab] = useState('Tasks');
   const [showAllDates, setShowAllDates] = useState(false);
   const [isTaskDetailsVisible, setIsTaskDetailsVisible] = useState(false);
@@ -154,43 +140,6 @@ export const ClientDetailScreen = ({
 
   const tabs = ['Overview', 'Tasks', 'Nutrition', 'Profile'];
 
-<<<<<<< HEAD
-  // Mock data for the table
-  const tableSections = [
-    {
-      id: 'week22',
-      period: 'Week 22',
-      dateRange: '19 - 22 Mar',
-      completion: '40/50',
-      rows: [
-        { id: 'sun', label: 'SUN', subLabel: '22 MAR', value: '3/5' },
-        { id: 'sat', label: 'SAT', subLabel: '21 MAR', value: '4/5' },
-        { id: 'fri', label: 'FRI', subLabel: '20 MAR', value: '4/4' },
-        { id: 'thu', label: 'THUR', subLabel: '19 MAR', value: '5/6' },
-        { id: 'wed', label: 'WED', subLabel: '18 MAR', value: '4/4' },
-        { id: 'tue', label: 'TUE', subLabel: '17 MAR', value: '2/2' },
-        { id: 'mon', label: 'MON', subLabel: '16 MAR', value: '3/4' },
-      ],
-    },
-    {
-      id: 'week21',
-      period: 'Week 21',
-      dateRange: '12 - 19 Mar',
-      completion: '50/60',
-      rows: [
-        { id: 'w21_sun', label: 'SUN', subLabel: '19 MAR', value: '7/7' },
-        { id: 'w21_sat', label: 'SAT', subLabel: '18 MAR', value: '8/8' },
-      ],
-    },
-    {
-      id: 'week20',
-      period: 'Week 20',
-      dateRange: '6 - 12 Mar',
-      completion: '38/40',
-      rows: [{ id: 'w20_sun', label: 'SUN', subLabel: '12 MAR', value: '5/5' }],
-    },
-  ];
-
   const handleScrollToTop = (): void => {
     scrollViewRef.current?.scrollTo({ y: 0, animated: true });
   };
@@ -200,9 +149,6 @@ export const ClientDetailScreen = ({
       clientId: clientId,
     });
   };
-
-=======
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
   return (
     <View style={styles.container}>
       <PageHeader
@@ -311,11 +257,11 @@ export const ClientDetailScreen = ({
         )}
       </ScrollView>
 
-<<<<<<< HEAD
       <ClientFloatingActions
         onScrollToTop={handleScrollToTop}
         onNudge={handleNudge}
-=======
+      />
+
       <QuickActionsBottomSheet
         isVisible={isQuickActionsVisible}
         onClose={() => setIsQuickActionsVisible(false)}
@@ -334,7 +280,6 @@ export const ClientDetailScreen = ({
           console.log('Nudge pressed');
           setIsTaskDetailsVisible(false);
         }}
->>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
       />
     </View>
   );

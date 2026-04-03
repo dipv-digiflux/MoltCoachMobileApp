@@ -1,15 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
 import { BottomSheet } from '@/components';
 import { colors, moderateScale, spacing, typography } from '@/theme';
-import { DeleteTaskBottomSheetProps } from './DeleteTaskBottomSheet.types';
+
 import { DeleteTaskIcon } from './DeleteTaskBottomSheet.icons';
+
+import type { DeleteTaskBottomSheetProps } from './DeleteTaskBottomSheet.types';
 
 export const DeleteTaskBottomSheet = ({
   isVisible,
   onClose,
   onDelete,
-  taskTitle,
 }: DeleteTaskBottomSheetProps): React.ReactElement => {
   return (
     <BottomSheet

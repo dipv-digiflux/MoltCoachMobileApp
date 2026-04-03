@@ -1,17 +1,12 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BottomSheet, Button } from '@/components';
 import { colors, moderateScale, spacing } from '@/theme';
+
 import { ITEM_HEIGHT, Wheel } from './Wheel';
 
-export interface MonthlyDateSelectionBottomSheetProps {
-  visible: boolean;
-  onClose: () => void;
-  onSelect: (date: { month: string; day: string; year: string }) => void;
-  initialValue?: { month: string; day: string; year: string };
-  title?: string;
-}
+import type { MonthlyDateSelectionBottomSheetProps } from './MonthlyDateSelectionBottomSheet.types';
 
 const MONTHS = [
   'January',
@@ -37,12 +32,12 @@ export const MonthlyDateSelectionBottomSheet = ({
   onSelect,
   initialValue,
   title = 'Select monthly date',
-}: MonthlyDateSelectionBottomSheetProps) => {
+}: MonthlyDateSelectionBottomSheetProps): React.ReactElement => {
   const [month, setMonth] = useState(initialValue?.month || 'April');
   const [day, setDay] = useState(initialValue?.day || '3');
   const [year, setYear] = useState(initialValue?.year || '2026');
 
-  const handleSelect = () => {
+  const handleSelect = (): void => {
     onSelect({ month, day, year });
     onClose();
   };

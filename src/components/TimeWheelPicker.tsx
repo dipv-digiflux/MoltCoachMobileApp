@@ -1,15 +1,16 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { colors, moderateScale, spacing, typography } from '@/theme';
+import { moderateScale, spacing } from '@/theme';
+
 import { ITEM_HEIGHT, Wheel } from './Wheel';
 
-export interface TimeWheelPickerProps {
-  value: string; // "hh:mm AM" or "hh:mm PM"
-  onChange: (value: string) => void;
-}
+import type { TimeWheelPickerProps } from './TimeWheelPicker.types';
 
-export const TimeWheelPicker = ({ value, onChange }: TimeWheelPickerProps) => {
+export const TimeWheelPicker = ({
+  value,
+  onChange,
+}: TimeWheelPickerProps): React.ReactElement => {
   const [time, period] = value.split(' ');
   const [hour, minute] = time.split(':');
 
@@ -23,15 +24,15 @@ export const TimeWheelPicker = ({ value, onChange }: TimeWheelPickerProps) => {
   );
   const periods = ['AM', 'PM'];
 
-  const handleHourChange = (newHour: string) => {
+  const handleHourChange = (newHour: string): void => {
     onChange(`${newHour}:${minute} ${period}`);
   };
 
-  const handleMinuteChange = (newMinute: string) => {
+  const handleMinuteChange = (newMinute: string): void => {
     onChange(`${hour}:${newMinute} ${period}`);
   };
 
-  const handlePeriodChange = (newPeriod: string) => {
+  const handlePeriodChange = (newPeriod: string): void => {
     onChange(`${hour}:${minute} ${newPeriod}`);
   };
 
