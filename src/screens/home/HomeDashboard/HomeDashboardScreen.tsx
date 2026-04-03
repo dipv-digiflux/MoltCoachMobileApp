@@ -119,7 +119,7 @@ export const HomeDashboardScreen = (): ReactElement => {
             onPress={() => {
               if (isAccepted) {
                 navigation.navigate('ClientDetail', {
-                  clientId: link._id,
+                  clientId: link.invitee._id,
                   clientName: name,
                 });
               }

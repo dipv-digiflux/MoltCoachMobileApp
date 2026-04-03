@@ -4,7 +4,16 @@ import {
   postCoachInviteStore,
   getCoachFetchLinks,
   patchCoachUpdateRelationship,
+<<<<<<< HEAD
   postSendNudge,
+=======
+  getCoachWeeklySummary,
+  getCoachUserRelationship,
+  postCoachTaskStore,
+  getCoachFetchTasks,
+  deleteCoachTask,
+  patchCoachUpdateTask,
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 } from '@/api/clientApi';
 import {
   setClientOperationError,
@@ -12,6 +21,10 @@ import {
   setClientOperationSuccess,
   setInviteLinks,
   appendInviteLinks,
+  setWeeklySummary,
+  appendWeeklySummary,
+  setUserRelationshipDetail,
+  setTasks,
 } from '@/store/slices/clientSlice';
 import { getApiErrorMessage } from '@/utils/apiError';
 
@@ -22,8 +35,12 @@ import type {
   ApiResponse,
   AddClientPayload,
   InviteWithOnboarding,
+<<<<<<< HEAD
   SendNudgePayload,
   NudgeType,
+=======
+  CreateTaskPayload,
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 } from '@/types/api.types';
 
 export const inviteBulkClientsThunk =
@@ -196,6 +213,7 @@ export const updateInviteLinkThunk =
       throw error;
     }
   };
+<<<<<<< HEAD
 export const sendNudgeThunk =
   (payload: SendNudgePayload, type: NudgeType) =>
   async (dispatch: AppDispatch): Promise<ApiResponse<unknown>> => {
@@ -210,6 +228,90 @@ export const sendNudgeThunk =
           setClientOperationError({
             operation: 'sendNudge',
             message: response?.message || 'Failed to send nudge',
+=======
+
+export const fetchWeeklySummaryThunk =
+  (customerId: string, page: number = 1, limit: number = 10) =>
+  async (dispatch: AppDispatch): Promise<void> => {
+    dispatch(setClientOperationLoading('fetchWeeklySummary'));
+
+    try {
+      const response = await getCoachWeeklySummary(customerId, page, limit);
+      if (response && response.status) {
+        if (page === 1) {
+          dispatch(setWeeklySummary(response.data));
+        } else {
+          dispatch(appendWeeklySummary(response.data));
+        }
+        dispatch(setClientOperationSuccess('fetchWeeklySummary'));
+      } else {
+        dispatch(
+          setClientOperationError({
+            operation: 'fetchWeeklySummary',
+            message: response?.message || 'Fetch failed',
+          }),
+        );
+      }
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(
+        setClientOperationError({
+          operation: 'fetchWeeklySummary',
+          message: errorMsg,
+        }),
+      );
+      throw error;
+    }
+  };
+
+export const fetchUserRelationshipThunk =
+  (userId: string) =>
+  async (dispatch: AppDispatch): Promise<void> => {
+    dispatch(setClientOperationLoading('fetchUserRelationship'));
+
+    try {
+      const response = await getCoachUserRelationship(userId);
+      if (response && response.status && response.data.length > 0) {
+        dispatch(setUserRelationshipDetail(response.data[0]));
+        dispatch(setClientOperationSuccess('fetchUserRelationship'));
+      } else {
+        dispatch(
+          setClientOperationError({
+            operation: 'fetchUserRelationship',
+            message: response?.message || 'Fetch failed',
+          }),
+        );
+      }
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(
+        setClientOperationError({
+          operation: 'fetchUserRelationship',
+          message: errorMsg,
+        }),
+      );
+      throw error;
+    }
+  };
+
+export const createTaskThunk =
+  (payload: CreateTaskPayload) =>
+  async (dispatch: AppDispatch): Promise<ApiResponse<unknown>> => {
+    dispatch(setClientOperationLoading('createTask'));
+
+    try {
+      const response = await postCoachTaskStore(payload);
+      if (response && response.status) {
+        dispatch(setClientOperationSuccess('createTask'));
+        // Refetch task list and weekly summary
+        void dispatch(fetchTasksThunk(payload.customer_id));
+        void dispatch(fetchWeeklySummaryThunk(payload.customer_id));
+      } else {
+        dispatch(
+          setClientOperationError({
+            operation: 'createTask',
+            message: response?.message || 'Create task failed',
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
           }),
         );
       }
@@ -218,7 +320,106 @@ export const sendNudgeThunk =
       const errorMsg = getApiErrorMessage(error);
       dispatch(
         setClientOperationError({
+<<<<<<< HEAD
           operation: 'sendNudge',
+=======
+          operation: 'createTask',
+          message: errorMsg,
+        }),
+      );
+      throw error;
+    }
+  };
+
+export const fetchTasksThunk =
+  (customerId: string) =>
+  async (dispatch: AppDispatch): Promise<void> => {
+    dispatch(setClientOperationLoading('fetchTasks'));
+
+    try {
+      const response = await getCoachFetchTasks(customerId);
+      if (response && response.status) {
+        dispatch(setTasks(response.data.list));
+        dispatch(setClientOperationSuccess('fetchTasks'));
+      } else {
+        dispatch(
+          setClientOperationError({
+            operation: 'fetchTasks',
+            message: response?.message || 'Fetch tasks failed',
+          }),
+        );
+      }
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(
+        setClientOperationError({
+          operation: 'fetchTasks',
+          message: errorMsg,
+        }),
+      );
+      throw error;
+    }
+  };
+
+export const deleteTaskThunk =
+  (taskId: string, customerId: string) =>
+  async (dispatch: AppDispatch): Promise<void> => {
+    dispatch(setClientOperationLoading('deleteTask'));
+
+    try {
+      const response = await deleteCoachTask(taskId);
+      if (response && response.status) {
+        dispatch(setClientOperationSuccess('deleteTask'));
+        // Refetch both
+        void dispatch(fetchTasksThunk(customerId));
+        void dispatch(fetchWeeklySummaryThunk(customerId));
+      } else {
+        dispatch(
+          setClientOperationError({
+            operation: 'deleteTask',
+            message: response?.message || 'Delete task failed',
+          }),
+        );
+      }
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(
+        setClientOperationError({
+          operation: 'deleteTask',
+          message: errorMsg,
+        }),
+      );
+      throw error;
+    }
+  };
+
+export const updateTaskThunk =
+  (taskId: string, payload: CreateTaskPayload) =>
+  async (dispatch: AppDispatch): Promise<ApiResponse<unknown>> => {
+    dispatch(setClientOperationLoading('updateTask'));
+
+    try {
+      const response = await patchCoachUpdateTask(taskId, payload);
+      if (response && response.status) {
+        dispatch(setClientOperationSuccess('updateTask'));
+        // Refetch both
+        void dispatch(fetchTasksThunk(payload.customer_id));
+        void dispatch(fetchWeeklySummaryThunk(payload.customer_id));
+      } else {
+        dispatch(
+          setClientOperationError({
+            operation: 'updateTask',
+            message: response?.message || 'Update task failed',
+          }),
+        );
+      }
+      return response;
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(
+        setClientOperationError({
+          operation: 'updateTask',
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
           message: errorMsg,
         }),
       );

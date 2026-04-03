@@ -25,15 +25,17 @@ if (
 
 const TableRow = ({
   label,
-  subLabel,
+  subLabel = '',
   value,
   isHeader = false,
   onPress,
+  onPressValue,
 }: TableRowProps): React.ReactElement => {
+  const RowComponent = isHeader ? Pressable : View;
+
   return (
-    <Pressable
-      onPress={onPress}
-      disabled={!onPress}
+    <RowComponent
+      onPress={isHeader ? onPress : undefined}
       style={[styles.row, isHeader && styles.headerRow]}
     >
       <View style={styles.periodCol}>
@@ -50,23 +52,41 @@ const TableRow = ({
         )}
       </View>
       <View style={styles.verticalDivider} />
-      <View style={styles.valueCol}>
+      <Pressable
+        onPress={() => onPressValue?.(label, subLabel, value)}
+        disabled={isHeader}
+        style={styles.valueCol}
+      >
         <Text style={isHeader ? styles.headerValueText : styles.dayValueText}>
           {value}
         </Text>
-      </View>
-    </Pressable>
+      </Pressable>
+    </RowComponent>
   );
 };
 
 export const CollapsibleTableCard = ({
   sections,
+  onPressValue,
+  isAllDatesSelected = false,
 }: CollapsibleTableCardProps): React.ReactElement => {
   const [expandedSections, setExpandedSections] = useState<
     Record<string, boolean>
-  >(
-    { [sections[0]?.id]: true }, // Expand first section by default
-  );
+  >({});
+
+  // Sync expansion state with All Dates toggle
+  React.useEffect(() => {
+    if (sections.length > 0) {
+      if (isAllDatesSelected) {
+        // Collapse all when All Dates is ON
+        setExpandedSections({});
+      } else {
+        // Expand first section by default when All Dates is OFF
+        setExpandedSections({ [sections[0].id]: true });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections, isAllDatesSelected]);
 
   const toggleSection = (id: string): void => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -99,6 +119,7 @@ export const CollapsibleTableCard = ({
               value={section.completion}
               isHeader
               onPress={() => toggleSection(section.id)}
+              onPressValue={onPressValue}
             />
             {isExpanded && (
               <View style={styles.expandedContent}>
@@ -108,6 +129,7 @@ export const CollapsibleTableCard = ({
                     label={row.label}
                     subLabel={row.subLabel}
                     value={row.value}
+                    onPressValue={onPressValue}
                   />
                 ))}
               </View>

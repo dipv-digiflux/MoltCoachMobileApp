@@ -1,4 +1,4 @@
-import React, { type ReactElement } from 'react';
+import React, { useEffect, type ReactElement } from 'react';
 import {
   Pressable,
   ScrollView,
@@ -24,8 +24,15 @@ import {
   PageHeader,
   Switch,
   TextArea,
+  TimeWheelPicker,
+  MonthlyDateSelectionBottomSheet,
+  TimeSelectionBottomSheet,
 } from '@/components';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { resetClientOperation } from '@/store/slices/clientSlice';
+import { createTaskThunk, updateTaskThunk } from '@/store/thunks/clientThunks';
 import { colors, moderateScale, spacing, typography } from '@/theme';
+import { CreateTaskPayload } from '@/types/api.types';
 import { AppStackParamList } from '@/types/navigation.types';
 
 import {
@@ -35,6 +42,8 @@ import {
   DAYS,
   TASK_TYPES,
   FREQUENCIES,
+  DAY_MAPPING,
+  INVERSE_DAY_MAPPING,
 } from './CreateTaskScreen.types';
 
 export const CreateTaskScreen = ({
@@ -43,34 +52,161 @@ export const CreateTaskScreen = ({
   const navigation =
     useNavigation<NativeStackScreenProps<AppStackParamList>['navigation']>();
   const insets = useSafeAreaInsets();
+  const dispatch = useAppDispatch();
   const _clientName = route.params?.clientName || 'Client';
+  const clientId = route.params?.clientId || '';
+
+  const { operations } = useAppSelector(state => state.client);
+  const task = route.params?.task;
+  const isEditing = !!task;
+  const isPending =
+    operations.createTask.status === 'loading' ||
+    operations.updateTask.status === 'loading';
+
+  const [isMonthlySheetVisible, setIsMonthlySheetVisible] =
+    React.useState(false);
+  const [isTimeSheetVisible, setIsTimeSheetVisible] = React.useState(false);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetClientOperation('createTask'));
+      dispatch(resetClientOperation('updateTask'));
+    };
+  }, [dispatch]);
+
+  // Initial values based on task if editing
+  const getInitialValues = (): CreateTaskFormValues => {
+    if (!task) {
+      return {
+        taskName: '',
+        taskType: 'Repeat task',
+        frequency: 'Daily',
+        selectedDays: [],
+        monthlyDay: '14th Apr 2026',
+        quarterlyDate: '31st Mar 2026',
+        oneTimeDate: '31st Mar 2026',
+        reminderEnabled: true,
+        reminderTime: '06:28 PM',
+      };
+    }
+
+    const freq = (task.frequency.charAt(0).toUpperCase() +
+      task.frequency.slice(1)) as CreateTaskFormValues['frequency'];
+
+    // Map schedule values
+    let monthlyDay = '14th Apr 2026';
+    if (task.frequency === 'monthly' && task.schedule?.day_of_month) {
+      monthlyDay = `${task.schedule.day_of_month}th of every month`;
+    }
+
+    let quarterlyDate = '31st Mar 2026';
+    if (task.frequency === 'quarterly' && task.schedule?.day_of_month) {
+      quarterlyDate = `${task.schedule.day_of_month}th of quarter`;
+    }
+
+    let oneTimeDate = '31st Mar 2026';
+    if (task.task_type === 'one-time' && task.schedule?.date) {
+      oneTimeDate = task.schedule.date;
+    }
+
+    return {
+      taskName: task.task,
+      taskType: task.task_type === 'repeat' ? 'Repeat task' : 'One-time task',
+      frequency: freq,
+      selectedDays: (task.schedule?.days_of_week || []).map(
+        d => INVERSE_DAY_MAPPING[d] || d,
+      ),
+      monthlyDay,
+      quarterlyDate,
+      oneTimeDate,
+      reminderEnabled: task.is_reminder || false,
+      reminderTime: task.reminder_time || '06:28 PM',
+    };
+  };
 
   const {
     control,
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<CreateTaskFormValues>({
     resolver: zodResolver(CreateTaskSchema),
-    defaultValues: {
-      taskName: '',
-      taskType: 'Repeat task',
-      frequency: 'Daily',
-      selectedDays: [],
-      reminderEnabled: true,
-      reminderTime: '06:28 PM',
-    },
+    defaultValues: getInitialValues(),
   });
+
+  // Re-initialize if task changes
+  useEffect(() => {
+    if (task) {
+      reset(getInitialValues());
+    }
+  }, [task, reset]);
 
   const taskType = watch('taskType');
   const frequency = watch('frequency');
   const reminderEnabled = watch('reminderEnabled');
   const selectedDays = watch('selectedDays');
 
-  const onSubmit = (data: CreateTaskFormValues): void => {
-    console.log('Task Created:', data);
-    navigation.goBack();
+  const onSubmit = async (data: CreateTaskFormValues): Promise<void> => {
+    if (!clientId) {
+      console.error('Client ID is missing');
+      return;
+    }
+
+    const payload: CreateTaskPayload = {
+      start_date: task?.start_date || new Date().toISOString().split('T')[0],
+      end_date: task?.end_date || '2099-12-31',
+      task: data.taskName,
+      customer_id: clientId,
+      task_type: data.taskType === 'Repeat task' ? 'repeat' : 'one-time',
+      frequency: data.frequency.toLowerCase() as CreateTaskPayload['frequency'],
+      schedule: {},
+      is_reminder: data.reminderEnabled,
+      reminder_time: data.reminderTime,
+    };
+
+    if (data.taskType === 'One-time task') {
+      payload.schedule = {
+        date: data.oneTimeDate,
+      };
+    } else if (data.frequency === 'Weekly') {
+      payload.schedule = {
+        days_of_week: data.selectedDays.map(
+          d => DAY_MAPPING[d] || d.toLowerCase(),
+        ),
+      };
+    } else if (data.frequency === 'Monthly') {
+      const dayStr = data.monthlyDay || '';
+      const day = parseInt(dayStr.split(' ')[0], 10);
+      payload.schedule = {
+        day_of_month: isNaN(day) ? 14 : day,
+      };
+    } else if (data.frequency === 'Quarterly') {
+      const dayStr = data.quarterlyDate || '';
+      const day = parseInt(dayStr.split(' ')[0], 10);
+      payload.schedule = {
+        quarters: [1, 2, 3, 4],
+        day_of_month: isNaN(day) ? 14 : day,
+      };
+    }
+
+    try {
+      let response;
+      if (task?._id) {
+        response = await dispatch(updateTaskThunk(task._id, payload));
+      } else {
+        response = await dispatch(createTaskThunk(payload));
+      }
+
+      if (response && response.status) {
+        setTimeout(() => {
+          navigation.goBack();
+        }, 100);
+      }
+    } catch (error) {
+      console.error('Failed to save task:', error);
+    }
   };
 
   const toggleDay = (
@@ -86,7 +222,10 @@ export const CreateTaskScreen = ({
 
   return (
     <View style={styles.container}>
-      <PageHeader title="Create task" onPressBack={() => navigation.goBack()} />
+      <PageHeader
+        title={isEditing ? 'Edit task' : 'Create task'}
+        onPressBack={() => navigation.goBack()}
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -149,6 +288,22 @@ export const CreateTaskScreen = ({
               </Pressable>
             ))}
           </View>
+          {taskType === 'One-time task' && (
+            <View style={styles.oneTimeDateContainer}>
+              <Pressable style={styles.frequencyInputBox}>
+                <Text style={styles.frequencyInputText}>
+                  {watch('oneTimeDate')}
+                </Text>
+                <CalendarDaysIconSvg
+                  width={moderateScale(18)}
+                  height={moderateScale(18)}
+                />
+              </Pressable>
+              <Text style={styles.oneTimeHelperText}>
+                This task is valid only on {watch('oneTimeDate')}
+              </Text>
+            </View>
+          )}
         </View>
 
         {/* Frequency Section */}
@@ -227,6 +382,46 @@ export const CreateTaskScreen = ({
                 )}
               </View>
             )}
+
+            {frequency === 'Monthly' && (
+              <View style={styles.frequencyInputWrapper}>
+                <Pressable
+                  style={styles.frequencyInputBox}
+                  onPress={() => setIsMonthlySheetVisible(true)}
+                >
+                  <Text style={styles.frequencyInputText}>
+                    {watch('monthlyDay')}
+                  </Text>
+                  <CalendarDaysIconSvg
+                    width={moderateScale(18)}
+                    height={moderateScale(18)}
+                  />
+                </Pressable>
+              </View>
+            )}
+
+            {frequency === 'Quarterly' && (
+              <View style={styles.frequencyInputWrapper}>
+                <Pressable
+                  style={styles.frequencyInputBox}
+                  onPress={() => setIsMonthlySheetVisible(true)}
+                >
+                  <Text style={styles.frequencyInputText}>
+                    {watch('quarterlyDate')}
+                  </Text>
+                  <CalendarDaysIconSvg
+                    width={moderateScale(18)}
+                    height={moderateScale(18)}
+                  />
+                </Pressable>
+                <Text style={styles.repeatSummaryText}>
+                  Repeat:{' '}
+                  <Text style={styles.repeatSummaryDays}>
+                    30th June, 30th Sep, 31st Dec
+                  </Text>
+                </Text>
+              </View>
+            )}
           </View>
         )}
 
@@ -248,28 +443,16 @@ export const CreateTaskScreen = ({
             />
           </View>
           {reminderEnabled && (
-            <View style={styles.timePickerContainer}>
-              {/* Top Row - Faded */}
-              <View style={styles.timeRow}>
-                <Text style={styles.timeTextFaded}>06</Text>
-                <Text style={styles.timeTextFaded}>28</Text>
-                <View style={styles.periodPlaceholder} />
-              </View>
-
-              {/* Middle Row - Active */}
-              <View style={[styles.timeRow, styles.timeRowActive]}>
-                <Text style={styles.timeTextActive}>06</Text>
-                <Text style={styles.timeTextActive}>28</Text>
-                <Text style={styles.timeTextActive}>PM</Text>
-              </View>
-
-              {/* Bottom Row - Faded */}
-              <View style={styles.timeRow}>
-                <Text style={styles.timeTextFaded}>06</Text>
-                <Text style={styles.timeTextFaded}>28</Text>
-                <Text style={styles.timeTextFaded}>AM</Text>
-              </View>
-            </View>
+            <Pressable
+              style={styles.timePickerContainer}
+              onPress={() => setIsTimeSheetVisible(true)}
+            >
+              <TimeWheelPicker
+                value={watch('reminderTime')}
+                onChange={() => {}}
+              />
+              <View style={StyleSheet.absoluteFill} pointerEvents="none" />
+            </Pressable>
           )}
         </View>
 
@@ -283,15 +466,21 @@ export const CreateTaskScreen = ({
                 ? `Repeats ${frequency}${
                     frequency === 'Weekly' && selectedDays.length > 0
                       ? ` on ${selectedDays.join(', ')}`
+                      : frequency === 'Monthly'
+                      ? ` on ${watch('monthlyDay')}`
+                      : frequency === 'Quarterly'
+                      ? ` on ${watch('quarterlyDate')}`
                       : ''
                   }`
-                : 'One-time task'}
+                : `One-time task on ${watch('oneTimeDate')}`}
             </Text>
           </View>
           <View style={styles.summaryItem}>
             <NotificationBellSvg width={18} height={18} />
             <Text style={styles.summaryText}>
-              {reminderEnabled ? 'Reminder at 8:00 AM' : 'No reminder set'}
+              {reminderEnabled
+                ? `Reminder at ${watch('reminderTime')}`
+                : 'No reminder set'}
             </Text>
           </View>
           <View style={styles.summaryItem}>
@@ -301,14 +490,36 @@ export const CreateTaskScreen = ({
         </View>
       </ScrollView>
 
+      <MonthlyDateSelectionBottomSheet
+        visible={isMonthlySheetVisible}
+        onClose={() => setIsMonthlySheetVisible(false)}
+        onSelect={({ month, day, year }) => {
+          const formatted = `${day} ${month} ${year}`;
+          if (frequency === 'Monthly') {
+            setValue('monthlyDay', formatted);
+          } else {
+            setValue('quarterlyDate', formatted);
+          }
+        }}
+        title={`Select ${frequency.toLowerCase()} date`}
+      />
+
+      <TimeSelectionBottomSheet
+        visible={isTimeSheetVisible}
+        onClose={() => setIsTimeSheetVisible(false)}
+        initialValue={watch('reminderTime')}
+        onSelect={time => setValue('reminderTime', time)}
+      />
+
       <LiquidFooter showTopBorder>
         <Button
-          label="Create Task"
+          label={isEditing ? 'Update Task' : 'Create Task'}
           onPress={() => {
             void handleSubmit(onSubmit)();
           }}
           variant="primary"
           size="large"
+          loading={isPending}
           fullWidth
         />
       </LiquidFooter>
@@ -398,8 +609,36 @@ const styles = StyleSheet.create({
   frequencyTabs: {
     flexDirection: 'row',
     backgroundColor: colors.SurfaceSecondaryDefault,
-    borderRadius: moderateScale(4),
     padding: spacing['Spacing-xs'],
+    borderRadius: moderateScale(4),
+    gap: spacing['Spacing-xs'],
+  },
+  frequencyInputWrapper: {
+    marginTop: spacing['Spacing-xl'],
+    gap: spacing['Spacing-xl'],
+  },
+  frequencyInputBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: colors.StatesOutline,
+    borderRadius: moderateScale(4),
+    paddingHorizontal: spacing['Spacing-xl'],
+    paddingVertical: moderateScale(12),
+    backgroundColor: colors.StatesWhite,
+  },
+  frequencyInputText: {
+    ...typography.bodySmall1Medium,
+    color: colors.TextSecondaryDefault,
+  },
+  oneTimeDateContainer: {
+    marginTop: spacing['Spacing-xl'],
+    gap: spacing['Spacing-m'],
+  },
+  oneTimeHelperText: {
+    ...typography.bodySmall2Regular,
+    color: colors.AccentBlueDark,
   },
   freqButton: {
     flex: 1,

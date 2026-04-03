@@ -1,4 +1,4 @@
-import type { InviteWithOnboarding } from './api.types';
+import type { InviteWithOnboarding, TaskDetail } from './api.types';
 import type { NavigatorScreenParams } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { Contact } from 'react-native-contacts';
@@ -50,7 +50,14 @@ export interface AppStackParamList extends ParamListIndexSignature {
   AddedClients: { selectedContacts: Contact[] } | undefined;
   ImportContacts: undefined;
   SelectContact: undefined;
-  CreateTask: { fromScreen?: string; clientName?: string } | undefined;
+  CreateTask:
+    | {
+        fromScreen?: string;
+        clientName?: string;
+        clientId?: string;
+        task?: TaskDetail;
+      }
+    | undefined;
   EditTask: { taskId?: string } | undefined;
   TaskTypeSelection: undefined;
   FrequencySetup: undefined;
@@ -75,6 +82,7 @@ export interface AppStackParamList extends ParamListIndexSignature {
     clientName: string;
   };
   ManageTasks: {
+    clientId: string;
     clientName: string;
   };
   SendNudge: { clientId: string } | undefined;

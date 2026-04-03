@@ -1,4 +1,4 @@
-import { httpGet, httpPost, httpPatch } from '@/services/apiClient';
+import { httpGet, httpPost, httpPatch, httpDelete } from '@/services/apiClient';
 
 import { ENDPOINTS } from './endpoints';
 
@@ -9,15 +9,63 @@ import type {
   AddClientPayload,
   FetchInviteLinksResponse,
   InviteWithOnboarding,
+<<<<<<< HEAD
   NudgeType,
   SendNudgePayload,
+=======
+  WeeklyTaskSummaryResponse,
+  UserRelationshipDetailResponse,
+  CreateTaskPayload,
+  FetchTasksResponse,
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 } from '@/types/api.types';
+
+export const deleteCoachTask = async (
+  taskId: string,
+): Promise<ApiResponse<unknown>> => {
+  return httpDelete<ApiResponse<unknown>>(
+    `${ENDPOINTS.COACH_DELETE_TASK}/${taskId}`,
+  );
+};
+
+export const getCoachFetchTasks = async (
+  customerId: string,
+): Promise<FetchTasksResponse> => {
+  return httpGet<FetchTasksResponse>(
+    `${ENDPOINTS.COACH_FETCH_TASKS}?customer_id=${customerId}`,
+  );
+};
+
+export const postCoachTaskStore = async (
+  payload: CreateTaskPayload,
+): Promise<ApiResponse<unknown>> => {
+  return httpPost<CreateTaskPayload, ApiResponse<unknown>>(
+    ENDPOINTS.COACH_TASK_STORE,
+    payload,
+  );
+};
+
+export const patchCoachUpdateTask = async (
+  taskId: string,
+  payload: CreateTaskPayload,
+): Promise<ApiResponse<unknown>> => {
+  return httpPatch<CreateTaskPayload, ApiResponse<unknown>>(
+    `${ENDPOINTS.COACH_UPDATE_TASK}/${taskId}`,
+    payload,
+  );
+};
+
+export const getCoachUserRelationship = async (
+  userId: string,
+): Promise<UserRelationshipDetailResponse> => {
+  return httpGet<UserRelationshipDetailResponse>(
+    `${ENDPOINTS.COACH_USER_RELATIONSHIP}/${userId}`,
+  );
+};
 
 export const postCoachBulkInvite = async (
   request: InviteBulkClientsPayload,
 ): Promise<ApiResponse<unknown>> => {
-  console.log('check25 1', request);
-
   return httpPost<InviteBulkClientsPayload, ApiResponse<unknown>>(
     ENDPOINTS.COACH_BULK_INVITE,
     request,
@@ -27,8 +75,6 @@ export const postCoachBulkInvite = async (
 export const postCoachInviteSms = async (
   request: InviteSmsPayload,
 ): Promise<ApiResponse<unknown>> => {
-  console.log('check25', request);
-
   return httpPost<InviteSmsPayload, ApiResponse<unknown>>(
     ENDPOINTS.COACH_INVITE_SMS,
     request,
@@ -38,8 +84,6 @@ export const postCoachInviteSms = async (
 export const postCoachInviteStore = async (
   request: AddClientPayload,
 ): Promise<ApiResponse<InviteWithOnboarding[]>> => {
-  console.log('check25 2', request);
-
   return httpPost<AddClientPayload, ApiResponse<InviteWithOnboarding[]>>(
     ENDPOINTS.COACH_INVITE_STORE,
     request,
@@ -65,6 +109,7 @@ export const patchCoachUpdateRelationship = async (
   );
 };
 
+<<<<<<< HEAD
 export const postSendNudge = async (
   payload: SendNudgePayload,
   type: NudgeType,
@@ -72,5 +117,15 @@ export const postSendNudge = async (
   return httpPost<SendNudgePayload, ApiResponse<unknown>>(
     `${ENDPOINTS.COACH_NUDGE}?type=${type}`,
     payload,
+=======
+export const getCoachWeeklySummary = async (
+  customerId: string,
+  page: number = 1,
+  limit: number = 10,
+  type: string = 'task',
+): Promise<WeeklyTaskSummaryResponse> => {
+  return httpGet<WeeklyTaskSummaryResponse>(
+    `${ENDPOINTS.COACH_WEEKLY_SUMMARY}?page=${page}&limit=${limit}&type=${type}&customer_id=${customerId}`,
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
   );
 };

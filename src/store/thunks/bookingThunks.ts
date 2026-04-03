@@ -42,6 +42,7 @@ export const bookCallThunk =
           ''
         ).trim(),
         phone_number: coach.phone_number ?? '',
+        country_code: '+971',
       };
 
       const response = await postBookCall(bookingPayload);

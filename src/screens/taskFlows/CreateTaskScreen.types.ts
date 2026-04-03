@@ -6,6 +6,9 @@ export const CreateTaskSchema = z
     taskType: z.enum(['Repeat task', 'One-time task']),
     frequency: z.enum(['Daily', 'Weekly', 'Monthly', 'Quarterly']),
     selectedDays: z.array(z.string()),
+    monthlyDay: z.string().optional(),
+    quarterlyDate: z.string().optional(),
+    oneTimeDate: z.string().optional(),
     reminderEnabled: z.boolean(),
     reminderTime: z.string(),
   })
@@ -42,3 +45,23 @@ export const DAYS = [
 
 export const TASK_TYPES = ['Repeat task', 'One-time task'] as const;
 export const FREQUENCIES = ['Daily', 'Weekly', 'Monthly', 'Quarterly'] as const;
+
+export const DAY_MAPPING: Record<string, string> = {
+  Mon: 'monday',
+  Tue: 'tuesday',
+  Wed: 'wednesday',
+  Thu: 'thursday',
+  Fri: 'friday',
+  Sat: 'saturday',
+  Sun: 'sunday',
+};
+
+export const INVERSE_DAY_MAPPING: Record<string, string> = {
+  monday: 'Mon',
+  tuesday: 'Tue',
+  wednesday: 'Wed',
+  thursday: 'Thu',
+  friday: 'Fri',
+  saturday: 'Sat',
+  sunday: 'Sun',
+};

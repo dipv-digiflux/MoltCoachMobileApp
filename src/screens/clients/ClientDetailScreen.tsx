@@ -1,31 +1,160 @@
+<<<<<<< HEAD
 import React, { useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+=======
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { format, parseISO } from 'date-fns';
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   ClientProfileHeader,
   CollapsibleTableCard,
   PageHeader,
+  QuickActionsBottomSheet,
   Switch,
+  TaskDetailsBottomSheet,
 } from '@/components';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import {
+  fetchWeeklySummaryThunk,
+  fetchUserRelationshipThunk,
+} from '@/store/thunks/clientThunks';
 import { colors, moderateScale, spacing, typography } from '@/theme';
+import { WeeklySummaryDay } from '@/types/api.types';
 
 import { MenuDotsIcon } from './ClientDetailScreen.icons';
+<<<<<<< HEAD
 import { ClientDetailScreenProps } from './ClientDetailScreen.types';
 import { ClientFloatingActions } from './components/ClientFloatingActions';
+=======
+import { ClientDetailScreenProps, TaskData } from './ClientDetailScreen.types';
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 
 export const ClientDetailScreen = ({
   navigation,
   route,
 }: ClientDetailScreenProps): React.ReactElement => {
   const insets = useSafeAreaInsets();
+<<<<<<< HEAD
   const scrollViewRef = useRef<ScrollView>(null);
   const { clientName, clientId } = route.params;
+=======
+  const dispatch = useAppDispatch();
+  const { clientId, clientName } = route.params;
+
+  const {
+    userRelationshipDetail,
+    weeklySummary,
+    summaryPage,
+    summaryTotalPages,
+    operations,
+  } = useAppSelector(state => state.client);
+  const isFetchingSummary = operations.fetchWeeklySummary.status === 'loading';
+
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
   const [activeTab, setActiveTab] = useState('Tasks');
   const [showAllDates, setShowAllDates] = useState(false);
+  const [isTaskDetailsVisible, setIsTaskDetailsVisible] = useState(false);
+  const [isQuickActionsVisible, setIsQuickActionsVisible] = useState(false);
+  const [selectedTaskDate, setSelectedTaskDate] = useState('');
+  const [tasks, setTasks] = useState<TaskData[]>([]);
+
+  useEffect(() => {
+    if (activeTab === 'Tasks' && !weeklySummary) {
+      void dispatch(fetchWeeklySummaryThunk(clientId, 1, 10));
+    }
+  }, [activeTab, clientId, dispatch, weeklySummary]);
+
+  useEffect(() => {
+    if (clientId) {
+      void dispatch(fetchUserRelationshipThunk(clientId));
+    }
+  }, [clientId, dispatch]);
+
+  useEffect(() => {
+    if (showAllDates && summaryPage < summaryTotalPages) {
+      void dispatch(fetchWeeklySummaryThunk(clientId, summaryPage + 1, 10));
+    }
+  }, [showAllDates, summaryPage, summaryTotalPages, clientId, dispatch]);
+
+  const handlePressValue = (label: string, subLabel: string): void => {
+    // Label is "SUN", subLabel is "22 MAR" -> format to "Sun, 22 Mar 2026"
+    // We can find the task data from the weeklySummary if needed, or API for daily tasks
+    const formattedDate = `${
+      label.charAt(0) + label.slice(1).toLowerCase()
+    }, ${subLabel} 2026`;
+    setSelectedTaskDate(formattedDate);
+    setIsTaskDetailsVisible(true);
+    // For now keeping empty tasks until the daily API is ready
+    setTasks([]);
+  };
+
+  const handleToggleTask = (taskName: string): void => {
+    setTasks(prev =>
+      prev.map(task =>
+        task.name === taskName ? { ...task, completed: !task.completed } : task,
+      ),
+    );
+  };
+
+  const tableSections = useMemo(() => {
+    if (!weeklySummary) return [];
+
+    const sections = weeklySummary.weeks.map((week, index) => {
+      const startDate = parseISO(week.week_start);
+      const endDate = parseISO(week.week_end);
+
+      const totalWeekTasks = week.days.reduce(
+        (acc: number, day: WeeklySummaryDay) => acc + day.total_tasks,
+        0,
+      );
+      const completedWeekTasks = week.days.reduce(
+        (acc: number, day: WeeklySummaryDay) => acc + day.completed_tasks,
+        0,
+      );
+
+      return {
+        id: `week-${index}-${week.week_start}`,
+        period: `Week ${weeklySummary.weeks.length - index}`,
+        dateRange: `${format(startDate, 'd')} - ${format(endDate, 'd MMM')}`,
+        completion: `${completedWeekTasks}/${totalWeekTasks}`,
+        rows: week.days
+          .map(day => {
+            const d = parseISO(day.date);
+            let dayLabel = format(d, 'EEE').toUpperCase();
+            if (dayLabel === 'THU') dayLabel = 'THUR';
+
+            return {
+              id: day.date,
+              label: dayLabel,
+              subLabel: format(d, 'd MMM').toUpperCase(),
+              value: `${day.completed_tasks}/${day.total_tasks}`,
+            };
+          })
+          .reverse(), // Show latest days first within the week
+      };
+    });
+
+    if (!showAllDates) {
+      // If not "All Dates", maybe just show the latest week
+      return sections.slice(0, 1);
+    }
+
+    return sections;
+  }, [weeklySummary, showAllDates]);
 
   const tabs = ['Overview', 'Tasks', 'Nutrition', 'Profile'];
 
+<<<<<<< HEAD
   // Mock data for the table
   const tableSections = [
     {
@@ -72,6 +201,8 @@ export const ClientDetailScreen = ({
     });
   };
 
+=======
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
   return (
     <View style={styles.container}>
       <PageHeader
@@ -83,7 +214,10 @@ export const ClientDetailScreen = ({
           paddingBottom: spacing['Spacing-m'],
         }}
         rightIcon={
-          <Pressable style={styles.moreButton}>
+          <Pressable
+            style={styles.moreButton}
+            onPress={() => setIsQuickActionsVisible(true)}
+          >
             <MenuDotsIcon />
           </Pressable>
         }
@@ -97,9 +231,26 @@ export const ClientDetailScreen = ({
         }}
       >
         <ClientProfileHeader
-          name={clientName}
-          status="Fat Loss Phase"
-          sessionsInfo="Sessions: 12/24 • In person sessions"
+          name={
+            userRelationshipDetail
+              ? `${userRelationshipDetail.customer.first_name} ${userRelationshipDetail.customer.last_name}`.trim()
+              : clientName
+          }
+          status={userRelationshipDetail?.health_status || 'Fat Loss Phase'}
+          sessionsInfo={
+            userRelationshipDetail?.session_package?.total_sessions
+              ? `Sessions: ${userRelationshipDetail.session_package.sessions_left}/${userRelationshipDetail.session_package.total_sessions} • ${userRelationshipDetail.mode} sessions`
+              : userRelationshipDetail?.subscription?.number_of_month
+              ? `Subscription: ${
+                  userRelationshipDetail.subscription.number_of_month
+                } months • Starting ${format(
+                  parseISO(userRelationshipDetail.subscription.start_date),
+                  'dd/MM/yyyy',
+                )}`
+              : `Sessions: 0/0 • ${
+                  userRelationshipDetail?.mode || 'Online'
+                } sessions`
+          }
         />
 
         <View style={styles.tabBar}>
@@ -129,7 +280,7 @@ export const ClientDetailScreen = ({
                 <Pressable
                   style={styles.manageButtonBox}
                   onPress={() =>
-                    navigation.navigate('ManageTasks', { clientName })
+                    navigation.navigate('ManageTasks', { clientId, clientName })
                   }
                 >
                   <Text style={styles.manageButtonText}>Manage tasks</Text>
@@ -145,14 +296,45 @@ export const ClientDetailScreen = ({
               </View>
             </View>
 
-            <CollapsibleTableCard sections={tableSections} />
+            <CollapsibleTableCard
+              sections={tableSections}
+              onPressValue={handlePressValue}
+              isAllDatesSelected={showAllDates}
+            />
+            {isFetchingSummary && (
+              <ActivityIndicator
+                color={colors.MatrixMain}
+                style={{ marginTop: spacing['Spacing-xl'] }}
+              />
+            )}
           </View>
         )}
       </ScrollView>
 
+<<<<<<< HEAD
       <ClientFloatingActions
         onScrollToTop={handleScrollToTop}
         onNudge={handleNudge}
+=======
+      <QuickActionsBottomSheet
+        isVisible={isQuickActionsVisible}
+        onClose={() => setIsQuickActionsVisible(false)}
+        onChangeFitnessPhase={() => console.log('Change fitness phase')}
+        onChangeSessions={() => console.log('Change number of sessions')}
+        onDeleteUser={() => console.log('Delete user')}
+      />
+
+      <TaskDetailsBottomSheet
+        isVisible={isTaskDetailsVisible}
+        onClose={() => setIsTaskDetailsVisible(false)}
+        date={selectedTaskDate}
+        tasks={tasks}
+        onToggleTask={handleToggleTask}
+        onNudge={() => {
+          console.log('Nudge pressed');
+          setIsTaskDetailsVisible(false);
+        }}
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
       />
     </View>
   );

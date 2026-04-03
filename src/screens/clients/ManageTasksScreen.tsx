@@ -1,11 +1,26 @@
-import React from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Button, OngoingTaskCard, PageHeader } from '@/components';
+import {
+  Button,
+  DeleteTaskBottomSheet,
+  OngoingTaskCard,
+  PageHeader,
+} from '@/components';
 import { colors, moderateScale, spacing, typography } from '@/theme';
 import { AppStackParamList } from '@/types/navigation.types';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { deleteTaskThunk, fetchTasksThunk } from '@/store/thunks/clientThunks';
+import { format, parseISO } from 'date-fns';
 
 export const ManageTasksScreen = ({
   navigation,
@@ -15,20 +30,64 @@ export const ManageTasksScreen = ({
   'ManageTasks'
 >): React.ReactElement => {
   const insets = useSafeAreaInsets();
-  const { clientName } = route.params;
+  const dispatch = useAppDispatch();
+  const { clientId, clientName } = route.params;
 
-  const ongoingTasks = [
-    {
-      id: '1',
-      title: '5,000 step walk',
-      subtitle: 'Till 2 April 2026 • By you',
-    },
-    {
-      id: '2',
-      title: 'Drink 2ltr water',
-      subtitle: 'Daily • By you',
-    },
-  ];
+  const { tasks, operations } = useAppSelector(state => state.client);
+  const isFetching = operations.fetchTasks.status === 'loading';
+  const isDeleting = operations.deleteTask.status === 'loading';
+
+  const [isDeleteVisible, setIsDeleteVisible] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (clientId) {
+      void dispatch(fetchTasksThunk(clientId));
+    }
+  }, [clientId, dispatch]);
+
+  const handleDeleteTask = (taskId: string) => {
+    setSelectedTaskId(taskId);
+    setIsDeleteVisible(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedTaskId && clientId) {
+      void dispatch(deleteTaskThunk(selectedTaskId, clientId));
+      setIsDeleteVisible(false);
+      setSelectedTaskId(null);
+    }
+  };
+
+  const getTaskSubtitle = (task: any) => {
+    const creatorText = task.creator === 'coach' ? 'you' : 'client';
+    const frequency =
+      task.frequency.charAt(0).toUpperCase() + task.frequency.slice(1);
+
+    if (task.task_type === 'one-time' && task.end_date) {
+      return `Till ${format(
+        parseISO(task.end_date),
+        'd MMMM yyyy',
+      )} • By ${creatorText}`;
+    }
+
+    let freqDetail = '';
+    if (
+      task.frequency === 'weekly' &&
+      task.schedule?.days_of_week?.length > 0
+    ) {
+      freqDetail = ` (${task.schedule.days_of_week.join(', ')})`;
+    } else if (task.frequency === 'monthly' && task.schedule?.day_of_month) {
+      freqDetail = ` (Day ${task.schedule.day_of_month})`;
+    } else if (
+      task.frequency === 'quarterly' &&
+      task.schedule?.quarters?.length > 0
+    ) {
+      freqDetail = ` (Q${task.schedule.quarters.join(', ')})`;
+    }
+
+    return `${frequency}${freqDetail} • By ${creatorText}`;
+  };
 
   return (
     <View style={styles.container}>
@@ -47,7 +106,9 @@ export const ManageTasksScreen = ({
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>On going tasks</Text>
           <Pressable
-            onPress={() => navigation.navigate('CreateTask', { clientName })}
+            onPress={() =>
+              navigation.navigate('CreateTask', { clientId, clientName })
+            }
             style={styles.addTaskButton}
           >
             <Text style={styles.addTaskText}>Add new task +</Text>
@@ -55,17 +116,33 @@ export const ManageTasksScreen = ({
         </View>
 
         <View style={styles.tasksList}>
-          {ongoingTasks.map(task => (
-            <OngoingTaskCard
-              key={task.id}
-              title={task.title}
-              subtitle={task.subtitle}
-              onEdit={() => {}}
-              onDelete={() => {}}
-            />
-          ))}
+          {isFetching ? (
+            <ActivityIndicator color={colors.MatrixMain} />
+          ) : (
+            tasks.map(task => (
+              <OngoingTaskCard
+                key={task._id}
+                title={task.task}
+                subtitle={getTaskSubtitle(task)}
+                onEdit={() =>
+                  navigation.navigate('CreateTask', {
+                    clientId,
+                    clientName,
+                    task,
+                  })
+                }
+                onDelete={() => handleDeleteTask(task._id)}
+              />
+            ))
+          )}
         </View>
       </ScrollView>
+
+      <DeleteTaskBottomSheet
+        isVisible={isDeleteVisible}
+        onClose={() => setIsDeleteVisible(false)}
+        onDelete={confirmDelete}
+      />
 
       <View
         style={[

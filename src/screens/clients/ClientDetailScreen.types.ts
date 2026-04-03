@@ -8,3 +8,9 @@ export interface ClientDetailScreenProps {
   navigation: AppStackNavigationProp;
   route: RouteProp<AppStackParamList, 'ClientDetail'>;
 }
+
+export interface TaskData {
+  name: string;
+  description: string;
+  completed: boolean;
+}

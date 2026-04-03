@@ -19,8 +19,11 @@ export interface TableRowProps {
   value: string;
   isHeader?: boolean;
   onPress?: () => void;
+  onPressValue?: (label: string, subLabel: string, value: string) => void;
 }
 
 export interface CollapsibleTableCardProps {
   sections: TableSectionData[];
+  onPressValue?: (label: string, subLabel: string, value: string) => void;
+  isAllDatesSelected?: boolean;
 }

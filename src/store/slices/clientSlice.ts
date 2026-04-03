@@ -1,7 +1,12 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import type { OperationState } from './authSlice';
-import type { InviteLink } from '@/types/api.types';
+import type {
+  InviteLink,
+  WeeklyTaskSummaryData,
+  UserRelationshipDetail,
+  TaskDetail,
+} from '@/types/api.types';
 
 export type ClientOperationKey =
   | 'inviteBulkClients'
@@ -9,13 +14,27 @@ export type ClientOperationKey =
   | 'inviteClient'
   | 'fetchInviteLinks'
   | 'updateInviteLink'
+<<<<<<< HEAD
   | 'sendNudge';
+=======
+  | 'fetchWeeklySummary'
+  | 'fetchUserRelationship'
+  | 'createTask'
+  | 'fetchTasks'
+  | 'deleteTask'
+  | 'updateTask';
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 
 export interface ClientState {
   inviteLinks: InviteLink[];
   currentPage: number;
   totalPages: number;
   totalItems: number;
+  weeklySummary: WeeklyTaskSummaryData | null;
+  userRelationshipDetail: UserRelationshipDetail | null;
+  tasks: TaskDetail[];
+  summaryPage: number;
+  summaryTotalPages: number;
   operations: Record<ClientOperationKey, OperationState>;
 }
 
@@ -30,7 +49,16 @@ const initialOperations: Record<ClientOperationKey, OperationState> = {
   inviteClient: createInitialOperation(),
   fetchInviteLinks: createInitialOperation(),
   updateInviteLink: createInitialOperation(),
+<<<<<<< HEAD
   sendNudge: createInitialOperation(),
+=======
+  fetchWeeklySummary: createInitialOperation(),
+  fetchUserRelationship: createInitialOperation(),
+  createTask: createInitialOperation(),
+  fetchTasks: createInitialOperation(),
+  deleteTask: createInitialOperation(),
+  updateTask: createInitialOperation(),
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)
 };
 
 const initialState: ClientState = {
@@ -38,6 +66,11 @@ const initialState: ClientState = {
   currentPage: 1,
   totalPages: 1,
   totalItems: 0,
+  weeklySummary: null,
+  userRelationshipDetail: null,
+  tasks: [],
+  summaryPage: 1,
+  summaryTotalPages: 1,
   operations: initialOperations,
 };
 
@@ -96,6 +129,37 @@ const clientSlice = createSlice({
       state.totalPages = action.payload.totalPages;
       state.totalItems = action.payload.totalItems;
     },
+    setWeeklySummary(state, action: PayloadAction<WeeklyTaskSummaryData>) {
+      state.weeklySummary = action.payload;
+      state.summaryPage = action.payload.page;
+      state.summaryTotalPages = action.payload.totalPages;
+    },
+    appendWeeklySummary(state, action: PayloadAction<WeeklyTaskSummaryData>) {
+      if (state.weeklySummary) {
+        state.weeklySummary.weeks = [
+          ...state.weeklySummary.weeks,
+          ...action.payload.weeks,
+        ];
+        state.weeklySummary.page = action.payload.page;
+        state.summaryPage = action.payload.page;
+      } else {
+        state.weeklySummary = action.payload;
+        state.summaryPage = action.payload.page;
+        state.summaryTotalPages = action.payload.totalPages;
+      }
+    },
+    setUserRelationshipDetail(
+      state,
+      action: PayloadAction<UserRelationshipDetail>,
+    ) {
+      state.userRelationshipDetail = action.payload;
+    },
+    setTasks(state, action: PayloadAction<TaskDetail[]>) {
+      state.tasks = action.payload;
+    },
+    resetClientOperation(state, action: PayloadAction<ClientOperationKey>) {
+      state.operations[action.payload] = createInitialOperation();
+    },
     resetClientState() {
       return initialState;
     },
@@ -109,6 +173,11 @@ export const {
   setClientOperationIdle,
   setInviteLinks,
   appendInviteLinks,
+  setWeeklySummary,
+  appendWeeklySummary,
+  setUserRelationshipDetail,
+  setTasks,
+  resetClientOperation,
   resetClientState,
 } = clientSlice.actions;
 

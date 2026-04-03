@@ -120,6 +120,7 @@ export interface BookCallRequest {
   name: string;
   email: string;
   phone_number: string;
+  country_code: string;
 }
 
 export type BookCallResponse = BaseResponse & {
@@ -174,6 +175,51 @@ export interface UserRelationship {
     sessions_left: number;
   };
 }
+
+export interface UserRelationshipDetail {
+  _id: string;
+  role: string;
+  status: string;
+  mode: string;
+  health_status: string;
+  session_package: {
+    total_sessions?: number;
+    sessions_left?: number;
+  };
+  subscription: {
+    number_of_month: number;
+    start_date: string;
+  };
+  customer: {
+    _id: string;
+    first_name: string;
+    last_name: string;
+    country_code: string;
+    phone_number: string;
+    user_type: string;
+    body_metrics: {
+      gender: string;
+      birth_date: string;
+      height: number;
+      height_unit: string;
+      weight: number;
+      weight_unit: string;
+      activity_level: string;
+      goal: string;
+    };
+  };
+  coach: {
+    _id: string;
+    first_name: string;
+    email: string;
+    phone_number: string;
+    country_code: string;
+  };
+}
+
+export type UserRelationshipDetailResponse = ApiResponse<
+  UserRelationshipDetail[]
+>;
 
 export interface InviteLink {
   _id: string;
@@ -264,6 +310,7 @@ export type FetchInviteLinksResponse = ApiResponse<
   PaginatedResponse<InviteLink>
 >;
 
+<<<<<<< HEAD
 export type NudgeType = 'text' | 'task';
 
 export interface SendNudgePayload {
@@ -271,3 +318,74 @@ export interface SendNudgePayload {
   text?: string[];
   task_title?: string[];
 }
+=======
+// ── Tasks ─────────────────────────────────────────────
+
+export interface WeeklySummaryDay {
+  date: string;
+  total_tasks: number;
+  completed_tasks: number;
+}
+
+export interface WeeklySummaryWeek {
+  week_start: string;
+  week_end: string;
+  days: WeeklySummaryDay[];
+}
+
+export interface WeeklyTaskSummaryData {
+  customer_id: string;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  weeks: WeeklySummaryWeek[];
+  total_tasks: number;
+  completed_tasks: number;
+}
+
+export type WeeklyTaskSummaryResponse = ApiResponse<WeeklyTaskSummaryData>;
+
+export interface CreateTaskPayload {
+  start_date: string;
+  end_date?: string;
+  task: string;
+  customer_id: string;
+  task_type?: string;
+  creator?: string;
+  created_by?: string;
+  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
+  schedule?: {
+    days_of_week?: string[];
+    day_of_month?: number;
+    quarters?: number[];
+    date?: string;
+  };
+  is_reminder?: boolean;
+  reminder_time?: string;
+}
+
+export interface TaskDetail {
+  _id: string;
+  start_date: string;
+  end_date?: string;
+  task: string;
+  customer_id: string;
+  task_type: string;
+  creator: string;
+  created_by: string;
+  frequency: string;
+  schedule: {
+    days_of_week: string[];
+    quarters: number[];
+    day_of_month?: number;
+    date?: string;
+    _id: string;
+  };
+  is_reminder: boolean;
+  reminder_time: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type FetchTasksResponse = ApiResponse<PaginatedResponse<TaskDetail>>;
+>>>>>>> 481f38a (feat: implement task management system with CRUD and UI components)

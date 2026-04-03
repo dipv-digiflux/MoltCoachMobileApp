@@ -20,10 +20,10 @@ export const OngoingTaskCard = ({
       </View>
       <View style={styles.actions}>
         <Pressable onPress={onEdit} style={styles.iconButton}>
-          <EditIconSvg width={moderateScale(18)} height={moderateScale(18)} />
+          <EditIconSvg width={moderateScale(22)} height={moderateScale(22)} />
         </Pressable>
         <Pressable onPress={onDelete} style={styles.iconButton}>
-          <DeleteIconSvg width={moderateScale(18)} height={moderateScale(18)} />
+          <DeleteIconSvg width={moderateScale(22)} height={moderateScale(22)} />
         </Pressable>
       </View>
     </View>

@@ -111,9 +111,18 @@ export { AnimatedProgressBar } from './AnimatedProgressBar';
 export { default as ConfirmModal } from './ConfirmModal';
 export type { ConfirmModalProps } from './ConfirmModal/ConfirmModal.types';
 export { VerticalStepper } from './VerticalStepper';
-export { QuickNudges } from './clients/QuickNudges';
-export { SquareCheckbox } from './SquareCheckbox';
 export { default as AddSessionsModal } from './AddSessionsModal';
+export { TaskItem } from './TaskItem';
+export { TaskDetailsBottomSheet } from './TaskDetailsBottomSheet';
+export { QuickActionsBottomSheet } from './QuickActionsBottomSheet';
+export * from './QuickActionsBottomSheet.types';
+export { DeleteTaskBottomSheet } from './DeleteTaskBottomSheet';
+export * from './DeleteTaskBottomSheet.types';
+export { TimeWheelPicker } from './TimeWheelPicker';
+export type { TimeWheelPickerProps } from './TimeWheelPicker';
+export { Wheel } from './Wheel';
+export { MonthlyDateSelectionBottomSheet } from './MonthlyDateSelectionBottomSheet';
+export { TimeSelectionBottomSheet } from './TimeSelectionBottomSheet';
 export type {
   VerticalStepperProps,
   VerticalStepperStep,
