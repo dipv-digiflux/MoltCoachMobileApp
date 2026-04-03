@@ -88,4 +88,9 @@ export const translationInitialState = {
   contactCardTotalSessions: 'Total Sessions',
   contactCardSessionsLeft: 'Sessions Left',
   contactCardAddSessionsPackage: 'Add Sessions / Package',
+  nudgeSentHeaderTitle: 'Nudge Sent',
+  nudgeSentSuccessSubtitle:
+    'Your message has been successfully delivered to {{clientName}}.',
+  nudgeSentReturnToDashboardButton: 'Return to Dashboard',
+  nudgeSentViewClientProfileButton: 'View Client Profile',
 };

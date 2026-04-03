@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -12,13 +12,15 @@ import { colors, moderateScale, spacing, typography } from '@/theme';
 
 import { MenuDotsIcon } from './ClientDetailScreen.icons';
 import { ClientDetailScreenProps } from './ClientDetailScreen.types';
+import { ClientFloatingActions } from './components/ClientFloatingActions';
 
 export const ClientDetailScreen = ({
   navigation,
   route,
 }: ClientDetailScreenProps): React.ReactElement => {
   const insets = useSafeAreaInsets();
-  const { clientName } = route.params;
+  const scrollViewRef = useRef<ScrollView>(null);
+  const { clientName, clientId } = route.params;
   const [activeTab, setActiveTab] = useState('Tasks');
   const [showAllDates, setShowAllDates] = useState(false);
 
@@ -60,6 +62,16 @@ export const ClientDetailScreen = ({
     },
   ];
 
+  const handleScrollToTop = (): void => {
+    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+  };
+
+  const handleNudge = (): void => {
+    navigation.navigate('SendNudge', {
+      clientId: clientId,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <PageHeader
@@ -78,9 +90,10 @@ export const ClientDetailScreen = ({
       />
 
       <ScrollView
+        ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: insets.bottom + spacing['Spacing-15xl'],
+          paddingBottom: insets.bottom + spacing['Spacing-16xl'] * 2,
         }}
       >
         <ClientProfileHeader
@@ -136,6 +149,11 @@ export const ClientDetailScreen = ({
           </View>
         )}
       </ScrollView>
+
+      <ClientFloatingActions
+        onScrollToTop={handleScrollToTop}
+        onNudge={handleNudge}
+      />
     </View>
   );
 };

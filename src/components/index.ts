@@ -111,6 +111,8 @@ export { AnimatedProgressBar } from './AnimatedProgressBar';
 export { default as ConfirmModal } from './ConfirmModal';
 export type { ConfirmModalProps } from './ConfirmModal/ConfirmModal.types';
 export { VerticalStepper } from './VerticalStepper';
+export { QuickNudges } from './clients/QuickNudges';
+export { SquareCheckbox } from './SquareCheckbox';
 export { default as AddSessionsModal } from './AddSessionsModal';
 export type {
   VerticalStepperProps,

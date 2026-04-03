@@ -11,6 +11,7 @@ import CalanderSvg from './svg/calander.svg';
 import CalendarDaysIconSvg from './svg/calendar-days.svg';
 import CalendarIconSvg from './svg/calendar-icon.svg';
 import CheckCircleIconSvg from './svg/check-circle-icon.svg';
+import CheckStoreSvg from './svg/check-store.svg';
 import CheckedcircleWithBlackBgSvg from './svg/CheckedcircleWithBlackBg.svg';
 import ChevronDownIconSvg from './svg/chevron-down-icon.svg';
 import ContactSvg from './svg/contact.svg';
@@ -41,6 +42,7 @@ export {
   HeaderCurvedBg,
   BackIconSvg,
   CheckCircleIconSvg,
+  CheckStoreSvg,
   CalendarDaysIconSvg,
   CalendarIconSvg,
   ChevronDownIconSvg,

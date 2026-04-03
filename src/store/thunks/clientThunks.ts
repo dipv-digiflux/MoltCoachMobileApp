@@ -4,6 +4,7 @@ import {
   postCoachInviteStore,
   getCoachFetchLinks,
   patchCoachUpdateRelationship,
+  postSendNudge,
 } from '@/api/clientApi';
 import {
   setClientOperationError,
@@ -21,6 +22,8 @@ import type {
   ApiResponse,
   AddClientPayload,
   InviteWithOnboarding,
+  SendNudgePayload,
+  NudgeType,
 } from '@/types/api.types';
 
 export const inviteBulkClientsThunk =
@@ -187,6 +190,35 @@ export const updateInviteLinkThunk =
       dispatch(
         setClientOperationError({
           operation: 'updateInviteLink',
+          message: errorMsg,
+        }),
+      );
+      throw error;
+    }
+  };
+export const sendNudgeThunk =
+  (payload: SendNudgePayload, type: NudgeType) =>
+  async (dispatch: AppDispatch): Promise<ApiResponse<unknown>> => {
+    dispatch(setClientOperationLoading('sendNudge'));
+
+    try {
+      const response = await postSendNudge(payload, type);
+      if (response && response.status) {
+        dispatch(setClientOperationSuccess('sendNudge'));
+      } else {
+        dispatch(
+          setClientOperationError({
+            operation: 'sendNudge',
+            message: response?.message || 'Failed to send nudge',
+          }),
+        );
+      }
+      return response;
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(
+        setClientOperationError({
+          operation: 'sendNudge',
           message: errorMsg,
         }),
       );

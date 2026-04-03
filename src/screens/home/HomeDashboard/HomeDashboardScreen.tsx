@@ -67,6 +67,8 @@ export const HomeDashboardScreen = (): ReactElement => {
     buildRows,
   } = useHomeDashboard();
 
+  console.log(inviteLinks, 'inviteLinks');
+
   const overviewCards = getOverviewCards();
 
   const renderClientItem = useCallback(

@@ -9,6 +9,8 @@ import type {
   AddClientPayload,
   FetchInviteLinksResponse,
   InviteWithOnboarding,
+  NudgeType,
+  SendNudgePayload,
 } from '@/types/api.types';
 
 export const postCoachBulkInvite = async (
@@ -60,5 +62,15 @@ export const patchCoachUpdateRelationship = async (
   return httpPatch<Record<string, unknown>, ApiResponse<unknown>>(
     `${ENDPOINTS.COACH_USER_RELATIONSHIP}/${id}?update_for=${update_for}`,
     data,
+  );
+};
+
+export const postSendNudge = async (
+  payload: SendNudgePayload,
+  type: NudgeType,
+): Promise<ApiResponse<unknown>> => {
+  return httpPost<SendNudgePayload, ApiResponse<unknown>>(
+    `${ENDPOINTS.COACH_NUDGE}?type=${type}`,
+    payload,
   );
 };

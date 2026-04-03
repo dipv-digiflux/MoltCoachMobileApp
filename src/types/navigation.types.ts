@@ -77,6 +77,8 @@ export interface AppStackParamList extends ParamListIndexSignature {
   ManageTasks: {
     clientName: string;
   };
+  SendNudge: { clientId: string } | undefined;
+  NudgeSent: { clientId: string; clientName: string; messages: string[] };
 }
 
 export interface RootStackParamList extends ParamListIndexSignature {
@@ -102,7 +104,9 @@ export type AppScreenName =
   | 'GeneratingPlan'
   | 'SuggestedPlan'
   | 'ClientDetail'
-  | 'ManageTasks';
+  | 'ManageTasks'
+  | 'SendNudge'
+  | 'NudgeSent';
 
 /** Explicit screen names for type-safe navigate() when param list has an index signature. */
 export type OnboardingScreenName =
