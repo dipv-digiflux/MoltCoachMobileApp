@@ -25,7 +25,7 @@ import {
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logoutThunk } from '@/store/thunks/authThunks';
-import { colors, iconScale, spacing } from '@/theme';
+import { colors, iconScale, moderateScale, spacing } from '@/theme';
 import { formatFullName } from '@/utils/stringUtils';
 
 import { LogoutBottomSheet } from './components/LogoutBottomSheet';
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.StatesWhite,
   },
   contentContainerStyle: {
-    paddingBottom: spacing['Spacing-16xl'],
+    paddingBottom: moderateScale(100),
   },
   scrollContent: {
     paddingHorizontal: spacing['Spacing-5xl'],
