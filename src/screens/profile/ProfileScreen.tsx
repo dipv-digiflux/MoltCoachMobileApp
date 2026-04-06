@@ -23,7 +23,10 @@ import {
   ReferAndEarnCard,
   ReferOptionBottomSheet,
 } from '@/components';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { logoutThunk } from '@/store/thunks/authThunks';
 import { colors, iconScale, spacing } from '@/theme';
+import { formatFullName } from '@/utils/stringUtils';
 
 import { LogoutBottomSheet } from './components/LogoutBottomSheet';
 import { ProfileHeader } from './components/ProfileHeader';
@@ -34,7 +37,9 @@ import type { AppStackNavigationProp } from '@/types/navigation.types';
 export const ProfileScreen = (): ReactElement => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<AppStackNavigationProp>();
-
+  const dispatch = useAppDispatch();
+  const profile = useAppSelector(state => state.booking.profile);
+  const auth = useAppSelector(state => state.auth);
   const [notifications, setNotifications] = React.useState({
     newClient: true,
     profileCompleted: true,
@@ -220,6 +225,7 @@ export const ProfileScreen = (): ReactElement => {
       onPress: () => setIsLogoutSheetVisible(true),
     },
   ];
+  console.log('profile', auth);
 
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
@@ -229,9 +235,12 @@ export const ProfileScreen = (): ReactElement => {
       >
         <View style={styles.scrollContent}>
           <ProfileHeader
-            name="Alex Patel"
-            email="John@gmail.com"
-            id="129381"
+            name={
+              formatFullName(profile?.first_name, profile?.last_name) ||
+              'Alex Patel'
+            }
+            email={profile?.email || 'John@gmail.com'}
+            id={profile?._id || '129381'}
             onEditPress={() => navigation.navigate('ProfileSettings')}
             onCopyIdPress={() => console.log('Copy ID')}
           />
@@ -293,6 +302,7 @@ export const ProfileScreen = (): ReactElement => {
         onClose={() => setIsLogoutSheetVisible(false)}
         onLogout={() => {
           console.log('Logging out...');
+          void dispatch(logoutThunk());
           setIsLogoutSheetVisible(false);
         }}
       />

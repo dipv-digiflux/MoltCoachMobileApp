@@ -12,11 +12,14 @@ import CalanderSvg from './svg/calander.svg';
 import CalendarDaysIconSvg from './svg/calendar-days.svg';
 import CalendarIconSvg from './svg/calendar-icon.svg';
 import CheckCircleIconSvg from './svg/check-circle-icon.svg';
+import CheckStoreSvg from './svg/check-store.svg';
 import CheckedcircleWithBlackBgSvg from './svg/CheckedcircleWithBlackBg.svg';
 import ChevronDownIconSvg from './svg/chevron-down-icon.svg';
 import ContactSvg from './svg/contact.svg';
 import ContactBookSvg from './svg/contactbook.svg';
 import CreditIconSvg from './svg/credit.svg';
+import DeleteIconSvg from './svg/delete.svg';
+import EditIconSvg from './svg/edit.svg';
 import EmptyRadioCircleSvg from './svg/emptyRadioCircle.svg';
 import GreenShieldSvg from './svg/greenshield.svg';
 import InfoIconSvg from './svg/infoicon.svg';
@@ -31,6 +34,7 @@ import SearchiconSvg from './svg/searchicon.svg';
 import ShieldIconSvg from './svg/shield.svg';
 import StarIconSvg from './svg/star-icon.svg';
 import UserSvg from './svg/user.svg';
+import VectorIconSvg from './svg/Vector.svg';
 
 export {
   UserSvg,
@@ -41,6 +45,7 @@ export {
   HeaderCurvedBg,
   BackIconSvg,
   CheckCircleIconSvg,
+  CheckStoreSvg,
   CalendarDaysIconSvg,
   CalendarIconSvg,
   ChevronDownIconSvg,
@@ -64,4 +69,7 @@ export {
   AttendeesSvg,
   CalanderSvg,
   HandGrabingBanner,
+  EditIconSvg,
+  DeleteIconSvg,
+  VectorIconSvg,
 };

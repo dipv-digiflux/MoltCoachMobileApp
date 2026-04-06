@@ -162,6 +162,8 @@ export const Button = ({
       {
         backgroundColor: stateColors.backgroundColor,
         borderColor: stateColors.borderColor,
+        borderWidth:
+          variant === 'text' || variant === 'destructive-text' ? 0 : 1,
         borderRadius: sizeConfig.borderRadius,
         height: isIconOnly ? sizeConfig.iconOnlySize : sizeConfig.height,
         width: isIconOnly ? sizeConfig.iconOnlySize : undefined,

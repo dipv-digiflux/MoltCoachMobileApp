@@ -78,7 +78,13 @@ export const ProfileHeader = ({
           <Text style={styles.secondaryText}>{email}</Text>
           <View style={styles.separator} />
           <View style={styles.idContainer}>
-            <Text style={styles.secondaryText}>{`ID:${id}`}</Text>
+            <Text style={styles.secondaryText}>
+              {`ID:${
+                id.length > 12
+                  ? `${id.substring(0, 5)}...${id.substring(id.length - 4)}`
+                  : id
+              }`}
+            </Text>
             <Pressable
               onPress={onCopyIdPress}
               style={styles.copyButton}

@@ -1,7 +1,7 @@
 import React, { type ReactElement } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { ProfileHomeScreen } from '@screens/profile/ProfileHomeScreen';
+import { ProfileScreen } from '@/screens/profile/ProfileScreen';
 
 import type { ProfileStackParamList } from '@navigation/types';
 
@@ -17,7 +17,7 @@ export const ProfileStackNavigator = (): ReactElement => (
   >
     <Stack.Screen
       name="ProfileHome"
-      component={ProfileHomeScreen}
+      component={ProfileScreen}
       options={{ title: 'Profile' }}
     />
   </Stack.Navigator>

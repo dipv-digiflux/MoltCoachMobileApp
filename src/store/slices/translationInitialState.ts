@@ -143,4 +143,9 @@ export const translationInitialState = {
   transactionCardRedeemed: 'Redeemed',
   transactionHistoryFooterHelp: 'Need help?',
   transactionHistoryFooterContact: 'Contact support',
+  nudgeSentHeaderTitle: 'Nudge Sent',
+  nudgeSentSuccessSubtitle:
+    'Your message has been successfully delivered to {{clientName}}.',
+  nudgeSentReturnToDashboardButton: 'Return to Dashboard',
+  nudgeSentViewClientProfileButton: 'View Client Profile',
 };

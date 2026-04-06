@@ -64,6 +64,7 @@ export const useRequestAccess = (): RequestAccessHook => {
           name: data.fullName,
           email: data.email,
           phone_number: data.phone,
+          country_code: '+971',
         }),
       );
 

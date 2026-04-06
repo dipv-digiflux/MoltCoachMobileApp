@@ -62,10 +62,12 @@ export const HomeDashboardScreen = (): ReactElement => {
     selectedLinkForSessions,
     handleLoadMore,
     handleUpdateSessions,
-    handleLogout,
     handleEditSessions,
     buildRows,
+    handleProfileRedirect,
   } = useHomeDashboard();
+
+  console.log(inviteLinks, 'inviteLinks');
 
   const overviewCards = getOverviewCards();
 
@@ -114,6 +116,14 @@ export const HomeDashboardScreen = (): ReactElement => {
             tags={tags}
             onNudgePress={() => console.log('Nudge', name)}
             onEditSessions={() => handleEditSessions(link)}
+            onPress={() => {
+              if (isAccepted) {
+                navigation.navigate('ClientDetail', {
+                  clientId: link._id,
+                  clientName: name,
+                });
+              }
+            }}
           />
         );
       }
@@ -169,7 +179,7 @@ export const HomeDashboardScreen = (): ReactElement => {
               style={styles.profileButton}
               accessibilityRole="button"
               accessibilityLabel="Profile"
-              onPress={handleLogout}
+              onPress={handleProfileRedirect}
             >
               <ProfileIconSvg width={iconScale(36)} height={iconScale(36)} />
             </Pressable>
