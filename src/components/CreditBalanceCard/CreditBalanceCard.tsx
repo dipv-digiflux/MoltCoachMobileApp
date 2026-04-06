@@ -2,7 +2,14 @@ import React, { type ReactElement } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { CreditIconSvg, RightIndicationArrowSvg } from '@/assets/images';
-import { colors, iconScale, spacing, typography, radius } from '@/theme';
+import {
+  colors,
+  iconScale,
+  spacing,
+  typography,
+  radius,
+  moderateScale,
+} from '@/theme';
 
 import { CreditBalanceCardProps } from './CreditBalanceCard.types';
 
@@ -31,9 +38,9 @@ export const CreditBalanceCard = ({
       <View style={styles.rightSection}>
         <Text style={styles.labelText}>{label}</Text>
         <RightIndicationArrowSvg
-          width={iconScale(18)}
-          height={iconScale(18)}
-          color={colors.IconSecondaryDefault}
+          width={moderateScale(20)}
+          height={moderateScale(20)}
+          color={colors.IconSecondaryDisabled}
         />
       </View>
     </Pressable>
@@ -61,15 +68,15 @@ const styles = StyleSheet.create({
   },
   balanceText: {
     ...typography.bodySmall1TallSemiBold,
-    color: colors.TextPrimaryDefault,
+    color: colors.PrimaryMain,
   },
   rightSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing['Spacing-m'],
+    gap: spacing['Spacing-xl'],
   },
   labelText: {
     ...typography.bodySmall2Medium,
-    color: colors.TextPrimaryDefault,
+    color: colors.PrimaryMain,
   },
 });

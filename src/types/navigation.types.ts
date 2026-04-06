@@ -77,6 +77,7 @@ export interface AppStackParamList extends ParamListIndexSignature {
   TransactionHistory: undefined;
   ProfileSettings: undefined;
   TransactionDetails: undefined;
+  NewTransfer: undefined;
 }
 
 export interface RootStackParamList extends ParamListIndexSignature {

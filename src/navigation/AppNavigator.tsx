@@ -1,6 +1,7 @@
 import React, { type ReactElement } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { NewTransferScreen } from '@/screens/profile/NewTransferScreen';
 import { BottomTabs } from '@navigation/BottomTabs';
 import { AddClientScreen } from '@screens/clients/AddClientScreen';
 import { AddedClientsScreen } from '@screens/clients/AddedClientsScreen';
@@ -82,5 +83,6 @@ export const AppNavigator = (): ReactElement => (
       name="TransactionDetails"
       component={TransactionDetailsScreen}
     />
+    <Stack.Screen name="NewTransfer" component={NewTransferScreen} />
   </Stack.Navigator>
 );

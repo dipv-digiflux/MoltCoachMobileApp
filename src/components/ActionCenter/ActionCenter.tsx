@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     borderColor: colors.StatesOutline,
   },
   scrollContent: {
+    gap: spacing['Spacing-xl'],
     padding: spacing['Spacing-4xl'],
   },
 });

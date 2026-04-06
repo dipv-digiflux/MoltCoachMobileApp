@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...typography.bodySmall1Medium,
-    color: colors.TextSecondaryDefault,
+    color: colors.TextSecondaryDisabled,
     // marginBottom: spacing['Spacing-xl'],
     // paddingHorizontal: spacing['Spacing-m'],
     // marginTop: spacing['Spacing-m'],

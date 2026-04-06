@@ -30,8 +30,10 @@ import SearchIconSvg from './svg/search.svg';
 import SearchiconSvg from './svg/searchicon.svg';
 import ShieldIconSvg from './svg/shield.svg';
 import StarIconSvg from './svg/star-icon.svg';
+import UserSvg from './svg/user.svg';
 
 export {
+  UserSvg,
   Device,
   LogoWhite,
   ProfilePng,

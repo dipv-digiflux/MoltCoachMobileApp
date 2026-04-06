@@ -98,7 +98,7 @@ export const ProfileScreen = (): ReactElement => {
         />
       ),
       type: 'link' as const,
-      onPress: () => console.log('Ownership control'),
+      onPress: () => navigation.navigate('NewTransfer'),
     },
   ];
 

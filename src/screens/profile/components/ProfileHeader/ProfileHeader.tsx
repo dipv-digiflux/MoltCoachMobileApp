@@ -106,20 +106,20 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: spacing['Spacing-xl'],
+    paddingVertical: spacing['Spacing-2xl'],
     backgroundColor: colors.StatesWhite,
   },
   avatarContainer: {
-    width: moderateScale(64),
-    height: moderateScale(64),
+    width: moderateScale(52),
+    height: moderateScale(52),
     borderRadius: radius.xs,
     backgroundColor: colors.PrimaryMain,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: spacing['Spacing-xl'],
+    marginRight: spacing['Spacing-3xl'],
   },
   avatarText: {
-    ...typography.h3Bold,
+    ...typography.h8SemiBold,
     color: colors.StatesWhite,
   },
   infoContainer: {
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
   },
   nameText: {
     ...typography.h8SemiBold,
-    color: colors.TextPrimaryDefault,
-    marginBottom: moderateScale(4),
+    color: colors.PrimaryMain,
+    marginBottom: moderateScale(6),
   },
   secondaryInfoRow: {
     flexDirection: 'row',
@@ -142,8 +142,8 @@ const styles = StyleSheet.create({
   separator: {
     width: 1,
     height: moderateScale(12),
-    backgroundColor: colors.BorderSecondaryDefault,
-    marginHorizontal: spacing['Spacing-m'],
+    backgroundColor: colors.TextSecondaryDefault,
+    marginHorizontal: spacing['Spacing-l'],
   },
   idContainer: {
     flexDirection: 'row',

@@ -34,7 +34,7 @@ export const ActionCenterTabs = ({
                 padding="Spacing-xs"
                 paddingHorizontal="Spacing-m"
                 radius="pill"
-                typographyToken="bodySmall3SemiBold"
+                typographyToken="bodySmall3Medium"
               />
             </View>
           </Pressable>
@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: colors.StatesDivider,
-    marginBottom: spacing['Spacing-xl'],
   },
   tabButton: {
     paddingTop: spacing['Spacing-xl'],
@@ -71,11 +70,11 @@ const styles = StyleSheet.create({
     gap: spacing['Spacing-xl'],
   },
   tabLabel: {
-    ...typography.bodySmall1Regular,
-    color: colors.TextSecondaryDefault,
+    ...typography.bodySmall2Regular,
+    color: colors.TextSecondaryHover,
   },
   activeTabLabel: {
-    ...typography.bodySmall1Medium,
-    color: colors.TextPrimaryDefault,
+    ...typography.bodySmall2Medium,
+    color: colors.PrimaryMain,
   },
 });

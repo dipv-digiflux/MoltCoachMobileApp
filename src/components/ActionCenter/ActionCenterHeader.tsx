@@ -29,12 +29,13 @@ const styles = StyleSheet.create({
   },
   title: {
     ...typography.bodySmall1Medium,
-    color: colors.TextSecondaryDefault,
+    color: colors.TextSecondaryDisabled,
     textTransform: 'capitalize',
   },
   viewAll: {
-    ...typography.bodySmall1Medium,
-    color: colors.TextPrimaryDefault,
+    ...typography.bodySmall1Regular,
+    color: colors.PrimaryMain,
     textDecorationLine: 'underline',
+    textDecorationColor: colors.TextPrimaryDisabled,
   },
 });

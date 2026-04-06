@@ -44,8 +44,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.StatesOutline,
     borderRadius: moderateScale(4),
-    padding: spacing['Spacing-5xl'],
-    marginRight: spacing['Spacing-xl'],
+    padding: spacing['Spacing-3xl'],
+    // marginRight: spacing['Spacing-xl'],
     gap: spacing['Spacing-m'],
   },
   title: {
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   description: {
     ...typography.bodySmall1Regular,
     color: colors.TextSecondaryDefault,
-    marginBottom: spacing['Spacing-m'],
+    marginBottom: spacing['Spacing-3xl'],
     height: moderateScale(40),
   },
   buttonRow: {
