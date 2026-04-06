@@ -78,6 +78,8 @@ export interface AppStackParamList extends ParamListIndexSignature {
   ProfileSettings: undefined;
   TransactionDetails: undefined;
   NewTransfer: undefined;
+  TransferStatus: undefined;
+  AddAddress: undefined;
   ClientDetail: {
     clientId: string;
     clientName: string;
@@ -121,7 +123,8 @@ export type AppScreenName =
   | 'ClientDetail'
   | 'ManageTasks'
   | 'SendNudge'
-  | 'NudgeSent';
+  | 'NudgeSent'
+  | 'TransferStatus';
 
 /** Explicit screen names for type-safe navigate() when param list has an index signature. */
 export type OnboardingScreenName =

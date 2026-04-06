@@ -14,15 +14,18 @@ import {
 export const NewTransferCard = ({
   label,
   value,
+  onPress,
 }: {
   label: string;
   value: string;
+  onPress?: () => void;
 }): ReactElement => (
   <View style={styles.selectCardWrapper}>
     <Text style={styles.label}>{label}</Text>
 
     <Pressable
       style={({ pressed }) => [styles.selectBox, pressed && styles.pressed]}
+      onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`${label}: ${value}`}
     >

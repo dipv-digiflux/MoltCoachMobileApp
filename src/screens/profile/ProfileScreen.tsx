@@ -64,7 +64,7 @@ export const ProfileScreen = (): ReactElement => {
         />
       ),
       type: 'link' as const,
-      onPress: () => console.log('Manage Address'),
+      onPress: () => navigation.navigate('AddAddress'),
     },
     {
       id: 'transaction-history',

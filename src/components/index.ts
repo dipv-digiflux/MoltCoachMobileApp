@@ -143,5 +143,17 @@ export { ReferAndEarnCard } from './ReferAndEarnCard/ReferAndEarnCard';
 export type { ReferAndEarnCardProps } from './ReferAndEarnCard/ReferAndEarnCard.types';
 export { EmptyState } from './EmptyState/EmptyState';
 export type { EmptyStateProps } from './EmptyState/EmptyState.types';
+export * from './SearchClientBottomSheet';
+export { DestinationCoachBottomSheet } from './DestinationCoachBottomSheet';
+export { Badge } from './Badge';
+export * from './TransferStatus';
 
 export * from './common';
+
+export { AddAddressForm } from './AddAddressForm';
+export type {
+  AddAddressFormProps,
+  AddAddressFormState,
+} from './AddAddressForm';
+
+export * from './TransferRequestCard';

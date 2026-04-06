@@ -15,6 +15,7 @@ import { SendNudgeScreen } from '@screens/clients/SendNudgeScreen';
 import { SuggestedPlanScreen } from '@screens/clients/SuggestedPlanScreen';
 import { EarningsScreen } from '@screens/earnings/EarningsScreen';
 import { ImportContactsScreen } from '@screens/onboarding/ImportContactsScreen';
+import { AddAddress } from '@screens/profile';
 import { ContactUsScreen } from '@screens/profile/ContactUsScreen';
 import { PaymentMethodsScreen } from '@screens/profile/PaymentMethodsScreen';
 import { ProfileSettingsScreen } from '@screens/profile/ProfileSettingsScreen';
@@ -28,6 +29,7 @@ import {
   TaskSummaryScreen,
   TaskSuccessScreen,
 } from '@screens/taskFlows';
+import { TransferStatusScreen } from '@screens/transaction';
 import { TransactionDetailsScreen } from '@screens/transaction/TransactionDetailsScreen';
 import { TransactionHistoryScreen } from '@screens/transaction/TransactionHistoryScreen';
 
@@ -90,5 +92,7 @@ export const AppNavigator = (): ReactElement => (
       component={TransactionDetailsScreen}
     />
     <Stack.Screen name="NewTransfer" component={NewTransferScreen} />
+    <Stack.Screen name="TransferStatus" component={TransferStatusScreen} />
+    <Stack.Screen name="AddAddress" component={AddAddress} />
   </Stack.Navigator>
 );

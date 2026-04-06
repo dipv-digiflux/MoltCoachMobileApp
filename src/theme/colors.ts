@@ -46,16 +46,19 @@ export const colors = {
   TextPrimaryHover: '#111827',
   TextPrimaryActive: '#1F2937',
   TextPrimaryStrong: '#0F1720',
+  TextPrimaryDark: '#0B1A17',
   TextPrimaryDisabled: '#9CA3AF',
 
   // ── Text Secondary ──────────────────────────────────────
   TextSecondaryDefault: '#64748B',
+  TextSecondaryLight: '#8A9BB0',
   TextSecondaryHover: '#475569',
   TextSecondaryActive: '#1E293B',
   TextSecondaryDisabled: '#94A3B8',
 
   /** Label text (e.g. form field labels). */
   TextLabelDefault: '#374151',
+  TextTertiaryMuted: '#8B9694',
 
   // ── Icon Primary ────────────────────────────────────────
   IconPrimaryDefault: '#4B5563',
