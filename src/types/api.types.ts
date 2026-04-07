@@ -74,14 +74,18 @@ export interface Customer {
 export interface CoachProfile {
   _id: string;
   first_name: string;
-  last_name: string;
+  last_name?: string;
   email: string;
   country_code: string;
   phone_number: string;
-  status: 'reject' | 'pending' | 'approve';
+  status: 'reject' | 'pending' | 'approve' | 'approved';
   is_request_access?: boolean;
   is_booking_confirmed?: boolean;
   is_verified?: boolean;
+  referral_code?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
 }
 
 /** Request payload for `COACH_REQUEST_ACCESS` */
@@ -420,3 +424,4 @@ export interface DateWiseTaskGroup {
 }
 
 export type DateWiseTaskResponse = ApiResponse<DateWiseTaskGroup[]>;
+export type GetCoachProfileResponse = ApiResponse<CoachProfile>;

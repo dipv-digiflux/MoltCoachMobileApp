@@ -46,16 +46,19 @@ export const colors = {
   TextPrimaryHover: '#111827',
   TextPrimaryActive: '#1F2937',
   TextPrimaryStrong: '#0F1720',
+  TextPrimaryDark: '#0B1A17',
   TextPrimaryDisabled: '#9CA3AF',
 
   // ── Text Secondary ──────────────────────────────────────
   TextSecondaryDefault: '#64748B',
+  TextSecondaryLight: '#8A9BB0',
   TextSecondaryHover: '#475569',
   TextSecondaryActive: '#1E293B',
   TextSecondaryDisabled: '#94A3B8',
 
   /** Label text (e.g. form field labels). */
   TextLabelDefault: '#374151',
+  TextTertiaryMuted: '#8B9694',
 
   // ── Icon Primary ────────────────────────────────────────
   IconPrimaryDefault: '#4B5563',
@@ -91,6 +94,11 @@ export const colors = {
   ShadowDefault: '#000000',
 
   // ── Border Primary ──────────────────────────────────────
+  /** Subtle card borders (rgba 0,0,0,0.08). */
+  BorderSubtleDefault: 'rgba(0, 0, 0, 0.08)',
+  /** Subtle row dividers (rgba 229,231,235,0.7). */
+  BorderDividerSubtle: 'rgba(229, 231, 235, 0.7)',
+  BorderCardDefault: '#E6E6E6',
   BorderPrimaryDefault: '#D1D5DB',
   BorderPrimaryHover: '#9CA3AF',
   BorderPrimaryActive: '#6B7280',
@@ -119,20 +127,31 @@ export const colors = {
   // ── Accent ──────────────────────────────────────────────
   AccentOrangeLight: '#FFF7ED',
   AccentOrangeDark: '#EA580C',
+  /** Tier limit applied text (amber/brown). */
+  AccentTierLimitText: '#9A3412',
   AccentBlueLight: '#E5EBFA',
   AccentBlueDark: '#2563EB',
   AccentGoldenLight: '#FAF3E3',
   AccentGoldenDark: '#D5C191',
   AccentPinkLight: '#FFF6FA',
   AccentPinkDark: '#DC2777',
-  AccentTealLight: '#F2FDFF',
+  AccentTealLight: '#ECFEFF',
   AccentTealDark: '#1B5D69',
+  AccentTealDarkText: '#0E7490',
   AccentRoyalBlue: '#0F0FA9',
   AccentMediumDarkBlue: '#5C6CF2',
   AccentBlueNavy: '#0E2E6B',
   AccentDeepBlue: '#123C8C',
   AccentYellowMustard: '#EAB308',
   AccentAmberDark: '#D97706',
+
+  // ── Surface Info ────────────────────────────────────────
+  /** Teal-tinted information box background. */
+  SurfaceInfoDefault: 'rgba(15, 118, 110, 0.05)',
+  /** Teal-tinted information box border. */
+  BorderInfoDefault: 'rgba(15, 118, 110, 0.1)',
+  /** Information box text color. */
+  TextInfoDefault: '#0B1220',
 
   // ── Tags ────────────────────────────────────────────────
   TagSuccessSurface: '#DCFCE7',

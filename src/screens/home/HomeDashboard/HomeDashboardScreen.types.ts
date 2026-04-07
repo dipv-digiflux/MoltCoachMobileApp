@@ -26,4 +26,5 @@ export interface HomeDashboardHook {
   handleLogout: () => void;
   handleEditSessions: (link: InviteLink) => void;
   buildRows: (link: InviteLink) => ClientStatusRow[];
+  handleProfileRedirect: () => void;
 }

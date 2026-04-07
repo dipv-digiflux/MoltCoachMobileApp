@@ -10,6 +10,9 @@ export interface BadgeProps {
   children?: ReactNode;
   label?: string;
 
+  icon?: ReactNode;
+  iconGap?: SpacingToken;
+
   padding?: SpacingToken;
   paddingHorizontal?: SpacingToken;
   paddingVertical?: SpacingToken;

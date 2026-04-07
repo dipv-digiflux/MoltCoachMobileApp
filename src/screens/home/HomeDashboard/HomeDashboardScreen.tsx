@@ -62,9 +62,9 @@ export const HomeDashboardScreen = (): ReactElement => {
     selectedLinkForSessions,
     handleLoadMore,
     handleUpdateSessions,
-    handleLogout,
     handleEditSessions,
     buildRows,
+    handleProfileRedirect,
   } = useHomeDashboard();
 
   console.log(inviteLinks, 'inviteLinks');
@@ -179,7 +179,7 @@ export const HomeDashboardScreen = (): ReactElement => {
               style={styles.profileButton}
               accessibilityRole="button"
               accessibilityLabel="Profile"
-              onPress={handleLogout}
+              onPress={handleProfileRedirect}
             >
               <ProfileIconSvg width={iconScale(36)} height={iconScale(36)} />
             </Pressable>

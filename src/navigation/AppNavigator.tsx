@@ -1,6 +1,7 @@
 import React, { type ReactElement } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { NewTransferScreen } from '@/screens/profile/NewTransferScreen';
 import { BottomTabs } from '@navigation/BottomTabs';
 import { AddClientScreen } from '@screens/clients/AddClientScreen';
 import { AddedClientsScreen } from '@screens/clients/AddedClientsScreen';
@@ -14,7 +15,13 @@ import { SelectContactScreen } from '@screens/clients/SelectContactScreen';
 import { SendNudgeScreen } from '@screens/clients/SendNudgeScreen';
 import { SuggestedPlanScreen } from '@screens/clients/SuggestedPlanScreen';
 import { EarningsScreen } from '@screens/earnings/EarningsScreen';
+import { RedeemEarningScreen } from '@screens/earnings/RedeemEarningScreen';
 import { ImportContactsScreen } from '@screens/onboarding/ImportContactsScreen';
+import { AddAddress } from '@screens/profile';
+import { ContactUsScreen } from '@screens/profile/ContactUsScreen';
+import { PaymentMethodsScreen } from '@screens/profile/PaymentMethodsScreen';
+import { ProfileSettingsScreen } from '@screens/profile/ProfileSettingsScreen';
+import { ReferCoachScreen } from '@screens/profile/ReferCoachScreen';
 import {
   CreateTaskScreen,
   EditTaskScreen,
@@ -24,6 +31,11 @@ import {
   TaskSummaryScreen,
   TaskSuccessScreen,
 } from '@screens/taskFlows';
+import { TransferStatusScreen } from '@screens/transaction';
+import { RequestDetailsScreen } from '@screens/transaction/RequestDetailsScreen';
+import { TransactionDetailsScreen } from '@screens/transaction/TransactionDetailsScreen';
+import { TransactionHistoryScreen } from '@screens/transaction/TransactionHistoryScreen';
+import { TransferRequestTransactionDetailsScreen } from '@screens/transaction/TransferRequestTransactionDetailsScreen';
 
 import type { AppStackParamList } from '@navigation/types';
 
@@ -41,6 +53,7 @@ export const AppNavigator = (): ReactElement => (
     <Stack.Screen name="BottomTabs" component={BottomTabs} />
 
     <Stack.Screen name="Earnings" component={EarningsScreen} />
+    <Stack.Screen name="RedeemEarning" component={RedeemEarningScreen} />
     <Stack.Screen name="AddClient" component={AddClientScreen} />
     <Stack.Screen name="AddedClients" component={AddedClientsScreen} />
     <Stack.Screen name="ImportContacts" component={ImportContactsScreen} />
@@ -70,6 +83,27 @@ export const AppNavigator = (): ReactElement => (
       options={{
         gestureEnabled: false,
       }}
+    />
+
+    <Stack.Screen name="PaymentMethods" component={PaymentMethodsScreen} />
+    <Stack.Screen name="ContactUs" component={ContactUsScreen} />
+    <Stack.Screen name="ReferCoach" component={ReferCoachScreen} />
+    <Stack.Screen
+      name="TransactionHistory"
+      component={TransactionHistoryScreen}
+    />
+    <Stack.Screen name="ProfileSettings" component={ProfileSettingsScreen} />
+    <Stack.Screen
+      name="TransactionDetails"
+      component={TransactionDetailsScreen}
+    />
+    <Stack.Screen name="NewTransfer" component={NewTransferScreen} />
+    <Stack.Screen name="TransferStatus" component={TransferStatusScreen} />
+    <Stack.Screen name="AddAddress" component={AddAddress} />
+    <Stack.Screen name="RequestDetails" component={RequestDetailsScreen} />
+    <Stack.Screen
+      name="TransferRequestTransactionDetails"
+      component={TransferRequestTransactionDetailsScreen}
     />
   </Stack.Navigator>
 );

@@ -17,4 +17,5 @@ export const ENDPOINTS = {
   COACH_DELETE_TASK: 'v1/coach/task/delete-task',
   COACH_UPDATE_TASK: 'v1/coach/task/update-task',
   COACH_DATE_WISE_TASK: 'v1/coach/task/get-date-wise-task',
+  COACH_PROFILE: 'v1/coach/profile',
 } as const;

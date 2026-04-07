@@ -48,6 +48,8 @@ const App = (): ReactElement => {
 const AppContent = (): ReactElement => {
   React.useEffect(() => {
     const token = store.getState().auth.token;
+    console.log('token', token);
+
     if (token) {
       void store.dispatch(getCoachBookingsThunk());
     }

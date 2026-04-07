@@ -560,7 +560,6 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
     const showContent = !loading && hasChildren;
 
     // ── Render ───────────────────────────────────────────────────────
-    if (!visible) return null;
 
     return (
       <Modal

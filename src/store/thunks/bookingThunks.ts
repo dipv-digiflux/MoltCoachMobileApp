@@ -1,12 +1,16 @@
 import { CommonActions } from '@react-navigation/native';
 
-import { getCoachBookings, postBookCall } from '@/api/authApi';
+import { getCoachBookings, postBookCall, getCoachProfile } from '@/api/authApi';
 import {
   setBookingData,
   setOperationError,
   setOperationLoading,
   setOperationSuccess,
   setNotApprovedVisible,
+  setCoachProfile,
+  setProfileError,
+  setProfileLoading,
+  setProfileSuccess,
 } from '@/store/slices/bookingSlice';
 import { getApiErrorMessage } from '@/utils/apiError';
 import { rootNavigationRef } from '@navigation/navigationRef';
@@ -252,5 +256,26 @@ export const getCoachBookingsThunk =
       const errorMsg = getApiErrorMessage(error);
       dispatch(setOperationError(errorMsg));
       throw error;
+    }
+  };
+
+export const getCoachProfileThunk =
+  () =>
+  async (dispatch: AppDispatch): Promise<void> => {
+    dispatch(setProfileLoading());
+    try {
+      const response = await getCoachProfile();
+      if (response.status) {
+        console.log('Coach Profile Data:', response.data);
+        dispatch(setCoachProfile(response.data));
+        dispatch(setProfileSuccess());
+      } else {
+        dispatch(
+          setProfileError(response.message || 'Failed to fetch coach profile'),
+        );
+      }
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(setProfileError(errorMsg));
     }
   };

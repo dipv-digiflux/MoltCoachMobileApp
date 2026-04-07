@@ -33,19 +33,25 @@ export interface ShopStackParamList extends ParamListIndexSignature {
   MealsHome: undefined;
 }
 
+export interface EarningStackParamList extends ParamListIndexSignature {
+  Earnings: undefined;
+  TransactionDetailsScreen: undefined;
+}
+
 export interface ProfileStackParamList extends ParamListIndexSignature {
   ProfileHome: undefined;
 }
 
 export interface BottomTabParamList extends ParamListIndexSignature {
   HomeTab: NavigatorScreenParams<HomeStackParamList>;
-  ShopTab: NavigatorScreenParams<ShopStackParamList>;
+  EarningTab: NavigatorScreenParams<EarningStackParamList>;
   ProfileTab: NavigatorScreenParams<ProfileStackParamList>;
 }
 
 export interface AppStackParamList extends ParamListIndexSignature {
   BottomTabs: NavigatorScreenParams<BottomTabParamList>;
   Earnings: undefined;
+  RedeemEarning: undefined;
   AddClient: undefined;
   AddedClients: { selectedContacts: Contact[] } | undefined;
   ImportContacts: undefined;
@@ -77,6 +83,16 @@ export interface AppStackParamList extends ParamListIndexSignature {
     phoneNumber?: string;
     countryCode?: string;
   };
+  profile: undefined;
+  PaymentMethods: undefined;
+  ContactUs: undefined;
+  ReferCoach: undefined;
+  TransactionHistory: undefined;
+  ProfileSettings: undefined;
+  TransactionDetails: undefined;
+  NewTransfer: undefined;
+  TransferStatus: undefined;
+  AddAddress: undefined;
   ClientDetail: {
     clientId: string;
     clientName: string;
@@ -91,6 +107,8 @@ export interface AppStackParamList extends ParamListIndexSignature {
     clientId: string;
     clientName: string;
   };
+  RequestDetails: undefined;
+  TransferRequestTransactionDetails: undefined;
 }
 
 export interface RootStackParamList extends ParamListIndexSignature {
@@ -101,6 +119,7 @@ export interface RootStackParamList extends ParamListIndexSignature {
 export type AppScreenName =
   | 'BottomTabs'
   | 'Earnings'
+  | 'RedeemEarning'
   | 'AddClient'
   | 'AddedClients'
   | 'ImportContacts'
@@ -115,11 +134,21 @@ export type AppScreenName =
   | 'TaskSuccess'
   | 'GeneratingPlan'
   | 'SuggestedPlan'
+  | 'profile'
+  | 'PaymentMethods'
+  | 'ContactUs'
+  | 'ReferCoach'
+  | 'TransactionHistory'
+  | 'ProfileSettings'
+  | 'TransactionDetails'
   | 'ClientDetail'
   | 'ManageTasks'
   | 'SendNudge'
   | 'NudgeSent'
-  | 'ManageData';
+  | 'ManageData'
+  | 'TransferStatus'
+  | 'RequestDetails'
+  | 'TransferRequestTransactionDetails';
 
 /** Explicit screen names for type-safe navigate() when param list has an index signature. */
 export type OnboardingScreenName =
@@ -136,6 +165,7 @@ export type HomeScreenName =
   | 'TaskProgress'
   | 'TaskCompletion';
 export type ShopScreenName = 'MealsHome';
+export type EarningScreenName = 'Earnings' | 'TransactionDetailsScreen';
 export type ProfileScreenName = 'ProfileHome';
 
 export type OnboardingNavigationProp =
@@ -144,6 +174,8 @@ export type HomeStackNavigationProp =
   NativeStackNavigationProp<HomeStackParamList>;
 export type ShopStackNavigationProp =
   NativeStackNavigationProp<ShopStackParamList>;
+export type EarningStackNavigationProp =
+  NativeStackNavigationProp<EarningStackParamList>;
 export type ProfileStackNavigationProp =
   NativeStackNavigationProp<ProfileStackParamList>;
 export type AppStackNavigationProp =

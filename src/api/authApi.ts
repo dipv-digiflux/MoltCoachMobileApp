@@ -8,6 +8,7 @@ import type {
   BookCallRequest,
   BookCallResponse,
   GetCoachBookingsResponse,
+  GetCoachProfileResponse,
   OnboardingRequest,
   OnboardingResponse,
 } from '@/types/api.types';
@@ -54,4 +55,8 @@ export const postBookCall = async (
 
 export const getCoachBookings = async (): Promise<GetCoachBookingsResponse> => {
   return httpGet<GetCoachBookingsResponse>(ENDPOINTS.COACH_BOOKINGS);
+};
+
+export const getCoachProfile = async (): Promise<GetCoachProfileResponse> => {
+  return httpGet<GetCoachProfileResponse>(ENDPOINTS.COACH_PROFILE);
 };

@@ -12,6 +12,8 @@ const getSpacingValue = (token?: SpacingToken): number | undefined =>
 export const Badge: React.FC<BadgeProps> = ({
   children,
   label,
+  icon,
+  iconGap,
   padding = 'Spacing-m',
   paddingHorizontal,
   paddingVertical,
@@ -35,7 +37,21 @@ export const Badge: React.FC<BadgeProps> = ({
       </Text>
     ) : null;
 
-  const content = children ?? textNode;
+  const iconNode = icon ? (
+    <>
+      {icon}
+      {iconGap !== undefined && <View style={{ width: spacing[iconGap] }} />}
+    </>
+  ) : null;
+
+  const content =
+    children ??
+    (iconNode || textNode ? (
+      <>
+        {iconNode}
+        {textNode}
+      </>
+    ) : null);
 
   if (!content) {
     return null;

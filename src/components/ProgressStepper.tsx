@@ -1,7 +1,7 @@
 import React, { type ReactElement } from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import { colors, spacing, moderateScale } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 import type { ProgressStepperProps } from '@/types/components.types';
 
@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
   },
   stepSegment: {
     flex: 1,
-    height: moderateScale(4),
-    borderRadius: moderateScale(2),
+    height: radius.sm,
+    borderRadius: radius.xs,
   },
   stepSegmentActive: {
     backgroundColor: colors.PrimaryMain,

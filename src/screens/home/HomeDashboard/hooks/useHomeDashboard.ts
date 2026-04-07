@@ -3,6 +3,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logoutThunk } from '@/store/thunks';
+import { getCoachProfileThunk } from '@/store/thunks';
 import {
   fetchInviteLinksThunk,
   updateInviteLinkThunk,
@@ -43,6 +44,7 @@ export const useHomeDashboard = (): HomeDashboardHook => {
   useFocusEffect(
     useCallback(() => {
       void dispatch(fetchInviteLinksThunk(1, 10));
+      void dispatch(getCoachProfileThunk());
     }, [dispatch]),
   );
 
@@ -91,6 +93,10 @@ export const useHomeDashboard = (): HomeDashboardHook => {
 
   const handleLogout = (): void => {
     void dispatch(logoutThunk());
+  };
+
+  const handleProfileRedirect = (): void => {
+    navigation.navigate('BottomTabs', { screen: 'ProfileTab' });
   };
 
   const handleEditSessions = (link: InviteLink): void => {
@@ -146,6 +152,7 @@ export const useHomeDashboard = (): HomeDashboardHook => {
     handleLoadMore,
     handleUpdateSessions,
     handleLogout,
+    handleProfileRedirect,
     handleEditSessions,
     buildRows,
   };

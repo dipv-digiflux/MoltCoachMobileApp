@@ -237,6 +237,92 @@ export const VARIANT_STATE_COLORS: Record<ButtonVariant, VariantStateMap> = {
       spinnerColor: colors.TextPrimaryDisabled,
     },
   },
+  // ── Text ──────────────────────────────────────────────────────────
+  text: {
+    default: {
+      backgroundColor: colors.Transparent,
+      borderColor: colors.Transparent,
+      textColor: colors.PrimaryMain,
+      iconColor: colors.PrimaryMain,
+      focusRingColor: colors.Transparent,
+      spinnerColor: colors.PrimaryMain,
+    },
+    hover: {
+      backgroundColor: colors.SurfaceSecondaryDefault,
+      borderColor: colors.Transparent,
+      textColor: colors.PrimaryMain,
+      iconColor: colors.PrimaryMain,
+      focusRingColor: colors.Transparent,
+      spinnerColor: colors.PrimaryMain,
+    },
+    focus: {
+      backgroundColor: colors.Transparent,
+      borderColor: colors.Transparent,
+      textColor: colors.PrimaryMain,
+      iconColor: colors.PrimaryMain,
+      focusRingColor: FOCUS_RING_NEUTRAL,
+      spinnerColor: colors.PrimaryMain,
+    },
+    loading: {
+      backgroundColor: colors.Transparent,
+      borderColor: colors.Transparent,
+      textColor: colors.PrimaryMain,
+      iconColor: colors.PrimaryMain,
+      focusRingColor: colors.Transparent,
+      spinnerColor: colors.PrimaryMain,
+    },
+    disabled: {
+      backgroundColor: colors.Transparent,
+      borderColor: colors.Transparent,
+      textColor: colors.TextPrimaryDisabled,
+      iconColor: colors.IconSecondaryDisabled,
+      focusRingColor: colors.Transparent,
+      spinnerColor: colors.TextPrimaryDisabled,
+    },
+  },
+  // ── Destructive-Text ──────────────────────────────────────────────
+  'destructive-text': {
+    default: {
+      backgroundColor: colors.Transparent,
+      borderColor: colors.Transparent,
+      textColor: colors.FeedbackWarningText,
+      iconColor: colors.FeedbackWarningText,
+      focusRingColor: colors.Transparent,
+      spinnerColor: colors.FeedbackWarningText,
+    },
+    hover: {
+      backgroundColor: colors.FeedbackWarningSurface,
+      borderColor: colors.Transparent,
+      textColor: colors.FeedbackWarningText,
+      iconColor: colors.FeedbackWarningText,
+      focusRingColor: colors.Transparent,
+      spinnerColor: colors.FeedbackWarningText,
+    },
+    focus: {
+      backgroundColor: colors.Transparent,
+      borderColor: colors.Transparent,
+      textColor: colors.FeedbackWarningText,
+      iconColor: colors.FeedbackWarningText,
+      focusRingColor: FOCUS_RING_DESTRUCTIVE,
+      spinnerColor: colors.FeedbackWarningText,
+    },
+    loading: {
+      backgroundColor: colors.Transparent,
+      borderColor: colors.Transparent,
+      textColor: colors.FeedbackWarningText,
+      iconColor: colors.FeedbackWarningText,
+      focusRingColor: colors.Transparent,
+      spinnerColor: colors.FeedbackWarningText,
+    },
+    disabled: {
+      backgroundColor: colors.Transparent,
+      borderColor: colors.Transparent,
+      textColor: colors.TextPrimaryDisabled,
+      iconColor: colors.IconSecondaryDisabled,
+      focusRingColor: colors.Transparent,
+      spinnerColor: colors.TextPrimaryDisabled,
+    },
+  },
 };
 
 // ─── Size configuration ─────────────────────────────────────────────
