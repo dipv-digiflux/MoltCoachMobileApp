@@ -7,9 +7,9 @@ import {
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import EarningIconSvg from '@/assets/images/svg/earning.svg';
 import HomeIconSvg from '@/assets/images/svg/home-icon.svg';
 import ProfileIconSvg from '@/assets/images/svg/profile-icon.svg';
-import ShopIconSvg from '@/assets/images/svg/shop-icon.svg';
 import { colors, typography, spacing, moderateScale, iconScale } from '@/theme';
 import PlusIcon from '@assets/images/svg/plus-icon.svg';
 
@@ -102,8 +102,8 @@ export const CustomTabBar = ({
                     color={iconColor}
                   />
                 ) : null}
-                {route.name === 'ShopTab' ? (
-                  <ShopIconSvg
+                {route.name === 'EarningTab' ? (
+                  <EarningIconSvg
                     width={iconScale(24)}
                     height={iconScale(24)}
                     color={iconColor}

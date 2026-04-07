@@ -1,5 +1,6 @@
-import React, { type ReactElement, useState } from 'react';
+import React, { type ReactElement, useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { MealIconSvg, ShopIconSvg, UserSvg } from '@/assets/images';
@@ -12,18 +13,35 @@ import {
 } from '@/components';
 import { PageHeaderScrollView } from '@/components/PageHeaderScrollView';
 import { useAppSelector } from '@/store/hooks';
-import { iconScale, colors } from '@/theme';
-import { moderateScale, spacing } from '@/theme';
+import { iconScale, colors, moderateScale, spacing } from '@/theme';
+
+import type {
+  AppStackParamList,
+  EarningStackParamList,
+} from '@/navigation/types';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const TAB_BAR_HEIGHT = moderateScale(72);
 
 export const EarningsScreen = (): ReactElement => {
   const insets = useSafeAreaInsets();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<EarningStackParamList>>();
+  const appNavigation =
+    useNavigation<NativeStackNavigationProp<AppStackParamList>>();
   const translation = useAppSelector(state => state.translation);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
 
   const scrollPaddingBottom =
     insets.bottom + spacing['Spacing-15xl'] + TAB_BAR_HEIGHT;
+
+  const handleTransactionPress = useCallback(() => {
+    navigation.navigate('TransactionDetailsScreen');
+  }, [navigation]);
+
+  const handleRedeemPress = useCallback(() => {
+    appNavigation.navigate('RedeemEarning');
+  }, [appNavigation]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -35,7 +53,11 @@ export const EarningsScreen = (): ReactElement => {
         bounces={false}
       >
         <View style={styles.container}>
-          <EarningsOverview credits={450} aedValue={45.0} />
+          <EarningsOverview
+            credits={450}
+            aedValue={45.0}
+            onRedeem={handleRedeemPress}
+          />
           <TierStatusCard
             progress={0.8}
             credits="32k"
@@ -83,6 +105,7 @@ export const EarningsScreen = (): ReactElement => {
             ]}
           />
           <RecentTransactions
+            onTransactionPress={handleTransactionPress}
             data={[
               {
                 type: 'incoming',

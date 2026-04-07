@@ -29,6 +29,10 @@ export const spacing = {
   'Spacing-14xl': spacingScale(44),
   'Spacing-15xl': spacingScale(48),
   'Spacing-16xl': spacingScale(52),
+  'Spacing-17xl': spacingScale(56),
+  'Spacing-18xl': spacingScale(60),
+  'Spacing-19xl': spacingScale(64),
+  'Spacing-20xl': spacingScale(68),
 } as const;
 
 export type SpacingToken = keyof typeof spacing;

@@ -12,6 +12,7 @@ import type { RecentTransactionsProps } from './RecentTransactions.types';
 export const RecentTransactions = ({
   initialFilterIndex = 0,
   data,
+  onTransactionPress,
 }: RecentTransactionsProps): ReactElement => {
   const translation = useAppSelector(state => state.translation);
 
@@ -46,6 +47,7 @@ export const RecentTransactions = ({
               key={index}
               {...item}
               isLast={index === data.length - 1}
+              onPress={onTransactionPress}
             />
           ))}
         </View>

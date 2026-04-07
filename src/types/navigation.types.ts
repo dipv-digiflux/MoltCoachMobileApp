@@ -51,6 +51,7 @@ export interface BottomTabParamList extends ParamListIndexSignature {
 export interface AppStackParamList extends ParamListIndexSignature {
   BottomTabs: NavigatorScreenParams<BottomTabParamList>;
   Earnings: undefined;
+  RedeemEarning: undefined;
   AddClient: undefined;
   AddedClients: { selectedContacts: Contact[] } | undefined;
   ImportContacts: undefined;
@@ -94,6 +95,7 @@ export interface AppStackParamList extends ParamListIndexSignature {
   };
   SendNudge: { clientId: string } | undefined;
   NudgeSent: { clientId: string; clientName: string; messages: string[] };
+  RequestDetails: undefined;
 }
 
 export interface RootStackParamList extends ParamListIndexSignature {
@@ -104,6 +106,7 @@ export interface RootStackParamList extends ParamListIndexSignature {
 export type AppScreenName =
   | 'BottomTabs'
   | 'Earnings'
+  | 'RedeemEarning'
   | 'AddClient'
   | 'AddedClients'
   | 'ImportContacts'
@@ -129,7 +132,8 @@ export type AppScreenName =
   | 'ManageTasks'
   | 'SendNudge'
   | 'NudgeSent'
-  | 'TransferStatus';
+  | 'TransferStatus'
+  | 'RequestDetails';
 
 /** Explicit screen names for type-safe navigate() when param list has an index signature. */
 export type OnboardingScreenName =

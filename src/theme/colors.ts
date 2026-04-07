@@ -94,6 +94,9 @@ export const colors = {
   ShadowDefault: '#000000',
 
   // ── Border Primary ──────────────────────────────────────
+  /** Subtle card borders (rgba 0,0,0,0.08). */
+  BorderSubtleDefault: 'rgba(0, 0, 0, 0.08)',
+  BorderCardDefault: '#E6E6E6',
   BorderPrimaryDefault: '#D1D5DB',
   BorderPrimaryHover: '#9CA3AF',
   BorderPrimaryActive: '#6B7280',
@@ -122,6 +125,8 @@ export const colors = {
   // ── Accent ──────────────────────────────────────────────
   AccentOrangeLight: '#FFF7ED',
   AccentOrangeDark: '#EA580C',
+  /** Tier limit applied text (amber/brown). */
+  AccentTierLimitText: '#9A3412',
   AccentBlueLight: '#E5EBFA',
   AccentBlueDark: '#2563EB',
   AccentGoldenLight: '#FAF3E3',
@@ -135,6 +140,14 @@ export const colors = {
   AccentBlueNavy: '#0E2E6B',
   AccentDeepBlue: '#123C8C',
   AccentYellowMustard: '#EAB308',
+
+  // ── Surface Info ────────────────────────────────────────
+  /** Teal-tinted information box background. */
+  SurfaceInfoDefault: 'rgba(15, 118, 110, 0.05)',
+  /** Teal-tinted information box border. */
+  BorderInfoDefault: 'rgba(15, 118, 110, 0.1)',
+  /** Information box text color. */
+  TextInfoDefault: '#0B1220',
 
   // ── Tags ────────────────────────────────────────────────
   TagSuccessSurface: '#DCFCE7',

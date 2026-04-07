@@ -1,7 +1,14 @@
 import React, { type ReactElement } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { colors, moderateScale, radius, spacing, typography } from '@/theme';
+import {
+  borderWidth,
+  colors,
+  moderateScale,
+  radius,
+  spacing,
+  typography,
+} from '@/theme';
 
 import type { InfoCardProps } from '@/types/components.types';
 
@@ -39,12 +46,14 @@ export const InfoCard = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.StatesOutline,
+    borderRadius: radius.xs,
+    borderWidth: borderWidth.hairline,
+    borderColor: colors.BorderInfoDefault,
     padding: spacing['Spacing-5xl'],
-    gap: spacing['Spacing-xl'],
-    backgroundColor: colors.StatesWhite,
+    gap: spacing['Spacing-3xl'],
+    backgroundColor: colors.SurfaceInfoDefault,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     alignSelf: 'stretch',
   },
   containerSimple: {
@@ -62,11 +71,9 @@ const styles = StyleSheet.create({
   contentRowSimple: {
     gap: spacing['Spacing-xl'],
   },
-  textContainer: {
-    flex: 1,
-    gap: spacing['Spacing-xs'],
-  },
   icon: {
+    width: moderateScale(20),
+    height: moderateScale(20),
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -76,14 +83,17 @@ const styles = StyleSheet.create({
     borderRadius: radius.full,
     backgroundColor: colors.MatrixMain,
   },
+  textContainer: {
+    flex: 1,
+  },
   title: {
     ...typography.bodySmall1SemiBold,
     color: colors.TextPrimaryStrong,
     flex: 1,
   },
   description: {
-    ...typography.bodySmall4TallRegular,
-    color: colors.IconTertiarySubtle,
+    ...typography.bodySmall4TallMedium,
+    color: colors.TextInfoDefault,
   },
   descriptionSimple: {
     ...typography.bodySmall1Regular,

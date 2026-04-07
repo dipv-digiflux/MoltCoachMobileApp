@@ -14,6 +14,7 @@ import { SelectContactScreen } from '@screens/clients/SelectContactScreen';
 import { SendNudgeScreen } from '@screens/clients/SendNudgeScreen';
 import { SuggestedPlanScreen } from '@screens/clients/SuggestedPlanScreen';
 import { EarningsScreen } from '@screens/earnings/EarningsScreen';
+import { RedeemEarningScreen } from '@screens/earnings/RedeemEarningScreen';
 import { ImportContactsScreen } from '@screens/onboarding/ImportContactsScreen';
 import { AddAddress } from '@screens/profile';
 import { ContactUsScreen } from '@screens/profile/ContactUsScreen';
@@ -30,6 +31,7 @@ import {
   TaskSuccessScreen,
 } from '@screens/taskFlows';
 import { TransferStatusScreen } from '@screens/transaction';
+import { RequestDetailsScreen } from '@screens/transaction/RequestDetailsScreen';
 import { TransactionDetailsScreen } from '@screens/transaction/TransactionDetailsScreen';
 import { TransactionHistoryScreen } from '@screens/transaction/TransactionHistoryScreen';
 
@@ -49,6 +51,7 @@ export const AppNavigator = (): ReactElement => (
     <Stack.Screen name="BottomTabs" component={BottomTabs} />
 
     <Stack.Screen name="Earnings" component={EarningsScreen} />
+    <Stack.Screen name="RedeemEarning" component={RedeemEarningScreen} />
     <Stack.Screen name="AddClient" component={AddClientScreen} />
     <Stack.Screen name="AddedClients" component={AddedClientsScreen} />
     <Stack.Screen name="ImportContacts" component={ImportContactsScreen} />
@@ -94,5 +97,6 @@ export const AppNavigator = (): ReactElement => (
     <Stack.Screen name="NewTransfer" component={NewTransferScreen} />
     <Stack.Screen name="TransferStatus" component={TransferStatusScreen} />
     <Stack.Screen name="AddAddress" component={AddAddress} />
+    <Stack.Screen name="RequestDetails" component={RequestDetailsScreen} />
   </Stack.Navigator>
 );

@@ -1,5 +1,5 @@
 import React, { type ReactElement } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { ArrowDownLeftSvg, ArrowUpRightSvg } from '@/assets/images';
 import { colors, iconScale, radius, spacing, typography } from '@/theme';
@@ -13,11 +13,16 @@ export const TransactionItem = ({
   amount,
   aedValue,
   isLast = false,
+  onPress,
 }: TransactionItemProps): ReactElement => {
   const isIncoming = type === 'incoming';
 
   return (
-    <View style={[styles.container, isLast && styles.noBorder]}>
+    <TouchableOpacity
+      style={[styles.container, isLast && styles.noBorder]}
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
       <View
         style={[
           styles.iconContainer,
@@ -59,7 +64,7 @@ export const TransactionItem = ({
         </Text>
         <Text style={styles.aedValue}>{aedValue} AED</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

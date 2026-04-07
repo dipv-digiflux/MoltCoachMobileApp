@@ -9,6 +9,7 @@ import ArrowDownLeftSvg from './svg/arrow-down-left.svg';
 import ArrowUpRightSvg from './svg/arrow-up-right.svg';
 import AttendeesSvg from './svg/attendees.svg';
 import BackIconSvg from './svg/back-icon.svg';
+import BankIconSvg from './svg/bank-icon.svg';
 import BlackBackgroundCheckSvg from './svg/BlackBackgroundCheck.svg';
 import CalanderSvg from './svg/calander.svg';
 import CalendarDaysIconSvg from './svg/calendar-days.svg';
@@ -17,12 +18,16 @@ import CheckCircleIconSvg from './svg/check-circle-icon.svg';
 import CheckStoreSvg from './svg/check-store.svg';
 import CheckedcircleWithBlackBgSvg from './svg/CheckedcircleWithBlackBg.svg';
 import ChevronDownIconSvg from './svg/chevron-down-icon.svg';
+import CircleCheckIconSvg from './svg/circle-check-icon.svg';
 import ContactSvg from './svg/contact.svg';
 import ContactBookSvg from './svg/contactbook.svg';
 import CreditIconSvg from './svg/credit.svg';
 import DeleteIconSvg from './svg/delete.svg';
+import DownloadIconSvg from './svg/download-icon.svg';
+import EarningIconSvg from './svg/earning.svg';
 import EditIconSvg from './svg/edit.svg';
 import EmptyRadioCircleSvg from './svg/emptyRadioCircle.svg';
+import FlagIconSvg from './svg/flag-icon.svg';
 import GreenShieldSvg from './svg/greenshield.svg';
 import InfoIconSvg from './svg/infoicon.svg';
 import LocationSvg from './svg/Location.svg';
@@ -36,9 +41,11 @@ import ProfileIconSvg from './svg/profile.svg';
 import RightIndicationArrowSvg from './svg/rightindicationarrow.svg';
 import SearchIconSvg from './svg/search.svg';
 import SearchiconSvg from './svg/searchicon.svg';
+import ShieldTickCustomSvg from './svg/shield-tick-custom.svg';
 import ShieldIconSvg from './svg/shield.svg';
 import ShopIconSvg from './svg/shop-icon.svg';
 import StarIconSvg from './svg/star-icon.svg';
+import UserPlusIconSvg from './svg/user-plus-icon.svg';
 import UserSvg from './svg/user.svg';
 import VectorIconSvg from './svg/Vector.svg';
 import WithdrawIconSvg from './svg/withdraw.svg';
@@ -51,7 +58,9 @@ export {
   LogoWhiteSvg,
   HeaderCurvedBg,
   BackIconSvg,
+  BankIconSvg,
   CheckCircleIconSvg,
+  CircleCheckIconSvg,
   CheckStoreSvg,
   CalendarDaysIconSvg,
   CalendarIconSvg,
@@ -78,6 +87,7 @@ export {
   HandGrabingBanner,
   EditIconSvg,
   DeleteIconSvg,
+  DownloadIconSvg,
   VectorIconSvg,
   ShopIconSvg,
   WithdrawIconSvg,
@@ -86,4 +96,8 @@ export {
   MealIconSvg,
   ArrowDownLeftSvg,
   ArrowUpRightSvg,
+  FlagIconSvg,
+  ShieldTickCustomSvg,
+  UserPlusIconSvg,
+  EarningIconSvg,
 };

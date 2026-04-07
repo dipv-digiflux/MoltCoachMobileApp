@@ -25,6 +25,10 @@ export interface TransactionItemProps {
    * Whether this is the last item in the list (hides bottom border)
    */
   isLast?: boolean;
+  /**
+   * Callback when the item is pressed
+   */
+  onPress?: () => void;
 }
 
 export interface RecentTransactionsProps {
@@ -36,4 +40,8 @@ export interface RecentTransactionsProps {
    * Transaction data to display
    */
   data: TransactionItemProps[];
+  /**
+   * Callback when a transaction item is pressed
+   */
+  onTransactionPress?: () => void;
 }
