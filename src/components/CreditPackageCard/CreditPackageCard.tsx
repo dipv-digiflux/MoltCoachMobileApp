@@ -35,11 +35,29 @@ const ClockIcon = ({ color = colors.AccentOrangeDark }): ReactElement => (
   </Svg>
 );
 
+const CheckIcon = ({ color = colors.FeedbackSuccessText }): ReactElement => (
+  <Svg
+    width={iconScale(16)}
+    height={iconScale(16)}
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <Circle cx="12" cy="12" r="10" fill={color} />
+    <Path
+      d="M8 12L11 15L16 9"
+      stroke="white"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
 // ── Component ────────────────────────────────────────────────────────
 
 /**
  * A card component that displays a credit package with its count,
- * status (e.g. In Progress), and price.
+ * status (e.g. In Progress, Completed), and price.
  */
 export const CreditPackageCard = ({
   credits,
@@ -61,6 +79,41 @@ export const CreditPackageCard = ({
     .replace('{{price}}', price.toFixed(2))
     .replace('{{currency}}', currency);
 
+  const renderStatusBadge = (): ReactElement | null => {
+    switch (status) {
+      case 'inProgress':
+        return (
+          <Badge
+            label={translation.creditPackageInProgress}
+            icon={<ClockIcon />}
+            iconGap="Spacing-m"
+            backgroundColor="AccentOrangeLight"
+            textColor="AccentOrangeDark"
+            radius="xs"
+            paddingHorizontal="Spacing-xl"
+            paddingVertical="Spacing-m"
+            typographyToken="bodySmall2SemiBold"
+          />
+        );
+      case 'completed':
+        return (
+          <Badge
+            label={translation.creditPackageCompleted}
+            icon={<CheckIcon />}
+            iconGap="Spacing-m"
+            backgroundColor="TagSuccessSurface"
+            textColor="FeedbackSuccessText"
+            radius="xs"
+            paddingHorizontal="Spacing-xl"
+            paddingVertical="Spacing-m"
+            typographyToken="bodySmall2SemiBold"
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <Pressable
       onPress={onPress}
@@ -74,19 +127,7 @@ export const CreditPackageCard = ({
     >
       <View style={styles.topSection}>
         <Text style={styles.title}>{formattedCredits}</Text>
-        {status === 'inProgress' && (
-          <Badge
-            label={translation.creditPackageInProgress}
-            icon={<ClockIcon />}
-            iconGap="Spacing-m"
-            backgroundColor="AccentOrangeLight"
-            textColor="AccentOrangeDark"
-            radius="xs"
-            paddingHorizontal="Spacing-xl"
-            paddingVertical="Spacing-m"
-            typographyToken="bodySmall2SemiBold"
-          />
-        )}
+        {renderStatusBadge()}
       </View>
 
       <Badge

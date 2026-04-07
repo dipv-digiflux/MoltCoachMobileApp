@@ -15,6 +15,7 @@ import { PageHeaderScrollView } from '@/components/PageHeaderScrollView';
 import { useAppSelector } from '@/store/hooks';
 import { iconScale, colors, moderateScale, spacing } from '@/theme';
 
+import type { TransactionItemProps } from '@/components/RecentTransactions/RecentTransactions.types';
 import type {
   AppStackParamList,
   EarningStackParamList,
@@ -35,9 +36,16 @@ export const EarningsScreen = (): ReactElement => {
   const scrollPaddingBottom =
     insets.bottom + spacing['Spacing-15xl'] + TAB_BAR_HEIGHT;
 
-  const handleTransactionPress = useCallback(() => {
-    navigation.navigate('TransactionDetailsScreen');
-  }, [navigation]);
+  const handleTransactionPress = useCallback(
+    (item: TransactionItemProps) => {
+      if (item.type === 'transfer') {
+        appNavigation.navigate('TransferRequestTransactionDetails');
+      } else {
+        navigation.navigate('TransactionDetailsScreen');
+      }
+    },
+    [appNavigation, navigation],
+  );
 
   const handleRedeemPress = useCallback(() => {
     appNavigation.navigate('RedeemEarning');
@@ -113,6 +121,13 @@ export const EarningsScreen = (): ReactElement => {
                 date: 'Feb 18, 2026',
                 amount: 500.0,
                 aedValue: 50,
+              },
+              {
+                type: 'transfer',
+                title: 'Transfer request',
+                date: 'Feb 16, 2026',
+                amount: 300.0,
+                aedValue: 30,
               },
               {
                 type: 'incoming',

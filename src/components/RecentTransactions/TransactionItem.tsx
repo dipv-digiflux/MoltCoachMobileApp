@@ -1,7 +1,11 @@
 import React, { type ReactElement } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { ArrowDownLeftSvg, ArrowUpRightSvg } from '@/assets/images';
+import {
+  ArrowDownLeftSvg,
+  ArrowUpRightSvg,
+  TransferRequestSvg,
+} from '@/assets/images';
 import { colors, iconScale, radius, spacing, typography } from '@/theme';
 
 import type { TransactionItemProps } from './RecentTransactions.types';
@@ -16,29 +20,38 @@ export const TransactionItem = ({
   onPress,
 }: TransactionItemProps): ReactElement => {
   const isIncoming = type === 'incoming';
+  const isOutgoing = type === 'outgoing';
+  const isTransfer = type === 'transfer';
+
+  const iconBgColor = isIncoming
+    ? colors.FeedbackSuccessSurface
+    : isTransfer
+    ? colors.StatesFill1
+    : colors.FeedbackWarningSurface;
+
+  const amountColor = isIncoming
+    ? colors.MatrixMain
+    : isTransfer
+    ? colors.PrimarySecondary
+    : colors.PrimaryMain;
+
+  const amountPrefix = isIncoming ? '+ ' : isTransfer ? '' : '- ';
 
   return (
     <TouchableOpacity
       style={[styles.container, isLast && styles.noBorder]}
-      onPress={onPress}
+      onPress={() => onPress?.({ type, title, date, amount, aedValue, isLast })}
       activeOpacity={0.7}
     >
-      <View
-        style={[
-          styles.iconContainer,
-          {
-            backgroundColor: isIncoming
-              ? colors.FeedbackSuccessSurface
-              : '#FFE5E5',
-          },
-        ]}
-      >
+      <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
         {isIncoming ? (
           <ArrowDownLeftSvg
             width={iconScale(16)}
             height={iconScale(16)}
             color={colors.FeedbackSuccessText}
           />
+        ) : isTransfer ? (
+          <TransferRequestSvg width={iconScale(22)} height={iconScale(15)} />
         ) : (
           <ArrowUpRightSvg
             width={iconScale(16)}
@@ -54,13 +67,13 @@ export const TransactionItem = ({
       </View>
 
       <View style={styles.amountContainer}>
-        <Text
-          style={[
-            styles.amount,
-            { color: isIncoming ? colors.MatrixMain : colors.PrimaryMain },
-          ]}
-        >
-          {isIncoming ? `+ ${amount.toFixed(2)}` : `- ${amount}`}
+        <Text style={[styles.amount, { color: amountColor }]}>
+          {amountPrefix}
+          {isTransfer
+            ? amount.toFixed(2)
+            : isOutgoing
+            ? amount
+            : amount.toFixed(2)}
         </Text>
         <Text style={styles.aedValue}>{aedValue} AED</Text>
       </View>

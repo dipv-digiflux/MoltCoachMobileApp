@@ -34,6 +34,7 @@ import { TransferStatusScreen } from '@screens/transaction';
 import { RequestDetailsScreen } from '@screens/transaction/RequestDetailsScreen';
 import { TransactionDetailsScreen } from '@screens/transaction/TransactionDetailsScreen';
 import { TransactionHistoryScreen } from '@screens/transaction/TransactionHistoryScreen';
+import { TransferRequestTransactionDetailsScreen } from '@screens/transaction/TransferRequestTransactionDetailsScreen';
 
 import type { AppStackParamList } from '@navigation/types';
 
@@ -98,5 +99,9 @@ export const AppNavigator = (): ReactElement => (
     <Stack.Screen name="TransferStatus" component={TransferStatusScreen} />
     <Stack.Screen name="AddAddress" component={AddAddress} />
     <Stack.Screen name="RequestDetails" component={RequestDetailsScreen} />
+    <Stack.Screen
+      name="TransferRequestTransactionDetails"
+      component={TransferRequestTransactionDetailsScreen}
+    />
   </Stack.Navigator>
 );

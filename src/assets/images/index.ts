@@ -45,6 +45,7 @@ import ShieldTickCustomSvg from './svg/shield-tick-custom.svg';
 import ShieldIconSvg from './svg/shield.svg';
 import ShopIconSvg from './svg/shop-icon.svg';
 import StarIconSvg from './svg/star-icon.svg';
+import TransferRequestSvg from './svg/transfer-request.svg';
 import UserPlusIconSvg from './svg/user-plus-icon.svg';
 import UserSvg from './svg/user.svg';
 import VectorIconSvg from './svg/Vector.svg';
@@ -98,6 +99,7 @@ export {
   ArrowUpRightSvg,
   FlagIconSvg,
   ShieldTickCustomSvg,
+  TransferRequestSvg,
   UserPlusIconSvg,
   EarningIconSvg,
 };

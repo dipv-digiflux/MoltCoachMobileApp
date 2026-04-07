@@ -1,4 +1,4 @@
-export type TransactionType = 'incoming' | 'outgoing';
+export type TransactionType = 'incoming' | 'outgoing' | 'transfer';
 
 export interface TransactionItemProps {
   /**
@@ -28,7 +28,7 @@ export interface TransactionItemProps {
   /**
    * Callback when the item is pressed
    */
-  onPress?: () => void;
+  onPress?: (item: TransactionItemProps) => void;
 }
 
 export interface RecentTransactionsProps {
@@ -43,5 +43,5 @@ export interface RecentTransactionsProps {
   /**
    * Callback when a transaction item is pressed
    */
-  onTransactionPress?: () => void;
+  onTransactionPress?: (item: TransactionItemProps) => void;
 }

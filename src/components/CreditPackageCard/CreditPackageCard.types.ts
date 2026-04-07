@@ -1,6 +1,6 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
-export type CreditPackageStatus = 'inProgress' | 'none';
+export type CreditPackageStatus = 'inProgress' | 'completed' | 'none';
 
 export interface CreditPackageCardProps {
   /** The number of credits in this package. */

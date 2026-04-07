@@ -52,3 +52,22 @@ export interface TransactionDetailsCardProps {
 export interface TransactionDetailsReportFooterProps {
   onReportPress: () => void;
 }
+
+export interface TransactionInfoCardProps {
+  /**
+   * Optional title of the card
+   */
+  title?: string;
+  /**
+   * List of rows to display
+   */
+  rows: TransactionDetailsDetailRowProps[];
+  /**
+   * Optional badge to display in the header
+   */
+  headerBadge?: ReactNode;
+  /**
+   * Optional note to display at the bottom
+   */
+  footerNote?: string;
+}

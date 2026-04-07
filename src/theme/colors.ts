@@ -96,6 +96,8 @@ export const colors = {
   // ── Border Primary ──────────────────────────────────────
   /** Subtle card borders (rgba 0,0,0,0.08). */
   BorderSubtleDefault: 'rgba(0, 0, 0, 0.08)',
+  /** Subtle row dividers (rgba 229,231,235,0.7). */
+  BorderDividerSubtle: 'rgba(229, 231, 235, 0.7)',
   BorderCardDefault: '#E6E6E6',
   BorderPrimaryDefault: '#D1D5DB',
   BorderPrimaryHover: '#9CA3AF',
@@ -133,8 +135,9 @@ export const colors = {
   AccentGoldenDark: '#D5C191',
   AccentPinkLight: '#FFF6FA',
   AccentPinkDark: '#DC2777',
-  AccentTealLight: '#F2FDFF',
+  AccentTealLight: '#ECFEFF',
   AccentTealDark: '#1B5D69',
+  AccentTealDarkText: '#0E7490',
   AccentRoyalBlue: '#0F0FA9',
   AccentMediumDarkBlue: '#5C6CF2',
   AccentBlueNavy: '#0E2E6B',
