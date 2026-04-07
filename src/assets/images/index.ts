@@ -5,6 +5,8 @@ import HeaderCurvedBg from './png/header-curved-bg.png';
 import LogoWhite from './png/logo-white.png';
 import ProfilePng from './png/profile.jpg';
 // svgs
+import ArrowDownLeftSvg from './svg/arrow-down-left.svg';
+import ArrowUpRightSvg from './svg/arrow-up-right.svg';
 import AttendeesSvg from './svg/attendees.svg';
 import BackIconSvg from './svg/back-icon.svg';
 import BlackBackgroundCheckSvg from './svg/BlackBackgroundCheck.svg';
@@ -25,16 +27,21 @@ import GreenShieldSvg from './svg/greenshield.svg';
 import InfoIconSvg from './svg/infoicon.svg';
 import LocationSvg from './svg/Location.svg';
 import LogoWhiteSvg from './svg/logo-WhiteSvg.svg';
+import MealIconSvg from './svg/meal-icon.svg';
+import MedalIconSvg from './svg/medal-icon.svg';
 import NotificationBellSvg from './svg/notification-icon.svg';
 import NotificationIconSvg from './svg/notification.svg';
+import PaperPlaneIconSvg from './svg/paper-plane.svg';
 import ProfileIconSvg from './svg/profile.svg';
 import RightIndicationArrowSvg from './svg/rightindicationarrow.svg';
 import SearchIconSvg from './svg/search.svg';
 import SearchiconSvg from './svg/searchicon.svg';
 import ShieldIconSvg from './svg/shield.svg';
+import ShopIconSvg from './svg/shop-icon.svg';
 import StarIconSvg from './svg/star-icon.svg';
 import UserSvg from './svg/user.svg';
 import VectorIconSvg from './svg/Vector.svg';
+import WithdrawIconSvg from './svg/withdraw.svg';
 
 export {
   UserSvg,
@@ -72,4 +79,11 @@ export {
   EditIconSvg,
   DeleteIconSvg,
   VectorIconSvg,
+  ShopIconSvg,
+  WithdrawIconSvg,
+  PaperPlaneIconSvg,
+  MedalIconSvg,
+  MealIconSvg,
+  ArrowDownLeftSvg,
+  ArrowUpRightSvg,
 };

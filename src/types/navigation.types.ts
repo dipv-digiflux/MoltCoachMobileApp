@@ -33,13 +33,18 @@ export interface ShopStackParamList extends ParamListIndexSignature {
   MealsHome: undefined;
 }
 
+export interface EarningStackParamList extends ParamListIndexSignature {
+  Earnings: undefined;
+  TransactionDetailsScreen: undefined;
+}
+
 export interface ProfileStackParamList extends ParamListIndexSignature {
   ProfileHome: undefined;
 }
 
 export interface BottomTabParamList extends ParamListIndexSignature {
   HomeTab: NavigatorScreenParams<HomeStackParamList>;
-  ShopTab: NavigatorScreenParams<ShopStackParamList>;
+  EarningTab: NavigatorScreenParams<EarningStackParamList>;
   ProfileTab: NavigatorScreenParams<ProfileStackParamList>;
 }
 
@@ -141,6 +146,7 @@ export type HomeScreenName =
   | 'TaskProgress'
   | 'TaskCompletion';
 export type ShopScreenName = 'MealsHome';
+export type EarningScreenName = 'Earnings' | 'TransactionDetailsScreen';
 export type ProfileScreenName = 'ProfileHome';
 
 export type OnboardingNavigationProp =
@@ -149,6 +155,8 @@ export type HomeStackNavigationProp =
   NativeStackNavigationProp<HomeStackParamList>;
 export type ShopStackNavigationProp =
   NativeStackNavigationProp<ShopStackParamList>;
+export type EarningStackNavigationProp =
+  NativeStackNavigationProp<EarningStackParamList>;
 export type ProfileStackNavigationProp =
   NativeStackNavigationProp<ProfileStackParamList>;
 export type AppStackNavigationProp =

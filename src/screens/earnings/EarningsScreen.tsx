@@ -1,43 +1,124 @@
-import React, { type ReactElement } from 'react';
+import React, { type ReactElement, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { EarningsEmptyStateCard } from '@/components/EarningsEmptyStateCard';
-import { EarningsTotalCard } from '@/components/EarningsTotalCard';
-import { HowToStartEarning } from '@/components/HowToStartEarning';
+import { MealIconSvg, ShopIconSvg, UserSvg } from '@/assets/images';
+import {
+  EarningsOverview,
+  EarningsSummary,
+  RecentTransactions,
+  TierLimitsBottomSheet,
+  TierStatusCard,
+} from '@/components';
 import { PageHeaderScrollView } from '@/components/PageHeaderScrollView';
+import { useAppSelector } from '@/store/hooks';
+import { iconScale, colors } from '@/theme';
 import { moderateScale, spacing } from '@/theme';
 
 const TAB_BAR_HEIGHT = moderateScale(72);
 
 export const EarningsScreen = (): ReactElement => {
   const insets = useSafeAreaInsets();
+  const translation = useAppSelector(state => state.translation);
+  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+
   const scrollPaddingBottom =
     insets.bottom + spacing['Spacing-15xl'] + TAB_BAR_HEIGHT;
 
   return (
-    <PageHeaderScrollView
-      header={{ title: 'Earnings' }}
-      style={{ flex: 1 }}
-      contentContainerStyle={{ paddingBottom: scrollPaddingBottom }}
-      showsVerticalScrollIndicator={false}
-      bounces={false}
-    >
-      <View style={styles.container}>
-        <EarningsTotalCard />
-        <EarningsEmptyStateCard />
-        <HowToStartEarning />
-      </View>
-    </PageHeaderScrollView>
+    <View style={{ flex: 1 }}>
+      <PageHeaderScrollView
+        header={{ title: 'Earnings' }}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingBottom: scrollPaddingBottom }}
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+      >
+        <View style={styles.container}>
+          <EarningsOverview credits={450} aedValue={45.0} />
+          <TierStatusCard
+            progress={0.8}
+            credits="32k"
+            remainingToNext="24K"
+            onPressInfo={() => setIsBottomSheetVisible(true)}
+          />
+          <EarningsSummary
+            items={[
+              {
+                title: translation.earningsSummaryReferral,
+                credits: 850,
+                aedValue: 45.0,
+                icon: (
+                  <UserSvg
+                    width={iconScale(20)}
+                    height={iconScale(20)}
+                    color={colors.IconPrimaryActive}
+                  />
+                ),
+              },
+              {
+                title: translation.earningsSummaryMoltMeals,
+                credits: 850,
+                aedValue: 45.0,
+                icon: (
+                  <MealIconSvg
+                    width={iconScale(20)}
+                    height={iconScale(20)}
+                    color={colors.IconPrimaryActive}
+                  />
+                ),
+              },
+              {
+                title: translation.earningsSummarySelfPurchase,
+                credits: 850,
+                aedValue: 45.0,
+                icon: (
+                  <ShopIconSvg
+                    width={iconScale(20)}
+                    height={iconScale(20)}
+                    color={colors.IconPrimaryActive}
+                  />
+                ),
+              },
+            ]}
+          />
+          <RecentTransactions
+            data={[
+              {
+                type: 'incoming',
+                title: 'Referral bonus',
+                date: 'Feb 18, 2026',
+                amount: 500.0,
+                aedValue: 50,
+              },
+              {
+                type: 'incoming',
+                title: 'Meal referral',
+                date: 'Feb 15, 2026',
+                amount: 150.0,
+                aedValue: 50,
+              },
+              {
+                type: 'outgoing',
+                title: 'Redeemed',
+                date: 'Feb 10, 2026',
+                amount: 200,
+                aedValue: 50,
+              },
+            ]}
+          />
+        </View>
+      </PageHeaderScrollView>
+      <TierLimitsBottomSheet
+        visible={isBottomSheetVisible}
+        onClose={() => setIsBottomSheetVisible(false)}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingHorizontal: spacing['Spacing-5xl'],
-    paddingTop: spacing['Spacing-11xl'],
-    paddingBottom: spacing['Spacing-15xl'] + TAB_BAR_HEIGHT,
     rowGap: spacing['Spacing-10xl'],
   },
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { colors, moderateScale, spacing, typography } from '@/theme';
 
@@ -26,12 +26,15 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
     <View
       style={[styles.container, isOutlined && styles.containerOutlined, style]}
     >
-      <View
-        style={[
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={[
           styles.tabsWrapper,
           isOutlined && styles.tabsWrapperOutlined,
           tabsWrapperStyle,
         ]}
+        decelerationRate="fast"
       >
         {tabs.map(tab => {
           const isActive = tab === activeTab;
@@ -61,7 +64,7 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
             </Pressable>
           );
         })}
-      </View>
+      </ScrollView>
       {rightElement}
     </View>
   );
@@ -93,6 +96,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(6),
     padding: moderateScale(2),
     gap: spacing['Spacing-m'],
+    flexGrow: 1,
   },
   tabsWrapperOutlined: {
     backgroundColor: 'transparent',
@@ -101,9 +105,9 @@ const styles = StyleSheet.create({
     gap: spacing['Spacing-l'],
   },
   tabButton: {
-    paddingHorizontal: spacing['Spacing-2xl'], // 10px
-    paddingVertical: spacing['Spacing-l'], // 6px
-    borderRadius: moderateScale(6),
+    paddingHorizontal: spacing['Spacing-5xl'],
+    paddingVertical: spacing['Spacing-2xl'],
+    borderRadius: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -133,11 +137,13 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   tabText: {
-    ...typography.bodySmall2Regular,
+    ...typography.bodySmall4SemiBold,
+    lineHeight: 13,
     color: colors.TextSecondaryDefault,
   },
   activeTabText: {
-    ...typography.bodySmall2Medium,
+    ...typography.bodySmall4SemiBold,
+    lineHeight: 13,
     color: colors.TextPrimaryDefault,
   },
 });

@@ -1,0 +1,39 @@
+export type TransactionType = 'incoming' | 'outgoing';
+
+export interface TransactionItemProps {
+  /**
+   * Type of transaction
+   */
+  type: TransactionType;
+  /**
+   * Title of the transaction (e.g. 'Referral bonus')
+   */
+  title: string;
+  /**
+   * Date string (e.g. 'Feb 18, 2026')
+   */
+  date: string;
+  /**
+   * Credit amount
+   */
+  amount: number;
+  /**
+   * AED value equivalent
+   */
+  aedValue: number;
+  /**
+   * Whether this is the last item in the list (hides bottom border)
+   */
+  isLast?: boolean;
+}
+
+export interface RecentTransactionsProps {
+  /**
+   * Initial selected filter index
+   */
+  initialFilterIndex?: number;
+  /**
+   * Transaction data to display
+   */
+  data: TransactionItemProps[];
+}
