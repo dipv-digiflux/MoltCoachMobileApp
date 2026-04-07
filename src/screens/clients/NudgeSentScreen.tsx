@@ -1,13 +1,15 @@
-import React, { type ReactElement } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useMemo, type ReactElement } from 'react';
+import { View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Circle, Path } from 'react-native-svg';
 
 import { Button, PageHeaderScrollView, LiquidFooter } from '@/components';
 import { useAppSelector } from '@/store/hooks';
-import { colors, moderateScale, spacing, typography } from '@/theme';
+import { RootState } from '@/store/store';
+import { colors, moderateScale } from '@/theme';
 
 import { NudgeSuccessCard } from './components/NudgeSuccessCard';
+import { getStyles } from './NudgeSentScreen.styles';
 
 import type {
   AppStackNavigationProp,
@@ -23,7 +25,7 @@ const SuccessBigIcon = (): React.ReactElement => (
     fill="none"
   >
     <Circle cx="60" cy="60" r="50" fill={colors.FeedbackSuccessSurface} />
-    <Circle cx="60" cy="60" r="40" fill="#DCFCE7" />
+    <Circle cx="60" cy="60" r="40" fill={colors.TagSuccessSurface} />
     <Path
       d="M75 48L55.75 67.25L45 56.5"
       stroke={colors.FeedbackSuccessIcon}
@@ -37,8 +39,9 @@ const SuccessBigIcon = (): React.ReactElement => (
 export const NudgeSentScreen = ({
   route,
 }: NativeStackScreenProps<AppStackParamList, 'NudgeSent'>): ReactElement => {
-  const translation = useAppSelector(state => state.translation);
+  const translation = useAppSelector((state: RootState) => state.translation);
   const navigation = useNavigation<AppStackNavigationProp>();
+  const styles = useMemo(() => getStyles(), []);
   const { clientId, clientName, messages } = route.params;
 
   const onReturnToDashboard = (): void => {
@@ -94,36 +97,3 @@ export const NudgeSentScreen = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.StatesWhite,
-  },
-  contentContainerStyle: {
-    flexGrow: 1,
-    paddingHorizontal: spacing['Spacing-5xl'],
-    paddingBottom: spacing['Spacing-10xl'],
-  },
-  headerSection: {
-    alignItems: 'center',
-    paddingTop: moderateScale(40),
-    marginBottom: spacing['Spacing-12xl'],
-  },
-  title: {
-    ...typography.h7Bold,
-    color: '#111827',
-    marginTop: spacing['Spacing-10xl'],
-    textAlign: 'center',
-  },
-  subtitle: {
-    ...typography.b2TallRegular,
-    color: '#6B7280',
-    marginTop: spacing['Spacing-m'],
-    textAlign: 'center',
-    paddingHorizontal: spacing['Spacing-10xl'],
-  },
-  primaryButton: {
-    marginBottom: spacing['Spacing-m'],
-  },
-});

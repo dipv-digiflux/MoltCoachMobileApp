@@ -1,7 +1,10 @@
 import React from 'react';
 import { UseFormReturn, UseFormWatch } from 'react-hook-form';
 
-import { AddSessionsModalValues } from '@/types/components.types';
+import {
+  AddSessionsModalValues,
+  AddSessionsModalProps,
+} from '@/types/components.types';
 
 export interface AddSessionsHook {
   isDatePickerVisible: boolean;
@@ -13,4 +16,5 @@ export interface AddSessionsHook {
   errors: UseFormReturn<AddSessionsModalValues>['formState']['errors'];
   handleUpdate: (data: AddSessionsModalValues) => void;
   watch: UseFormWatch<AddSessionsModalValues>;
+  recentActivity?: AddSessionsModalProps['recentActivity'];
 }

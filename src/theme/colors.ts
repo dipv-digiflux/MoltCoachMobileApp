@@ -132,11 +132,16 @@ export const colors = {
   AccentBlueNavy: '#0E2E6B',
   AccentDeepBlue: '#123C8C',
   AccentYellowMustard: '#EAB308',
+  AccentAmberDark: '#D97706',
 
   // ── Tags ────────────────────────────────────────────────
   TagSuccessSurface: '#DCFCE7',
+  TagSuccessText: '#166534',
   TagWarningSurface: '#FFEDF1',
+  TagErrorText: '#A33A3A',
   NeutralTealGrayIcon: '#6B7575',
+  AccentDeepGreen: '#0B1A1A',
+  AccentBrightGreen: '#22C55E',
 } as const;
 
 export type ColorToken = keyof typeof colors;

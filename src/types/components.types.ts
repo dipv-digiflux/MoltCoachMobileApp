@@ -324,6 +324,13 @@ export interface RadioSizeTokens {
 
 // ─── AddSessionsModal ────────────────────────────────────────────────
 
+export interface SessionActivity {
+  label: string;
+  value: string;
+  previousValue: string;
+  timestamp: string;
+}
+
 export interface AddSessionsModalValues {
   mode: 'Online' | 'Physical (In-person)';
   months?: string;
@@ -338,4 +345,5 @@ export interface AddSessionsModalProps {
   onUpdate: (values: AddSessionsModalValues) => void;
   clientName: string;
   initialValues?: Partial<AddSessionsModalValues>;
+  recentActivity?: SessionActivity[];
 }

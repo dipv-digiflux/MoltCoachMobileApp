@@ -1,5 +1,5 @@
-import React, { type ReactElement } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useMemo, type ReactElement } from 'react';
+import { View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Path } from 'react-native-svg';
@@ -10,7 +10,9 @@ import {
   VerticalStepper,
   type VerticalStepperStep,
 } from '@/components';
-import { colors, moderateScale, radius, spacing, typography } from '@/theme';
+import { colors, moderateScale, spacing } from '@/theme';
+
+import { getStyles } from './InviteSentScreen.styles';
 
 import type { AppStackNavigationProp } from '@/types/navigation.types';
 
@@ -22,7 +24,7 @@ const SuccessBigIcon = (): React.ReactElement => (
     fill="none"
   >
     <Circle cx="60" cy="60" r="50" fill={colors.FeedbackSuccessSurface} />
-    <Circle cx="60" cy="60" r="40" fill="#DCFCE7" />
+    <Circle cx="60" cy="60" r="40" fill={colors.TagSuccessSurface} />
     <Path
       d="M75 48L55.75 67.25L45 56.5"
       stroke={colors.FeedbackSuccessIcon}
@@ -36,6 +38,7 @@ const SuccessBigIcon = (): React.ReactElement => (
 export const InviteSentScreen = (): ReactElement => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<AppStackNavigationProp>();
+  const styles = useMemo(() => getStyles(), []);
 
   const onViewClientStatus = (): void => {
     // Reset to BottomTabs and navigate to appropriate tab if needed
@@ -67,11 +70,9 @@ export const InviteSentScreen = (): ReactElement => {
           <SuccessBigIcon />
           <Text style={styles.title}>Plan Sent Successfully</Text>
         </View>
-
         <View style={styles.stepperSection}>
           <VerticalStepper steps={steps} />
         </View>
-
         <View style={styles.infoBox}>
           <InfoIcon
             width={20}
@@ -106,54 +107,3 @@ export const InviteSentScreen = (): ReactElement => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.StatesWhite,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: spacing['Spacing-10xl'],
-    paddingTop: moderateScale(80),
-  },
-  headerSection: {
-    alignItems: 'center',
-    marginBottom: spacing['Spacing-12xl'],
-  },
-  title: {
-    ...typography.h7Bold,
-    color: colors.TextPrimaryDefault,
-    marginTop: spacing['Spacing-10xl'],
-    textAlign: 'center',
-  },
-  stepperSection: {
-    marginBottom: spacing['Spacing-16xl'],
-    paddingHorizontal: spacing['Spacing-xl'],
-  },
-  infoBox: {
-    flexDirection: 'row',
-    backgroundColor: colors.SurfaceSecondaryDefault,
-    padding: spacing['Spacing-5xl'],
-    borderRadius: radius.xs,
-    width: '100%',
-    alignItems: 'flex-start',
-    gap: spacing['Spacing-m'],
-  },
-  infoIcon: {
-    marginTop: moderateScale(2),
-  },
-  infoText: {
-    ...typography.bodySmall1Regular,
-    color: colors.TextSecondaryDefault,
-    flex: 1,
-    lineHeight: 20,
-  },
-  footer: {
-    paddingHorizontal: spacing['Spacing-7xl'],
-    width: '100%',
-  },
-  primaryButton: {
-    marginBottom: spacing['Spacing-l'],
-  },
-});

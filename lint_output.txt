@@ -1,0 +1,47 @@
+
+/home/dipendra/MoltCoachMobileApp/src/components/ActivityItem.tsx
+  6:8  error  Move types/interfaces to a .types.ts file. (component-structure.mdc)  no-restricted-syntax
+
+/home/dipendra/MoltCoachMobileApp/src/components/AdjustBodyMetricsModal/hooks/useAdjustBodyMetrics.ts
+  16:33  warning  Missing return type on function  @typescript-eslint/explicit-function-return-type
+  43:50  warning  Missing return type on function  @typescript-eslint/explicit-function-return-type
+
+/home/dipendra/MoltCoachMobileApp/src/components/AdjustGoalModal/AdjustGoalModal.tsx
+  30:29  warning  'clientName' is assigned a value but never used. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+
+/home/dipendra/MoltCoachMobileApp/src/components/AdjustGoalModal/hooks/useAdjustGoal.ts
+  16:26  warning  Missing return type on function  @typescript-eslint/explicit-function-return-type
+  47:49  warning  Missing return type on function  @typescript-eslint/explicit-function-return-type
+
+/home/dipendra/MoltCoachMobileApp/src/components/Chip.tsx
+  6:8  error  Move types/interfaces to a .types.ts file. (component-structure.mdc)  no-restricted-syntax
+
+/home/dipendra/MoltCoachMobileApp/src/components/CommonCard.tsx
+   6:1   error    Move types/interfaces to a .types.ts file. (component-structure.mdc)  no-restricted-syntax
+  20:21  warning  Missing return type on function                                       @typescript-eslint/explicit-function-return-type
+
+/home/dipendra/MoltCoachMobileApp/src/components/MacroItem.tsx
+  8:1  error  Move types/interfaces to a .types.ts file. (component-structure.mdc)  no-restricted-syntax
+
+/home/dipendra/MoltCoachMobileApp/src/components/MealCard.tsx
+  15:8  error    Move types/interfaces to a .types.ts file. (component-structure.mdc)                 no-restricted-syntax
+  17:1  error    Move types/interfaces to a .types.ts file. (component-structure.mdc)                 no-restricted-syntax
+  33:3  warning  'status' is defined but never used. Allowed unused args must match /^_/u             unused-imports/no-unused-vars
+  38:9  warning  'isLogged' is assigned a value but never used. Allowed unused vars must match /^_/u  unused-imports/no-unused-vars
+
+/home/dipendra/MoltCoachMobileApp/src/components/ProfileStatItem.tsx
+   6:1   error    Move types/interfaces to a .types.ts file. (component-structure.mdc)  no-restricted-syntax
+  16:26  warning  Missing return type on function                                       @typescript-eslint/explicit-function-return-type
+
+/home/dipendra/MoltCoachMobileApp/src/components/RecentActivityCard.tsx
+   7:1   error    Move types/interfaces to a .types.ts file. (component-structure.mdc)  no-restricted-syntax
+  15:29  warning  Missing return type on function                                       @typescript-eslint/explicit-function-return-type
+
+/home/dipendra/MoltCoachMobileApp/src/components/StatusChip.tsx
+   7:8   error    Move types/interfaces to a .types.ts file. (component-structure.mdc)  no-restricted-syntax
+   9:1   error    Move types/interfaces to a .types.ts file. (component-structure.mdc)  no-restricted-syntax
+  15:24  warning  Missing return type on function                                       @typescript-eslint/explicit-function-return-type
+  43:21  warning  Missing return type on function                                       @typescript-eslint/explicit-function-return-type
+
+✖ 22 problems (10 errors, 12 warnings)
+

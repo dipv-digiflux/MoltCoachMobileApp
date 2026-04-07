@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...typography.h8SemiBold,
-    color: '#0B1A1A',
+    color: colors.AccentDeepGreen,
   },
   description: {
     ...typography.bodySmall1Regular,

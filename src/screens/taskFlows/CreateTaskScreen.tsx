@@ -1,8 +1,7 @@
-import React, { useEffect, type ReactElement } from 'react';
+import React, { useEffect, useMemo, type ReactElement } from 'react';
 import {
   Pressable,
   ScrollView,
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
@@ -30,11 +29,13 @@ import {
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { resetClientOperation } from '@/store/slices/clientSlice';
+import { RootState } from '@/store/store';
 import { createTaskThunk, updateTaskThunk } from '@/store/thunks/clientThunks';
-import { colors, moderateScale, spacing, typography } from '@/theme';
+import { moderateScale, spacing } from '@/theme';
 import { CreateTaskPayload } from '@/types/api.types';
 import { AppStackParamList } from '@/types/navigation.types';
 
+import { getStyles } from './CreateTaskScreen.styles';
 import {
   CreateTaskSchema,
   type CreateTaskFormValues,
@@ -56,7 +57,7 @@ export const CreateTaskScreen = ({
   const _clientName = route.params?.clientName || 'Client';
   const clientId = route.params?.clientId || '';
 
-  const { operations } = useAppSelector(state => state.client);
+  const { operations } = useAppSelector((state: RootState) => state.client);
   const task = route.params?.task;
   const isEditing = !!task;
   const isPending =
@@ -66,6 +67,8 @@ export const CreateTaskScreen = ({
   const [isMonthlySheetVisible, setIsMonthlySheetVisible] =
     React.useState(false);
   const [isTimeSheetVisible, setIsTimeSheetVisible] = React.useState(false);
+
+  const styles = useMemo(() => getStyles(), []);
 
   useEffect(() => {
     return () => {
@@ -451,7 +454,7 @@ export const CreateTaskScreen = ({
                 value={watch('reminderTime')}
                 onChange={() => {}}
               />
-              <View style={StyleSheet.absoluteFill} pointerEvents="none" />
+              <View style={styles.absoluteFill} pointerEvents="none" />
             </Pressable>
           )}
         </View>
@@ -526,247 +529,3 @@ export const CreateTaskScreen = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.StatesWhite,
-  },
-  scrollContent: {
-    paddingHorizontal: spacing['Spacing-5xl'],
-    paddingTop: spacing['Spacing-5xl'],
-    gap: spacing['Spacing-10xl'],
-  },
-  section: {
-    gap: spacing['Spacing-xl'],
-  },
-  label: {
-    ...typography.h0SemiBold,
-    fontSize: moderateScale(16),
-    color: colors.TextPrimaryDefault,
-  },
-  textArea: {
-    minHeight: moderateScale(100),
-  },
-  suggestions: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing['Spacing-l'],
-    marginTop: spacing['Spacing-xs'],
-  },
-  suggestionPill: {
-    paddingHorizontal: spacing['Spacing-xl'],
-    paddingVertical: spacing['Spacing-m'],
-    backgroundColor: colors.SurfaceSecondaryDefault,
-    borderRadius: moderateScale(4),
-  },
-  suggestionText: {
-    ...typography.bodySmall2Regular,
-    color: colors.TextSecondaryDefault,
-  },
-  typeToggle: {
-    flexDirection: 'row',
-    backgroundColor: colors.SurfaceSecondaryDefault,
-    borderRadius: moderateScale(8),
-    padding: spacing['Spacing-xs'],
-  },
-  typeButton: {
-    flex: 1,
-    paddingVertical: spacing['Spacing-xl'],
-    alignItems: 'center',
-    borderRadius: moderateScale(6),
-  },
-  typeButtonActive: {
-    backgroundColor: colors.StatesWhite,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  typeButtonText: {
-    ...typography.bodySmall2Medium,
-    color: colors.TextSecondaryDefault,
-  },
-  typeButtonTextActive: {
-    color: colors.TextPrimaryDefault,
-  },
-  card: {
-    borderWidth: 1,
-    borderColor: colors.StatesOutline,
-    borderRadius: moderateScale(4),
-    padding: spacing['Spacing-5xl'],
-    gap: spacing['Spacing-xl'],
-  },
-  cardTitle: {
-    ...typography.b1SemiBold,
-    color: colors.TextPrimaryDefault,
-  },
-  cardSubtitle: {
-    ...typography.bodySmall1Regular,
-    color: colors.TextSecondaryHover,
-  },
-  frequencyTabs: {
-    flexDirection: 'row',
-    backgroundColor: colors.SurfaceSecondaryDefault,
-    padding: spacing['Spacing-xs'],
-    borderRadius: moderateScale(4),
-    gap: spacing['Spacing-xs'],
-  },
-  frequencyInputWrapper: {
-    marginTop: spacing['Spacing-xl'],
-    gap: spacing['Spacing-xl'],
-  },
-  frequencyInputBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: colors.StatesOutline,
-    borderRadius: moderateScale(4),
-    paddingHorizontal: spacing['Spacing-xl'],
-    paddingVertical: moderateScale(12),
-    backgroundColor: colors.StatesWhite,
-  },
-  frequencyInputText: {
-    ...typography.bodySmall1Medium,
-    color: colors.TextSecondaryDefault,
-  },
-  oneTimeDateContainer: {
-    marginTop: spacing['Spacing-xl'],
-    gap: spacing['Spacing-m'],
-  },
-  oneTimeHelperText: {
-    ...typography.bodySmall2Regular,
-    color: colors.AccentBlueDark,
-  },
-  freqButton: {
-    flex: 1,
-    paddingVertical: spacing['Spacing-xl'],
-    alignItems: 'center',
-    borderRadius: moderateScale(4),
-  },
-  freqButtonActive: {
-    backgroundColor: colors.StatesWhite,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-    borderWidth: 1,
-    borderColor: colors.StatesOutline,
-  },
-  freqButtonText: {
-    ...typography.bodySmall2Regular,
-    color: colors.TextSecondaryDefault,
-  },
-  freqButtonTextActive: {
-    ...typography.bodySmall2Medium,
-    color: colors.TextPrimaryDefault,
-  },
-  weeklyDaysSection: {
-    gap: spacing['Spacing-xl'],
-    marginTop: spacing['Spacing-xl'],
-  },
-  daySelectorRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  dayBubble: {
-    width: moderateScale(40),
-    height: moderateScale(40),
-    borderRadius: moderateScale(4),
-    borderWidth: 1,
-    borderColor: colors.StatesOutline,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.StatesWhite,
-  },
-  dayBubbleSelected: {
-    backgroundColor: colors.PrimaryMain,
-    borderColor: colors.PrimaryMain,
-  },
-  dayBubbleError: {
-    borderColor: colors.FeedbackWarningBorder,
-  },
-  dayLabel: {
-    ...typography.bodySmall2Medium,
-    color: colors.TextSecondaryDefault,
-  },
-  dayLabelSelected: {
-    color: colors.StatesWhite,
-  },
-  errorText: {
-    ...typography.bodySmall3Medium,
-    color: colors.FeedbackWarningText,
-    marginTop: spacing['Spacing-xs'],
-  },
-  repeatSummaryText: {
-    ...typography.bodySmall2Medium,
-    color: colors.TextPrimaryDefault,
-  },
-  repeatSummaryDays: {
-    color: colors.TextSecondaryHover,
-    ...typography.bodySmall2Regular,
-  },
-  reminderCard: {
-    gap: spacing['Spacing-5xl'],
-  },
-  reminderHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  timePickerContainer: {
-    alignItems: 'center',
-    gap: spacing['Spacing-m'],
-    marginTop: spacing['Spacing-xl'],
-  },
-  timeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing['Spacing-8xl'],
-    width: moderateScale(160),
-    justifyContent: 'center',
-  },
-  timeRowActive: {
-    paddingVertical: spacing['Spacing-xs'],
-  },
-  timeTextActive: {
-    ...typography.b1Medium,
-    color: colors.TextPrimaryDefault,
-    width: moderateScale(30),
-    textAlign: 'center',
-  },
-  timeTextFaded: {
-    ...typography.b1Medium,
-    color: colors.TextSecondaryDisabled,
-    width: moderateScale(30),
-    textAlign: 'center',
-    opacity: 0.3,
-  },
-  periodPlaceholder: {
-    width: moderateScale(30),
-  },
-  summaryCard: {
-    backgroundColor: colors.SurfaceSecondaryDefault,
-    borderRadius: moderateScale(8),
-    padding: spacing['Spacing-5xl'],
-    gap: spacing['Spacing-xl'],
-  },
-  summaryTitle: {
-    ...typography.bodySmall1SemiBold,
-    color: colors.TextSecondaryDefault,
-    marginBottom: spacing['Spacing-xs'],
-  },
-  summaryItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing['Spacing-xl'],
-  },
-  summaryText: {
-    ...typography.bodySmall1Medium,
-    color: colors.TextPrimaryDefault,
-  },
-});

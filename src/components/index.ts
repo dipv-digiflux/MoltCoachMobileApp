@@ -72,6 +72,9 @@ export type {
   MetricLayout,
 } from './OverviewCard';
 
+export { Chip } from './Chip';
+export type { ChipProps } from './Chip';
+
 export { FilterTabs } from './FilterTabs';
 export type { FilterTabsProps } from './FilterTabs';
 
@@ -85,6 +88,12 @@ export { ClientCardSkeleton } from './ClientCardSkeleton';
 export { ClientProfileHeader } from './ClientProfileHeader';
 export { CollapsibleTableCard } from './CollapsibleTableCard';
 export { OngoingTaskCard } from './OngoingTaskCard';
+export { CommonCard } from './CommonCard';
+export { ProfileStatItem } from './ProfileStatItem';
+export { StatusChip } from './StatusChip';
+export { RecentActivityCard } from './RecentActivityCard';
+export { AdjustGoalModal } from './AdjustGoalModal/AdjustGoalModal';
+export { AdjustBodyMetricsModal } from './AdjustBodyMetricsModal/AdjustBodyMetricsModal';
 export type {
   ClientCardProps,
   ClientTag,
@@ -103,6 +112,13 @@ export { RequestAccessHeader } from './RequestAccessHeader';
 export { RequestAccessStatus } from './RequestAccessStatus';
 
 export { StatusDot } from './StatusDot';
+export { StatusMessage } from './StatusMessage';
+export type { StatusMessageProps } from './StatusMessage';
+export * from './SummaryItem';
+export * from './ActivityItem';
+export * from './MacroItem';
+export * from './MealCard';
+export type { SummaryItemProps } from './SummaryItem';
 export { BookingConfirmHeader } from './BookingConfirmHeader';
 export { ScreenHeader } from './ScreenHeader';
 export type { ScreenHeaderProps } from './ScreenHeader';

@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { InfoIconSvg, CheckCircleIconSvg } from '@/assets/images';
-import { BottomSheet, Button } from '@/components';
+import { MealsImage } from '@/assets/images';
+import {
+  BottomSheet,
+  Button,
+  StatusMessage,
+  SummaryItem,
+  ActivityItem,
+  MacroItem,
+  StatusDot,
+  MealCard,
+} from '@/components';
 import { colors, moderateScale, spacing, typography } from '@/theme';
 
 import {
@@ -79,73 +88,58 @@ const StepsDetailContent = ({
         </View>
         <ProgressBar
           progress={(data.current / data.target) * 100}
-          color="#22C55E"
+          color={colors.AccentBrightGreen}
         />
-        <View style={styles.statusMessageRow}>
-          <View style={[styles.statusDot, { backgroundColor: '#22C55E' }]} />
-          <Text style={styles.statusMessage}>
-            On Track :{' '}
-            <Text style={styles.statusMessageSub}>{data.onTrackMessage}</Text>
-          </Text>
-        </View>
+        <StatusMessage
+          status="On Track"
+          message={data.onTrackMessage}
+          color={colors.AccentBrightGreen}
+        />
       </View>
       <View style={styles.subMetricsGrid}>
-        <View style={styles.subMetricItem}>
-          <Text style={styles.subMetricValue}>{data.dailyAverage}</Text>
-          <Text style={styles.subMetricLabel}>Daily average</Text>
-        </View>
+        <SummaryItem label="Daily average" value={data.dailyAverage} />
         <View style={styles.subMetricDivider} />
-        <View style={styles.subMetricItem}>
-          <Text style={styles.subMetricValue}>{data.time}</Text>
-          <Text style={styles.subMetricLabel}>Time</Text>
-        </View>
+        <SummaryItem label="Time" value={data.time} />
         <View style={styles.subMetricDivider} />
-        <View style={styles.subMetricItem}>
-          <Text style={styles.subMetricValue}>{data.distance}</Text>
-          <Text style={styles.subMetricLabel}>Km</Text>
-        </View>
+        <SummaryItem label="Km" value={data.distance} />
       </View>
     </MetricDetailCard>
 
-    <View style={styles.activitiesCard}>
-      <Text style={styles.sectionTitle}>Steps calculated from activities</Text>
+    <MetricDetailCard title="Steps calculated from activities" noPadding>
       {data.activities.map(activity => (
-        <View key={activity.id} style={styles.activityRow}>
-          <View style={styles.activityInfo}>
-            <Text style={styles.activityType}>{activity.type}</Text>
-            <Text style={styles.activityTime}>{activity.time}</Text>
-          </View>
-          <View style={styles.activityValueBlock}>
-            <Text style={styles.activityValue}>{activity.duration}</Text>
-            <Text style={styles.activitySubValue}>+{activity.steps} steps</Text>
-          </View>
-        </View>
+        <ActivityItem
+          key={activity.id}
+          type={activity.type}
+          time={activity.time}
+          value={activity.duration}
+          subValue={`+${activity.steps} steps`}
+        />
       ))}
       {data.activitiesSummary && (
         <View style={styles.activitySummaryGrid}>
-          <View style={styles.subMetricItem}>
-            <Text style={styles.subMetricValue}>
-              {data.activitiesSummary.totalTime}
-            </Text>
-            <Text style={styles.subMetricLabel}>Total time</Text>
-          </View>
+          <SummaryItem
+            label="Total time"
+            value={data.activitiesSummary.totalTime}
+            valueStyle={styles.summaryValue}
+            labelStyle={styles.summaryLabel}
+          />
           <View style={styles.subMetricDivider} />
-          <View style={styles.subMetricItem}>
-            <Text style={styles.subMetricValue}>
-              {data.activitiesSummary.caloriesBurned}
-            </Text>
-            <Text style={styles.subMetricLabel}>Calories burned</Text>
-          </View>
+          <SummaryItem
+            label="Calories burned"
+            value={data.activitiesSummary.caloriesBurned}
+            valueStyle={styles.summaryValue}
+            labelStyle={styles.summaryLabel}
+          />
           <View style={styles.subMetricDivider} />
-          <View style={styles.subMetricItem}>
-            <Text style={styles.subMetricValue}>
-              {data.activitiesSummary.stepsConverted}
-            </Text>
-            <Text style={styles.subMetricLabel}>Steps converted</Text>
-          </View>
+          <SummaryItem
+            label="Steps converted"
+            value={data.activitiesSummary.stepsConverted}
+            valueStyle={styles.summaryValue}
+            labelStyle={styles.summaryLabel}
+          />
         </View>
       )}
-    </View>
+    </MetricDetailCard>
   </View>
 );
 
@@ -155,46 +149,35 @@ const WeightDetailContent = ({
   data: WeightDetailData;
 }): React.ReactElement => (
   <View style={styles.contentContainer}>
-    <MetricDetailCard title="Body Weight">
-      <View style={styles.mainMetricRow}>
-        <View style={styles.mainMetricValueBlock}>
-          <Text style={styles.mainMetricValue}>{data.current}</Text>
-          <Text style={styles.mainMetricUnit}>{data.unit}</Text>
+    <MetricDetailCard title="Weight" noPadding>
+      <View style={{ paddingHorizontal: spacing['Spacing-xl'] }}>
+        <View style={styles.mainMetricRow}>
+          <View style={styles.mainMetricValueBlock}>
+            <Text style={styles.mainMetricValue}>{data.current}</Text>
+            <Text style={styles.mainMetricUnit}>{data.unit}</Text>
+          </View>
+          <Text style={styles.syncTime}>Updated {data.updatedAt}</Text>
         </View>
-        <Text style={styles.syncTime}>Updated {data.updatedAt}</Text>
-      </View>
-      <View style={styles.statusMessageRow}>
-        <View
-          style={[
-            styles.statusDot,
-            {
-              backgroundColor:
-                data.status === 'On Track' ? colors.MatrixMain : '#EA580C',
-            },
-          ]}
+        <StatusMessage
+          status={data.status}
+          message={data.statusMessage}
+          color={
+            data.status === 'On Track'
+              ? colors.MatrixMain
+              : colors.AccentOrangeDark
+          }
         />
-        <Text style={styles.statusMessage}>
-          <Text style={{ fontWeight: 'bold' }}>{data.status}</Text> :{' '}
-          {data.statusMessage}
-        </Text>
       </View>
       <View style={styles.subMetricsGrid}>
-        <View style={styles.subMetricItem}>
-          <Text style={styles.subMetricValue}>{data.targetWeight}</Text>
-          <Text style={styles.subMetricLabel}>Target weight</Text>
-        </View>
+        <SummaryItem label="Target weight" value={data.targetWeight} />
         <View style={styles.subMetricDivider} />
-        <View style={styles.subMetricItem}>
-          <Text style={styles.subMetricValue}>{data.startedWith}</Text>
-          <Text style={styles.subMetricLabel}>Started with</Text>
-        </View>
+        <SummaryItem label="Started with" value={data.startedWith} />
         <View style={styles.subMetricDivider} />
-        <View style={styles.subMetricItem}>
-          <Text style={[styles.subMetricValue, { color: colors.MatrixMain }]}>
-            {data.avgWeeklyChange}
-          </Text>
-          <Text style={styles.subMetricLabel}>Avg weekly</Text>
-        </View>
+        <SummaryItem
+          label="Avg weekly"
+          value={data.avgWeeklyChange}
+          valueStyle={{ color: colors.MatrixMain }}
+        />
       </View>
     </MetricDetailCard>
 
@@ -226,73 +209,81 @@ const CaloriesDetailContent = ({
   data: CaloriesDetailData;
 }): React.ReactElement => (
   <View style={styles.contentContainer}>
-    <MetricDetailCard title="Calories Consumed">
-      <View style={styles.mainMetricRow}>
-        <View style={styles.mainMetricValueBlock}>
-          <Text style={styles.mainMetricValue}>{data.consumed}</Text>
-          <Text style={styles.mainMetricUnit}>Kcal</Text>
-        </View>
-        <Text style={styles.kcalInfoText}>
-          {data.target} Kcal target • {data.left} kcal left
-        </Text>
-      </View>
-      <ProgressBar
-        progress={(data.consumed / data.target) * 100}
-        color={colors.MatrixMain}
-      />
-
-      <View style={styles.macrosContainer}>
-        {data.macros.map((macro, idx) => (
-          <View key={idx} style={styles.macroItem}>
-            <Text style={styles.macroLabel}>{macro.label}</Text>
-            <Text style={styles.macroValue}>
-              {macro.current}
-              <Text style={styles.macroTarget}>/{macro.target}g</Text>
-            </Text>
-            <View style={styles.macroStatusRow}>
-              <View
-                style={[
-                  styles.statusDotSmall,
-                  { backgroundColor: macro.statusColor },
-                ]}
-              />
-              <Text style={[styles.macroStatus, { color: macro.statusColor }]}>
-                {macro.status}
-              </Text>
-            </View>
+    <MetricDetailCard title="Calories Consumed" noPadding>
+      <View style={{ paddingHorizontal: spacing['Spacing-xl'] }}>
+        <View style={styles.mainMetricRow}>
+          <View style={styles.mainMetricValueBlock}>
+            <Text style={styles.mainMetricValue}>{data.consumed}</Text>
+            <Text style={styles.mainMetricUnit}>Kcal</Text>
           </View>
-        ))}
-      </View>
+          <Text style={styles.kcalInfoText}>
+            {data.target} Kcal target • {data.left} kcal left
+          </Text>
+        </View>
+        <ProgressBar
+          progress={(data.consumed / data.target) * 100}
+          color={colors.MatrixMain}
+        />
 
-      <View style={styles.insightBox}>
-        <InfoIconSvg width={moderateScale(14)} height={moderateScale(14)} />
-        <Text style={styles.insightText}>{data.insightMessage}</Text>
+        <View style={styles.macrosContainer}>
+          {data.macros.map((macro, idx) => (
+            <MacroItem
+              key={idx}
+              label={macro.label}
+              current={macro.current}
+              target={macro.target}
+              status={macro.status}
+              statusColor={macro.statusColor}
+            />
+          ))}
+        </View>
+
+        <View style={styles.recommendationCard}>
+          <StatusDot
+            color={colors.MatrixMain}
+            size={moderateScale(8)}
+            style={{ marginTop: moderateScale(4) }}
+          />
+          <Text style={styles.recommendationText}>{data.insightMessage}</Text>
+        </View>
+        <View style={{ height: spacing['Spacing-xl'] }} />
       </View>
     </MetricDetailCard>
 
-    <Text style={styles.sectionTitle}>Meals</Text>
-    {data.meals.map((category, idx) => (
-      <View key={idx} style={styles.mealCategory}>
-        <Text style={styles.mealCategoryTitle}>{category.category}</Text>
-        {category.items.map(item => (
-          <View key={item.id} style={styles.mealItem}>
-            <View style={styles.mealThumb} />
-            <View style={styles.mealDetails}>
-              <Text style={styles.mealName}>{item.name}</Text>
-              <Text style={styles.mealMacros}>
-                {item.kcal} Kcal • {item.macros}
-              </Text>
-              {item.status && (
-                <View style={styles.mealStatusBadge}>
-                  <CheckCircleIconSvg width={14} height={14} color="#0284C7" />
-                  <Text style={styles.mealStatusText}>{item.status}</Text>
-                </View>
-              )}
+    <MetricDetailCard title="Meals" noPadding>
+      <View style={{ paddingTop: spacing['Spacing-xl'] }}>
+        {data.meals.map((category, idx) => (
+          <View key={idx} style={styles.mealCategory}>
+            <Text style={styles.mealCategoryTitle}>{category.category}</Text>
+            <View style={{ paddingHorizontal: spacing['Spacing-xl'] }}>
+              {category.items.map(item => (
+                <MealCard
+                  key={item.id}
+                  name={item.name}
+                  kcal={item.kcal}
+                  macros={item.macros}
+                  image={
+                    item.image
+                      ? item.image.includes('meals')
+                        ? MealsImage
+                        : { uri: item.image }
+                      : MealsImage
+                  }
+                  status={item.status || 'Have not logged'}
+                  statusType={
+                    item.statusColor === 'blue'
+                      ? 'logged_molt'
+                      : item.statusColor === 'gray'
+                      ? 'logged_external'
+                      : 'not_logged'
+                  }
+                />
+              ))}
             </View>
           </View>
         ))}
       </View>
-    ))}
+    </MetricDetailCard>
   </View>
 );
 
@@ -355,9 +346,9 @@ export const OverviewDetailBottomSheet = ({
 
         <View style={styles.footer}>
           <Button
-            label="Got it"
+            label="Got It"
             onPress={onClose}
-            variant="secondary"
+            variant="outline"
             style={styles.footerButton}
           />
           <Button
@@ -397,7 +388,7 @@ const styles = StyleSheet.create({
   },
   tabItem: {
     flex: 1,
-    paddingVertical: spacing['Spacing-xl'],
+    paddingVertical: spacing['Spacing-2xl'],
     alignItems: 'center',
     borderBottomWidth: 2,
     borderBottomColor: 'transparent',
@@ -416,10 +407,10 @@ const styles = StyleSheet.create({
   tabItemContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing['Spacing-m'],
+    gap: spacing['Spacing-xl'],
   },
   scrollView: {
-    paddingHorizontal: spacing['Spacing-2xl'],
+    paddingHorizontal: spacing['Spacing-m'],
   },
   contentContainer: {
     paddingVertical: spacing['Spacing-2xl'],
@@ -428,7 +419,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.StatesWhite,
     borderWidth: 1,
     borderColor: colors.StatesOutline,
-    borderRadius: moderateScale(8),
+    borderRadius: moderateScale(2),
     padding: spacing['Spacing-xl'],
     marginBottom: spacing['Spacing-3xl'],
   },
@@ -455,7 +446,7 @@ const styles = StyleSheet.create({
   mainMetricValueBlock: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: spacing['Spacing-xs'],
+    gap: spacing['Spacing-m'],
   },
   mainMetricValue: {
     ...typography.b1Bold,
@@ -482,55 +473,21 @@ const styles = StyleSheet.create({
     height: moderateScale(6),
     backgroundColor: colors.StatesFill1,
     borderRadius: moderateScale(3),
-    marginBottom: spacing['Spacing-3xl'],
+    marginBottom: spacing['Spacing-xl'],
   },
   progressBarFill: {
     height: '100%',
     borderRadius: moderateScale(3),
   },
-  statusMessageRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.StatesFill1,
-    padding: spacing['Spacing-m'],
-    borderRadius: moderateScale(4),
-    marginBottom: spacing['Spacing-xl'],
-    gap: spacing['Spacing-m'],
-  },
-  statusDot: {
-    width: moderateScale(8),
-    height: moderateScale(8),
-    borderRadius: moderateScale(4),
-  },
-  statusMessage: {
-    ...typography.bodySmall3Medium,
-    color: colors.TextPrimaryDefault,
-  },
-  statusMessageSub: {
-    ...typography.bodySmall3Regular,
-    color: colors.TextSecondaryDefault,
-  },
+
   subMetricsGrid: {
     flexDirection: 'row',
     borderTopWidth: 1,
     borderTopColor: colors.StatesOutline,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.SurfacePrimaryDefault,
     paddingVertical: spacing['Spacing-xl'],
-    borderBottomLeftRadius: moderateScale(8),
-    borderBottomRightRadius: moderateScale(8),
-  },
-  subMetricItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  subMetricValue: {
-    ...typography.bodySmall1SemiBold,
-    color: colors.TextPrimaryDefault,
-  },
-  subMetricLabel: {
-    ...typography.bodySmall3Regular,
-    color: colors.TextSecondaryDefault,
+    borderBottomLeftRadius: moderateScale(2),
+    borderBottomRightRadius: moderateScale(2),
   },
   subMetricDivider: {
     width: 1,
@@ -538,60 +495,40 @@ const styles = StyleSheet.create({
     backgroundColor: colors.StatesOutline,
     alignSelf: 'center',
   },
-  activitiesCard: {
-    backgroundColor: colors.StatesWhite,
-    borderWidth: 1,
-    borderColor: colors.StatesOutline,
-    borderRadius: moderateScale(8),
-    paddingVertical: spacing['Spacing-xl'],
-    marginBottom: spacing['Spacing-3xl'],
-  },
   sectionTitle: {
     ...typography.bodySmall2Medium,
-    color: colors.TextSecondaryDefault,
+    color: colors.TextSecondaryDisabled,
+    marginTop: spacing['Spacing-xl'],
     marginBottom: spacing['Spacing-xl'],
     paddingHorizontal: spacing['Spacing-xl'],
   },
-  activityRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: spacing['Spacing-xl'],
-    borderBottomWidth: 1,
-    borderBottomColor: colors.StatesOutline,
+  sectionTitleMain: {
+    ...typography.h10SemiBold,
+    color: colors.TextPrimaryDefault,
+    marginTop: spacing['Spacing-4xl'],
+    marginBottom: spacing['Spacing-2xl'],
     paddingHorizontal: spacing['Spacing-xl'],
   },
-  activityInfo: {
-    gap: spacing['Spacing-xs'],
-  },
-  activityType: {
-    ...typography.bodySmall1SemiBold,
-    color: colors.TextPrimaryDefault,
-  },
-  activityTime: {
-    ...typography.bodySmall3Regular,
-    color: colors.TextSecondaryDefault,
-  },
-  activityValueBlock: {
-    alignItems: 'flex-end',
-    gap: spacing['Spacing-xs'],
-  },
-  activityValue: {
-    ...typography.bodySmall1SemiBold,
-    color: colors.TextPrimaryDefault,
-  },
-  activitySubValue: {
-    ...typography.bodySmall3SemiBold,
-    color: colors.TextSecondaryDefault,
+  activityRow: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.StatesOutline,
   },
   activitySummaryGrid: {
     flexDirection: 'row',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.SurfacePrimaryDefault,
     paddingVertical: spacing['Spacing-xl'],
-    marginTop: spacing['Spacing-xl'],
-    borderWidth: 1,
-    borderColor: colors.StatesOutline,
-    borderRadius: moderateScale(4),
-    marginHorizontal: spacing['Spacing-xl'],
+    borderTopWidth: 1,
+    borderTopColor: colors.StatesOutline,
+    borderBottomLeftRadius: moderateScale(2),
+    borderBottomRightRadius: moderateScale(2),
+  },
+  summaryValue: {
+    ...typography.bodySmall1SemiBold,
+    color: colors.PrimaryMain,
+  },
+  summaryLabel: {
+    ...typography.bodySmall3Regular,
+    color: colors.TextSecondaryDefault,
   },
   syncTime: {
     ...typography.bodySmall3Regular,
@@ -640,98 +577,36 @@ const styles = StyleSheet.create({
   macrosContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: spacing['Spacing-xl'],
-  },
-  macroItem: {
-    flex: 1,
-  },
-  macroLabel: {
-    ...typography.bodySmall3Regular,
-    color: colors.TextSecondaryDefault,
-    textTransform: 'uppercase',
-  },
-  macroValue: {
-    ...typography.bodySmall1SemiBold,
-    color: colors.TextPrimaryDefault,
-  },
-  macroTarget: {
-    color: colors.TextSecondaryDefault,
-  },
-  macroStatusRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing['Spacing-xs'],
-    marginTop: spacing['Spacing-xs'],
-  },
-  statusDotSmall: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-  },
-  macroStatus: {
-    ...typography.bodySmall3SemiBold,
-  },
-  insightBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F0F9FF',
-    padding: spacing['Spacing-m'],
-    borderRadius: moderateScale(4),
-    gap: spacing['Spacing-m'],
-  },
-  insightText: {
-    ...typography.bodySmall3Medium,
-    color: colors.TextPrimaryDefault,
-    flex: 1,
-  },
-  mealCategory: {
     marginBottom: spacing['Spacing-3xl'],
-  },
-  mealCategoryTitle: {
-    ...typography.bodySmall1SemiBold,
-    color: colors.TextPrimaryDefault,
-    marginBottom: spacing['Spacing-xl'],
-    paddingHorizontal: spacing['Spacing-xl'],
-  },
-  mealItem: {
-    flexDirection: 'row',
-    marginBottom: spacing['Spacing-xl'],
     gap: spacing['Spacing-xl'],
-    paddingHorizontal: spacing['Spacing-xl'],
   },
-  mealThumb: {
-    width: moderateScale(60),
-    height: moderateScale(60),
-    backgroundColor: colors.StatesFill1,
-    borderRadius: moderateScale(4),
-  },
-  mealDetails: {
-    flex: 1,
-    justifyContent: 'center',
-    gap: spacing['Spacing-m'],
-  },
-  mealName: {
-    ...typography.bodySmall1SemiBold,
-    color: colors.TextPrimaryDefault,
-  },
-  mealMacros: {
-    ...typography.bodySmall3Regular,
-    color: colors.TextSecondaryDefault,
-  },
-  mealStatusBadge: {
+  recommendationCard: {
     flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F8FAFC',
-    alignSelf: 'flex-start',
-    paddingHorizontal: spacing['Spacing-m'],
-    paddingVertical: spacing['Spacing-sm'],
-    borderRadius: moderateScale(10),
+    alignItems: 'flex-start',
+    backgroundColor: colors.SurfacePrimaryDefault,
+    padding: spacing['Spacing-xl'],
+    borderRadius: moderateScale(2),
     gap: spacing['Spacing-m'],
-    marginTop: spacing['Spacing-sm'],
+    borderWidth: 1,
+    borderColor: colors.SurfaceSecondaryDisabled,
+  },
+  recommendationText: {
+    ...typography.bodySmall2Medium,
+    color: colors.TextPrimaryDefault,
+    flex: 1,
   },
   mealStatusText: {
     ...typography.bodySmall3SemiBold,
     color: colors.TextSecondaryDefault,
+  },
+  mealCategory: {
+    marginBottom: spacing['Spacing-xl'],
+  },
+  mealCategoryTitle: {
+    ...typography.bodySmall1SemiBold,
+    color: colors.PrimaryMain,
+    marginBottom: spacing['Spacing-xl'],
+    paddingHorizontal: spacing['Spacing-xl'],
   },
   footer: {
     flexDirection: 'row',
@@ -743,6 +618,7 @@ const styles = StyleSheet.create({
   },
   footerButton: {
     flex: 1,
+    height: moderateScale(54),
     borderRadius: moderateScale(4),
   },
 });

@@ -14,3 +14,27 @@ export interface TaskData {
   description: string;
   completed: boolean;
 }
+export interface NutritionDayLogMeal {
+  id: string;
+  name: string;
+  kcal: number;
+  macros: string;
+  status: string;
+  statusType: string;
+  tags: string[];
+  image: unknown;
+}
+
+export interface NutritionDayLog {
+  id: string;
+  date: string;
+  kcal: number;
+  kcalTarget: number;
+  pro: number;
+  proTarget: number;
+  carbs: number;
+  carbsTarget: number;
+  fat: number;
+  fatTarget: number;
+  meals: NutritionDayLogMeal[];
+}

@@ -2,8 +2,10 @@
 import Device from './png/Device.png';
 import HeaderCurvedBg from './png/header-curved-bg.png';
 import LogoWhite from './png/logo-white.png';
+import MealsImage from './png/meals.png';
 import ProfilePng from './png/profile.jpg';
 // svgs
+import ArrowDownIconSvg from './svg/arrow-down.svg';
 import AttendeesSvg from './svg/attendees.svg';
 import BackIconSvg from './svg/back-icon.svg';
 import BlackBackgroundCheckSvg from './svg/BlackBackgroundCheck.svg';
@@ -25,6 +27,7 @@ import IconDragHandleSvg from './svg/icon-drag-handle.svg';
 import IconMinusSvg from './svg/icon-minus.svg';
 import IconPlusSvg from './svg/icon-plus.svg';
 import InfoIconSvg from './svg/infoicon.svg';
+import ArrowRightIconSvg from './svg/left.svg';
 import LocationSvg from './svg/Location.svg';
 import LogoWhiteSvg from './svg/logo-WhiteSvg.svg';
 import NotificationBellSvg from './svg/notification-icon.svg';
@@ -74,4 +77,7 @@ export {
   IconDragHandleSvg,
   IconMinusSvg,
   IconPlusSvg,
+  MealsImage,
+  ArrowRightIconSvg,
+  ArrowDownIconSvg,
 };

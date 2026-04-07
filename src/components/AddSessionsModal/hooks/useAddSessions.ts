@@ -13,7 +13,7 @@ import { sessionsSchema } from '../AddSessionsModal.utils';
 export const useAddSessions = (
   props: Pick<
     AddSessionsModalProps,
-    'visible' | 'initialValues' | 'onUpdate' | 'onClose'
+    'visible' | 'initialValues' | 'onUpdate' | 'onClose' | 'recentActivity'
   >,
 ): AddSessionsHook => {
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
@@ -59,5 +59,6 @@ export const useAddSessions = (
     errors,
     handleUpdate,
     watch,
+    recentActivity: props.recentActivity,
   };
 };

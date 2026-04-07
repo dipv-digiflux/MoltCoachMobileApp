@@ -1,5 +1,10 @@
-import React, { useCallback, useState, type ReactElement } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import React, {
+  useCallback,
+  useMemo,
+  useState,
+  type ReactElement,
+} from 'react';
+import { Pressable, View, Text } from 'react-native';
 import { Controller } from 'react-hook-form';
 
 import { CalendarDaysIconSvg } from '@/assets/images';
@@ -7,19 +12,21 @@ import { DateSelectionBottomSheet } from '@/components';
 import { Input } from '@/components/Input';
 import { Switch } from '@/components/Switch';
 import { useAppSelector } from '@/store/hooks';
-import { colors, iconScale, radius, spacing, typography } from '@/theme';
+import { RootState } from '@/store/store';
+import { colors, iconScale } from '@/theme';
 
+import { getStyles } from './AddSessionsPackageContainer.styles';
 import { type AddSessionsPackageContainerProps } from './AddSessionsPackageContainer.types';
-
-const FORM_BG = '#F5F7F8';
 
 export const AddSessionsPackageContainer = ({
   control,
   errors,
   showToggle = true,
 }: AddSessionsPackageContainerProps): ReactElement => {
-  const translation = useAppSelector(state => state.translation);
+  const translation = useAppSelector((state: RootState) => state.translation);
   const [dateSheetVisible, setDateSheetVisible] = useState<boolean>(false);
+
+  const styles = useMemo(() => getStyles(colors.SurfaceSearchBackground), []);
 
   const formatIsoToDisplay = useCallback((iso: string): string => {
     const [y, m, d] = iso.split('-').map(Number);
@@ -216,69 +223,3 @@ export const AddSessionsPackageContainer = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  outer: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    padding: spacing['Spacing-4xl'],
-    gap: spacing['Spacing-5_5xl'],
-    borderWidth: 1,
-    borderColor: colors.StatesOutline,
-    borderRadius: radius.xs,
-    backgroundColor: colors.StatesWhite,
-  },
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  title: {
-    ...typography.bodySmall1TallSemiBold,
-    color: colors.TextPrimaryStrong,
-  },
-  formContent: {
-    width: '100%',
-    gap: spacing['Spacing-5_5xl'],
-  },
-  chipRow: {
-    flexDirection: 'row',
-    gap: spacing['Spacing-3xl'],
-  },
-  chip: {
-    paddingVertical: spacing['Spacing-xl'],
-    paddingHorizontal: spacing['Spacing-3xl'],
-    borderRadius: radius.xs,
-    backgroundColor: colors.StatesWhite,
-    borderWidth: 1,
-    borderColor: colors.BorderPrimaryDefault,
-  },
-  chipActive: {
-    backgroundColor: colors.StatesFill2,
-    borderWidth: 1,
-    borderColor: colors.TextPrimaryDefault,
-  },
-  chipText: {
-    ...typography.bodySmall1SemiBold,
-    color: colors.IconTertiarySubtle,
-  },
-  chipTextActive: {
-    color: colors.TextPrimaryStrong,
-  },
-  inputsRow: {
-    flexDirection: 'row',
-    gap: spacing['Spacing-3xl'],
-    width: '100%',
-  },
-  inputWrapper: {
-    flex: 1,
-  },
-  calendarIconWrap: {
-    paddingRight: spacing['Spacing-xl'],
-  },
-  inputBgStyle: {
-    backgroundColor: FORM_BG,
-    borderWidth: 0,
-  },
-});

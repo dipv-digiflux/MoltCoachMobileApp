@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     paddingBottom: spacing['Spacing-16xl'],
   },
   infoCard: {
-    backgroundColor: '#F3F5F7',
+    backgroundColor: colors.SurfaceSecondaryDefault,
     borderWidth: 0,
     borderRadius: radius.xs,
   },

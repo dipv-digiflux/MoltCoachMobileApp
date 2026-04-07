@@ -8,6 +8,7 @@ import {
   FilterTabs,
   DateSelectionBottomSheet,
   BottomSheet,
+  RecentActivityCard,
 } from '@/components';
 import { colors, moderateScale } from '@/theme';
 import { AddSessionsModalProps } from '@/types/components.types';
@@ -64,8 +65,7 @@ export const AddSessionsModal = (
         visible={visible}
         onClose={onClose}
         header={{
-          title: clientName,
-          subtitle: 'Add sessions',
+          title: `${clientName} Session`,
         }}
         footer={{
           primaryLabel: 'Update',
@@ -93,85 +93,95 @@ export const AddSessionsModal = (
         </View>
 
         <View style={styles.formContainer}>
-          {mode === 'Online' ? (
-            <View style={styles.fieldsRow}>
-              <View style={styles.fieldWrap}>
-                <Controller
-                  control={control}
-                  name="months"
-                  render={({ field: { value, onChange } }) => (
-                    <Input
-                      label="Number of months"
-                      placeholder="e.g. 4"
-                      value={value}
-                      onChangeText={onChange}
-                      keyboardType="numeric"
-                      error={!!errors.months}
-                      errorMessage={errors.months?.message}
-                    />
-                  )}
-                />
-              </View>
-              <View style={styles.fieldWrap}>
-                <Controller
-                  control={control}
-                  name="startDate"
-                  render={({ field: { value } }) => (
-                    <Pressable onPress={() => setIsDatePickerVisible(true)}>
-                      <View pointerEvents="none">
-                        <Input
-                          label="Start Date"
-                          placeholder="DD MMM YYYY"
-                          value={formatDateLabel(value)}
-                          error={!!errors.startDate}
-                          errorMessage={errors.startDate?.message}
-                          rightIcon={<CalendarIcon />}
-                        />
-                      </View>
-                    </Pressable>
-                  )}
-                />
-              </View>
-            </View>
-          ) : (
-            <View style={styles.fieldsRow}>
-              <View style={styles.fieldWrap}>
-                <Controller
-                  control={control}
-                  name="totalSessions"
-                  render={({ field: { value, onChange } }) => (
-                    <Input
-                      label="Total Sessions"
-                      placeholder="e.g. 24"
-                      value={value}
-                      onChangeText={onChange}
-                      keyboardType="numeric"
-                      error={!!errors.totalSessions}
-                      errorMessage={errors.totalSessions?.message}
-                    />
-                  )}
-                />
-              </View>
-              <View style={styles.fieldWrap}>
-                <Controller
-                  control={control}
-                  name="sessionsLeft"
-                  render={({ field: { value, onChange } }) => (
-                    <Input
-                      label="Sessions Left"
-                      placeholder="e.g. 20"
-                      value={value}
-                      onChangeText={onChange}
-                      keyboardType="numeric"
-                      error={!!errors.sessionsLeft}
-                      errorMessage={errors.sessionsLeft?.message}
-                    />
-                  )}
-                />
-              </View>
-            </View>
-          )}
+          <View style={styles.fieldsRow}>
+            {mode === 'Online' ? (
+              <>
+                <View style={styles.fieldWrap}>
+                  <Controller
+                    control={control}
+                    name="months"
+                    render={({ field: { value, onChange } }) => (
+                      <Input
+                        label="Number of months"
+                        placeholder="e.g. 4"
+                        value={value}
+                        onChangeText={onChange}
+                        keyboardType="numeric"
+                        error={!!errors.months}
+                        errorMessage={errors.months?.message}
+                      />
+                    )}
+                  />
+                </View>
+                <View style={styles.fieldWrap}>
+                  <Controller
+                    control={control}
+                    name="startDate"
+                    render={({ field: { value } }) => (
+                      <Pressable onPress={() => setIsDatePickerVisible(true)}>
+                        <View pointerEvents="none">
+                          <Input
+                            label="Start Date"
+                            placeholder="DD MMM YYYY"
+                            value={formatDateLabel(value)}
+                            error={!!errors.startDate}
+                            errorMessage={errors.startDate?.message}
+                            rightIcon={
+                              <View style={styles.rightIconContainer}>
+                                <CalendarIcon />
+                              </View>
+                            }
+                          />
+                        </View>
+                      </Pressable>
+                    )}
+                  />
+                </View>
+              </>
+            ) : (
+              <>
+                <View style={styles.fieldWrap}>
+                  <Controller
+                    control={control}
+                    name="totalSessions"
+                    render={({ field: { value, onChange } }) => (
+                      <Input
+                        label="Total Sessions"
+                        placeholder="e.g. 24"
+                        value={value}
+                        onChangeText={onChange}
+                        keyboardType="numeric"
+                        error={!!errors.totalSessions}
+                        errorMessage={errors.totalSessions?.message}
+                      />
+                    )}
+                  />
+                </View>
+                <View style={styles.fieldWrap}>
+                  <Controller
+                    control={control}
+                    name="sessionsLeft"
+                    render={({ field: { value, onChange } }) => (
+                      <Input
+                        label="Sessions Left"
+                        placeholder="e.g. 20"
+                        value={value}
+                        onChangeText={onChange}
+                        keyboardType="numeric"
+                        error={!!errors.sessionsLeft}
+                        errorMessage={errors.sessionsLeft?.message}
+                      />
+                    )}
+                  />
+                </View>
+              </>
+            )}
+          </View>
         </View>
+
+        {props.recentActivity && props.recentActivity.length > 0 && (
+          <RecentActivityCard activities={props.recentActivity} />
+        )}
       </BottomSheet>
 
       <DateSelectionBottomSheet

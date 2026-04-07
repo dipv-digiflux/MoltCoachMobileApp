@@ -10,8 +10,9 @@ import {
   ConfirmModal,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { RootState } from '@/store/store';
 import { sendInviteSmsThunk } from '@/store/thunks';
-import { spacing } from '@/theme';
+import { colors, spacing } from '@/theme';
 import {
   AppStackNavigationProp,
   AppStackParamList,
@@ -20,7 +21,7 @@ import {
 export const SuggestedPlanScreen = (): ReactElement => {
   const navigation = useNavigation<AppStackNavigationProp>();
   const dispatch = useAppDispatch();
-  const clientState = useAppSelector(state => state.client);
+  const clientState = useAppSelector((state: RootState) => state.client);
   const smsOperation = clientState.operations.sendInviteSms;
   const route = useRoute<RouteProp<AppStackParamList, 'SuggestedPlan'>>();
   const { clientName, inviteData, phoneNumber, countryCode } = route.params;
@@ -97,7 +98,7 @@ export const SuggestedPlanScreen = (): ReactElement => {
         onPressBack={() => navigation.goBack()}
         alignTitleLeft
         variant="stacked"
-        fallbackBackgroundColor="#F9FAFB"
+        fallbackBackgroundColor={colors.SurfaceSecondaryDefault}
       />
 
       <ScrollView
@@ -159,11 +160,11 @@ export const SuggestedPlanScreen = (): ReactElement => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.SurfaceSecondaryDefault,
   },
   scrollView: {
     flex: 1,
-    backgroundColor: '#F9FAFB', // Matches image background
+    backgroundColor: colors.SurfaceSecondaryDefault, // Matches image background
   },
   contentContainer: {
     paddingHorizontal: spacing['Spacing-5xl'],
