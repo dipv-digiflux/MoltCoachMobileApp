@@ -186,9 +186,9 @@ export interface UserRelationshipDetail {
     total_sessions?: number;
     sessions_left?: number;
   };
-  subscription: {
-    number_of_month: number;
-    start_date: string;
+  subscription?: {
+    number_of_month?: number;
+    start_date?: string;
   };
   customer: {
     _id: string;
@@ -197,7 +197,7 @@ export interface UserRelationshipDetail {
     country_code: string;
     phone_number: string;
     user_type: string;
-    body_metrics: {
+    body_metrics?: {
       gender: string;
       birth_date: string;
       height: number;
@@ -215,6 +215,10 @@ export interface UserRelationshipDetail {
     phone_number: string;
     country_code: string;
   };
+}
+
+export interface UpdateUserRelationshipPayload {
+  health_status: string;
 }
 
 export type UserRelationshipDetailResponse = ApiResponse<
@@ -387,3 +391,32 @@ export interface TaskDetail {
 }
 
 export type FetchTasksResponse = ApiResponse<PaginatedResponse<TaskDetail>>;
+
+export interface DateWiseTaskItem {
+  _id: string;
+  customer_id: string;
+  task_id: string;
+  date: string;
+  __v: number;
+  createdAt: string;
+  created_by: string;
+  creator: string;
+  is_reminder: boolean;
+  reminder_time: string;
+  status: boolean;
+  task: string;
+  task_type: string;
+  updatedAt: string;
+  task_details?: TaskDetail;
+}
+
+export interface DateWiseTaskGroup {
+  _id: {
+    customer_id: string;
+    date: string;
+  };
+  tasks: DateWiseTaskItem[];
+  total_remaining_tasks: number;
+}
+
+export type DateWiseTaskResponse = ApiResponse<DateWiseTaskGroup[]>;

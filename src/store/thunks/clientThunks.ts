@@ -11,6 +11,8 @@ import {
   getCoachFetchTasks,
   deleteCoachTask,
   patchCoachUpdateTask,
+  getCoachDateWiseTask,
+  patchCoachUpdateFitnessPhase,
 } from '@/api/clientApi';
 import {
   setClientOperationError,
@@ -22,10 +24,11 @@ import {
   appendWeeklySummary,
   setUserRelationshipDetail,
   setTasks,
+  setDateWiseTasks,
 } from '@/store/slices/clientSlice';
 import { getApiErrorMessage } from '@/utils/apiError';
 
-import type { AppDispatch } from '@/store/store';
+import type { AppDispatch, AppThunk } from '@/store/store';
 import type {
   InviteBulkClientsPayload,
   InviteSmsPayload,
@@ -35,6 +38,7 @@ import type {
   SendNudgePayload,
   NudgeType,
   CreateTaskPayload,
+  UpdateUserRelationshipPayload,
 } from '@/types/api.types';
 
 export const inviteBulkClientsThunk =
@@ -239,12 +243,22 @@ export const sendNudgeThunk =
   };
 
 export const fetchWeeklySummaryThunk =
-  (customerId: string, page: number = 1, limit: number = 10) =>
+  (
+    customerId: string,
+    page: number = 1,
+    limit: number = 10,
+    type: string = 'task',
+  ) =>
   async (dispatch: AppDispatch): Promise<void> => {
     dispatch(setClientOperationLoading('fetchWeeklySummary'));
 
     try {
-      const response = await getCoachWeeklySummary(customerId, page, limit);
+      const response = await getCoachWeeklySummary(
+        customerId,
+        page,
+        limit,
+        type,
+      );
       if (response && response.status) {
         if (page === 1) {
           dispatch(setWeeklySummary(response.data));
@@ -423,6 +437,90 @@ export const updateTaskThunk =
       dispatch(
         setClientOperationError({
           operation: 'updateTask',
+          message: errorMsg,
+        }),
+      );
+      throw error;
+    }
+  };
+
+export const fetchDateWiseTaskThunk =
+  (
+    customerId: string,
+    date: string,
+    page: number = 1,
+    limit: number = 50,
+    type: string = 'task',
+  ) =>
+  async (dispatch: AppDispatch): Promise<void> => {
+    dispatch(setClientOperationLoading('fetchDateWiseTask'));
+
+    try {
+      const response = await getCoachDateWiseTask(
+        customerId,
+        date,
+        page,
+        limit,
+        type,
+      );
+      if (response && response.status) {
+        dispatch(setDateWiseTasks(response.data));
+        dispatch(setClientOperationSuccess('fetchDateWiseTask'));
+      } else {
+        dispatch(
+          setClientOperationError({
+            operation: 'fetchDateWiseTask',
+            message: response?.message || 'Fetch failed',
+          }),
+        );
+      }
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(
+        setClientOperationError({
+          operation: 'fetchDateWiseTask',
+          message: errorMsg,
+        }),
+      );
+      throw error;
+    }
+  };
+
+export const updateFitnessPhaseThunk =
+  (
+    userRelationshipId: string,
+    customerId: string,
+    healthStatus: string,
+  ): AppThunk<Promise<void>> =>
+  async dispatch => {
+    dispatch(setClientOperationLoading('updateFitnessPhase'));
+
+    try {
+      const payload: UpdateUserRelationshipPayload = {
+        health_status: healthStatus,
+      };
+      const response = await patchCoachUpdateFitnessPhase(
+        userRelationshipId,
+        payload,
+      );
+
+      if (response && response.status) {
+        dispatch(setClientOperationSuccess('updateFitnessPhase'));
+        // Fetch updated relationship details
+        void dispatch(fetchUserRelationshipThunk(customerId));
+      } else {
+        dispatch(
+          setClientOperationError({
+            operation: 'updateFitnessPhase',
+            message: response?.message || 'Update health status failed',
+          }),
+        );
+      }
+    } catch (error) {
+      const errorMsg = getApiErrorMessage(error);
+      dispatch(
+        setClientOperationError({
+          operation: 'updateFitnessPhase',
           message: errorMsg,
         }),
       );

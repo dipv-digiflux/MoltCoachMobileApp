@@ -1,5 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 
 import { BottomSheet } from '@/components';
 import { colors, moderateScale, spacing, typography } from '@/theme';
@@ -11,6 +16,7 @@ import { TaskItem } from './TaskItem';
 export const TaskDetailsBottomSheet = ({
   isVisible,
   onClose,
+  isLoading,
   date,
   tasks,
   onToggleTask,
@@ -41,15 +47,25 @@ export const TaskDetailsBottomSheet = ({
       }}
     >
       <View style={styles.content}>
-        {tasks.map((task, index) => (
-          <TaskItem
-            key={`${task.name}-${index}`}
-            name={task.name}
-            description={task.description}
-            completed={task.completed}
-            onToggle={() => onToggleTask?.(task.name)}
-          />
-        ))}
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.PrimaryMain} />
+          </View>
+        ) : tasks.length > 0 ? (
+          tasks.map((task, index) => (
+            <TaskItem
+              key={`${task.name}-${index}`}
+              name={task.name}
+              description={task.description}
+              completed={task.completed}
+              onToggle={() => onToggleTask?.(task.name)}
+            />
+          ))
+        ) : (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No tasks found for this date</Text>
+          </View>
+        )}
       </View>
     </BottomSheet>
   );
@@ -92,5 +108,19 @@ const styles = StyleSheet.create({
   nudgeButtonText: {
     ...typography.b1SemiBold,
     color: colors.StatesWhite,
+  },
+  loadingContainer: {
+    paddingVertical: spacing['Spacing-10xl'],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyContainer: {
+    paddingVertical: spacing['Spacing-10xl'],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    ...typography.bodySmall2Regular,
+    color: colors.TextSecondaryDefault,
   },
 });

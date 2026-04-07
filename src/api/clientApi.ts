@@ -15,6 +15,8 @@ import type {
   UserRelationshipDetailResponse,
   CreateTaskPayload,
   FetchTasksResponse,
+  DateWiseTaskResponse,
+  UpdateUserRelationshipPayload,
 } from '@/types/api.types';
 
 export const deleteCoachTask = async (
@@ -124,5 +126,27 @@ export const getCoachWeeklySummary = async (
 ): Promise<WeeklyTaskSummaryResponse> => {
   return httpGet<WeeklyTaskSummaryResponse>(
     `${ENDPOINTS.COACH_WEEKLY_SUMMARY}?page=${page}&limit=${limit}&type=${type}&customer_id=${customerId}`,
+  );
+};
+
+export const getCoachDateWiseTask = async (
+  customerId: string,
+  date: string,
+  page: number = 1,
+  limit: number = 50,
+  type: string = 'task',
+): Promise<DateWiseTaskResponse> => {
+  return httpGet<DateWiseTaskResponse>(
+    `${ENDPOINTS.COACH_DATE_WISE_TASK}/${customerId}/${date}?page=${page}&limit=${limit}&type=${type}&customer_id=${customerId}&date=${date}`,
+  );
+};
+
+export const patchCoachUpdateFitnessPhase = async (
+  userRelationshipId: string,
+  payload: UpdateUserRelationshipPayload,
+): Promise<ApiResponse<unknown>> => {
+  return httpPatch<UpdateUserRelationshipPayload, ApiResponse<unknown>>(
+    `${ENDPOINTS.COACH_USER_RELATIONSHIP}/${userRelationshipId}`,
+    payload,
   );
 };

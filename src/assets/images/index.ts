@@ -21,6 +21,9 @@ import DeleteIconSvg from './svg/delete.svg';
 import EditIconSvg from './svg/edit.svg';
 import EmptyRadioCircleSvg from './svg/emptyRadioCircle.svg';
 import GreenShieldSvg from './svg/greenshield.svg';
+import IconDragHandleSvg from './svg/icon-drag-handle.svg';
+import IconMinusSvg from './svg/icon-minus.svg';
+import IconPlusSvg from './svg/icon-plus.svg';
 import InfoIconSvg from './svg/infoicon.svg';
 import LocationSvg from './svg/Location.svg';
 import LogoWhiteSvg from './svg/logo-WhiteSvg.svg';
@@ -68,4 +71,7 @@ export {
   EditIconSvg,
   DeleteIconSvg,
   VectorIconSvg,
+  IconDragHandleSvg,
+  IconMinusSvg,
+  IconPlusSvg,
 };

@@ -6,6 +6,7 @@ import type {
   WeeklyTaskSummaryData,
   UserRelationshipDetail,
   TaskDetail,
+  DateWiseTaskGroup,
 } from '@/types/api.types';
 
 export type ClientOperationKey =
@@ -20,7 +21,9 @@ export type ClientOperationKey =
   | 'createTask'
   | 'fetchTasks'
   | 'deleteTask'
-  | 'updateTask';
+  | 'updateTask'
+  | 'fetchDateWiseTask'
+  | 'updateFitnessPhase';
 
 export interface ClientState {
   inviteLinks: InviteLink[];
@@ -32,6 +35,7 @@ export interface ClientState {
   tasks: TaskDetail[];
   summaryPage: number;
   summaryTotalPages: number;
+  dateWiseTasks: DateWiseTaskGroup[];
   operations: Record<ClientOperationKey, OperationState>;
 }
 
@@ -53,6 +57,8 @@ const initialOperations: Record<ClientOperationKey, OperationState> = {
   fetchTasks: createInitialOperation(),
   deleteTask: createInitialOperation(),
   updateTask: createInitialOperation(),
+  fetchDateWiseTask: createInitialOperation(),
+  updateFitnessPhase: createInitialOperation(),
 };
 
 const initialState: ClientState = {
@@ -65,6 +71,7 @@ const initialState: ClientState = {
   tasks: [],
   summaryPage: 1,
   summaryTotalPages: 1,
+  dateWiseTasks: [],
   operations: initialOperations,
 };
 
@@ -151,6 +158,17 @@ const clientSlice = createSlice({
     setTasks(state, action: PayloadAction<TaskDetail[]>) {
       state.tasks = action.payload;
     },
+    setDateWiseTasks(state, action: PayloadAction<DateWiseTaskGroup[]>) {
+      state.dateWiseTasks = action.payload;
+    },
+    clearDateWiseTasks(state) {
+      state.dateWiseTasks = [];
+    },
+    clearWeeklySummary(state) {
+      state.weeklySummary = null;
+      state.summaryPage = 1;
+      state.summaryTotalPages = 1;
+    },
     resetClientOperation(state, action: PayloadAction<ClientOperationKey>) {
       state.operations[action.payload] = createInitialOperation();
     },
@@ -171,6 +189,9 @@ export const {
   appendWeeklySummary,
   setUserRelationshipDetail,
   setTasks,
+  setDateWiseTasks,
+  clearDateWiseTasks,
+  clearWeeklySummary,
   resetClientOperation,
   resetClientState,
 } = clientSlice.actions;

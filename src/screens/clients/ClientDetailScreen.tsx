@@ -17,18 +17,80 @@ import {
   QuickActionsBottomSheet,
   Switch,
   TaskDetailsBottomSheet,
+  ChangeFitnessPhaseBottomSheet,
+  FitnessPhase,
+  OverviewDetailBottomSheet,
 } from '@/components';
+import {
+  TableColumn,
+  TableSectionData,
+} from '@/components/CollapsibleTableCard.types';
+import { OverviewDetailTab } from '@/components/OverviewDetailBottomSheet.types';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import {
+  clearDateWiseTasks,
+  clearWeeklySummary,
+} from '@/store/slices/clientSlice';
+import { RootState } from '@/store/store';
 import {
   fetchWeeklySummaryThunk,
   fetchUserRelationshipThunk,
+  fetchDateWiseTaskThunk,
+  updateFitnessPhaseThunk,
 } from '@/store/thunks/clientThunks';
 import { colors, moderateScale, spacing, typography } from '@/theme';
-import { WeeklySummaryDay } from '@/types/api.types';
+import {
+  DateWiseTaskItem,
+  WeeklySummaryDay,
+  WeeklySummaryWeek,
+} from '@/types/api.types';
 
 import { MenuDotsIcon } from './ClientDetailScreen.icons';
 import { ClientDetailScreenProps, TaskData } from './ClientDetailScreen.types';
 import { ClientFloatingActions } from './components/ClientFloatingActions';
+
+const TASK_COLUMNS: TableColumn[] = [
+  { id: 'period', label: 'PERIOD' },
+  { id: 'completion', label: 'TASK COMPLETED', width: moderateScale(140) },
+];
+
+const ACTIVITIES_COLUMNS: TableColumn[] = [
+  { id: 'duration', label: 'DURATION' },
+  { id: 'steps', label: 'STEPS', flex: 1 },
+  { id: 'weight', label: 'WEIGHT', flex: 1 },
+  { id: 'kcal', label: 'KCAL', flex: 1 },
+];
+
+const ComplianceCard = ({
+  title,
+  value,
+  subMetrics,
+  warning,
+}: {
+  title: string;
+  value: string;
+  subMetrics?: { label: string; value: string; color: string }[];
+  warning?: string;
+}): React.ReactElement => (
+  <View style={styles.complianceCard}>
+    <Text style={styles.complianceTitle}>{title}</Text>
+    <Text style={styles.complianceValue}>{value}</Text>
+    {subMetrics ? (
+      <View style={styles.subMetricsContainer}>
+        {subMetrics.map((sm, index) => (
+          <View key={index} style={styles.subMetricItem}>
+            <Text style={[styles.subMetricLabel, { color: sm.color }]}>
+              {sm.label}:
+            </Text>
+            <Text style={styles.subMetricValue}>{sm.value}</Text>
+          </View>
+        ))}
+      </View>
+    ) : (
+      warning && <Text style={styles.complianceWarning}>{warning}</Text>
+    )}
+  </View>
+);
 
 export const ClientDetailScreen = ({
   navigation,
@@ -45,18 +107,28 @@ export const ClientDetailScreen = ({
     summaryPage,
     summaryTotalPages,
     operations,
-  } = useAppSelector(state => state.client);
+    dateWiseTasks,
+  } = useAppSelector((state: RootState) => state.client);
   const isFetchingSummary = operations.fetchWeeklySummary.status === 'loading';
-  const [activeTab, setActiveTab] = useState('Tasks');
+  const isFetchingDateWiseTasks =
+    operations.fetchDateWiseTask.status === 'loading';
+  const [activeTab, setActiveTab] = useState('Overview');
   const [showAllDates, setShowAllDates] = useState(false);
   const [isTaskDetailsVisible, setIsTaskDetailsVisible] = useState(false);
   const [isQuickActionsVisible, setIsQuickActionsVisible] = useState(false);
+  const [isFitnessPhaseVisible, setIsFitnessPhaseVisible] = useState(false);
   const [selectedTaskDate, setSelectedTaskDate] = useState('');
   const [tasks, setTasks] = useState<TaskData[]>([]);
+  const [isDetailVisible, setIsDetailVisible] = useState(false);
+  const [selectedDetailTab] = useState<OverviewDetailTab>('Steps');
+  const [selectedDetailDate, setSelectedDetailDate] =
+    useState('Sun, 22 Mar 2026');
 
   useEffect(() => {
-    if (activeTab === 'Tasks' && !weeklySummary) {
-      void dispatch(fetchWeeklySummaryThunk(clientId, 1, 10));
+    if (activeTab === 'Tasks') {
+      if (!weeklySummary || weeklySummary.customer_id !== clientId) {
+        void dispatch(fetchWeeklySummaryThunk(clientId, 1, 10));
+      }
     }
   }, [activeTab, clientId, dispatch, weeklySummary]);
 
@@ -67,21 +139,90 @@ export const ClientDetailScreen = ({
   }, [clientId, dispatch]);
 
   useEffect(() => {
+    return () => {
+      dispatch(clearWeeklySummary());
+      dispatch(clearDateWiseTasks());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     if (showAllDates && summaryPage < summaryTotalPages) {
       void dispatch(fetchWeeklySummaryThunk(clientId, summaryPage + 1, 10));
     }
   }, [showAllDates, summaryPage, summaryTotalPages, clientId, dispatch]);
 
-  const handlePressValue = (label: string, subLabel: string): void => {
-    // Label is "SUN", subLabel is "22 MAR" -> format to "Sun, 22 Mar 2026"
-    // We can find the task data from the weeklySummary if needed, or API for daily tasks
+  useEffect(() => {
+    if (dateWiseTasks.length > 0) {
+      const mappedTasks = dateWiseTasks[0].tasks.map((t: DateWiseTaskItem) => ({
+        name: t.task,
+        description: t.reminder_time ? `Reminder: ${t.reminder_time}` : '',
+        completed: t.status,
+      }));
+      setTasks(mappedTasks);
+    } else {
+      setTasks([]);
+    }
+  }, [dateWiseTasks]);
+
+  const tableSections = useMemo(() => {
+    if (!weeklySummary) return [];
+
+    const sections: TableSectionData[] = weeklySummary.weeks.map(
+      (week: WeeklySummaryWeek, index: number) => {
+        const startDate = format(parseISO(week.week_start), 'dd');
+        const endDate = format(parseISO(week.week_end), 'dd MMM');
+        const weekSubLabel = `${startDate} - ${endDate}`.toUpperCase();
+
+        const weekTotalCompleted = week.days.reduce(
+          (acc, day) => acc + day.completed_tasks,
+          0,
+        );
+        const weekTotalTasks = week.days.reduce(
+          (acc, day) => acc + day.total_tasks,
+          0,
+        );
+
+        return {
+          id: `week-${week.week_start}`,
+          label: `WEEK ${weeklySummary.totalPages - index}`,
+          subLabel: weekSubLabel,
+          values: [`${weekTotalCompleted}/${weekTotalTasks}`],
+          rows: week.days.map((day: WeeklySummaryDay) => {
+            const dayName = format(parseISO(day.date), 'EEE').toUpperCase();
+            const dayDate = format(parseISO(day.date), 'dd MMM').toUpperCase();
+            return {
+              id: day.date,
+              label: dayName,
+              subLabel: dayDate,
+              values: [`${day.completed_tasks}/${day.total_tasks}`],
+            };
+          }),
+        };
+      },
+    );
+
+    return sections;
+  }, [weeklySummary]);
+
+  const handlePressValue = (
+    id: string,
+    colId: string,
+    value: string,
+    rowLabel: string,
+  ): void => {
     const formattedDate = `${
-      label.charAt(0) + label.slice(1).toLowerCase()
-    }, ${subLabel} 2026`;
+      rowLabel.charAt(0) + rowLabel.slice(1).toLowerCase()
+    }, ${id.split('-').slice(1).reverse().join(' ')} 2026`; // Rough date formatting from ID (assuming YYYY-MM-DD)
     setSelectedTaskDate(formattedDate);
     setIsTaskDetailsVisible(true);
-    // For now keeping empty tasks until the daily API is ready
-    setTasks([]);
+
+    dispatch(clearDateWiseTasks());
+    void dispatch(fetchDateWiseTaskThunk(clientId, id));
+  };
+
+  const handlePressRow = (id: string, label: string): void => {
+    setSelectedDetailDate(`${label} MAR 2026`);
+    setIsDetailVisible(true);
   };
 
   const handleToggleTask = (taskName: string): void => {
@@ -92,51 +233,184 @@ export const ClientDetailScreen = ({
     );
   };
 
-  const tableSections = useMemo(() => {
-    if (!weeklySummary) return [];
+  const DUMMY_STEPS_DATA = {
+    current: 1271,
+    target: 10000,
+    lastSynced: '9:40 pm',
+    onTrackMessage: 'On Track : Walk 10 minutes after lunch (+14%)',
+    dailyAverage: '9,000',
+    time: '1h 40m',
+    distance: '24km',
+    activities: [
+      {
+        id: '1',
+        type: 'Running',
+        time: 'Today, 8:00 AM',
+        duration: '45 min',
+        steps: '5.4k',
+      },
+      {
+        id: '2',
+        type: 'Swimming',
+        time: 'Yesterday, 8:00 AM',
+        duration: '65 min',
+        steps: '5.4k',
+      },
+    ],
+    activitiesSummary: {
+      totalTime: '1h 20m',
+      caloriesBurned: '2,450',
+      stepsConverted: '18,000',
+    },
+  };
 
-    const sections = weeklySummary.weeks.map((week, index) => {
-      const startDate = parseISO(week.week_start);
-      const endDate = parseISO(week.week_end);
+  const DUMMY_WEIGHT_DATA = {
+    current: 79.0,
+    unit: 'Kg',
+    updatedAt: '2 days ago',
+    status: 'Off Track' as const,
+    statusMessage: 'Update your weight to track results',
+    targetWeight: '68kg',
+    startedWith: '82kg',
+    avgWeeklyChange: '-0.3kg',
+    logs: [
+      {
+        id: '1',
+        date: 'Mon 19 mar',
+        time: '7:14 am',
+        value: '71.5 kg',
+        change: '-0.3',
+        changeColor: colors.MatrixMain,
+      },
+      {
+        id: '2',
+        date: 'Mon 19 mar',
+        time: '7:14 am',
+        value: '71.7 kg',
+        change: '-0.2',
+        changeColor: colors.MatrixMain,
+      },
+      {
+        id: '3',
+        date: 'Mon 19 mar',
+        time: '7:14 am',
+        value: '71.7 kg',
+        change: '+0.4',
+        changeColor: '#EA580C',
+      },
+      {
+        id: '4',
+        date: 'Mon 19 mar',
+        time: '7:14 am',
+        value: '71.5 kg',
+        change: '-0.3',
+        changeColor: colors.MatrixMain,
+      },
+      {
+        id: '5',
+        date: 'Mon 19 mar',
+        time: '7:14 am',
+        value: '71.7 kg',
+        change: '+0.2',
+        changeColor: '#EA580C',
+      },
+      {
+        id: '6',
+        date: 'Mon 19 mar',
+        time: '7:14 am',
+        value: '71.7 kg',
+        change: '-0.2',
+        changeColor: colors.MatrixMain,
+      },
+      {
+        id: '7',
+        date: 'Mon 19 mar',
+        time: '-',
+        value: 'No logged',
+        change: '',
+        changeColor: '',
+      },
+    ],
+  };
 
-      const totalWeekTasks = week.days.reduce(
-        (acc: number, day: WeeklySummaryDay) => acc + day.total_tasks,
-        0,
-      );
-      const completedWeekTasks = week.days.reduce(
-        (acc: number, day: WeeklySummaryDay) => acc + day.completed_tasks,
-        0,
-      );
+  const DUMMY_KCAL_DATA = {
+    consumed: 1241,
+    target: 1670,
+    left: 123,
+    lastSynced: '9:40 pm',
+    macros: [
+      {
+        label: 'Pro',
+        current: 32,
+        target: 80,
+        status: 'Need +28g',
+        statusColor: colors.MatrixMain,
+        statusMessage: 'Need more protein',
+      },
+      {
+        label: 'Carbs',
+        current: 67,
+        target: 60,
+        status: '+7g excess',
+        statusColor: '#EA580C',
+        statusMessage: 'Limit carbs',
+      },
+      {
+        label: 'Fat',
+        current: 48,
+        target: 60,
+        status: 'On track',
+        statusColor: colors.MatrixMain,
+        statusMessage: 'Good fat intake',
+      },
+    ],
+    insightMessage:
+      'They need to do 10 minute walk or increase protein to your dinner',
+    meals: [
+      {
+        category: 'Breakfast',
+        items: [
+          {
+            id: 'm1',
+            name: 'Chicken Quinoa Bowl',
+            kcal: 1280,
+            macros: '42g P • 58g C • 18g F',
+            status: 'Logged Molt meal',
+          },
+          {
+            id: 'm2',
+            name: 'Chicken Quinoa Bowl',
+            kcal: 1280,
+            macros: '42g P • 58g C • 18g F',
+            status: 'Logged External meal',
+          },
+        ],
+      },
+    ],
+  };
 
-      return {
-        id: `week-${index}-${week.week_start}`,
-        period: `Week ${weeklySummary.weeks.length - index}`,
-        dateRange: `${format(startDate, 'd')} - ${format(endDate, 'd MMM')}`,
-        completion: `${completedWeekTasks}/${totalWeekTasks}`,
-        rows: week.days
-          .map(day => {
-            const d = parseISO(day.date);
-            let dayLabel = format(d, 'EEE').toUpperCase();
-            if (dayLabel === 'THU') dayLabel = 'THUR';
-
-            return {
-              id: day.date,
-              label: dayLabel,
-              subLabel: format(d, 'd MMM').toUpperCase(),
-              value: `${day.completed_tasks}/${day.total_tasks}`,
-            };
-          })
-          .reverse(), // Show latest days first within the week
-      };
-    });
-
-    if (!showAllDates) {
-      // If not "All Dates", maybe just show the latest week
-      return sections.slice(0, 1);
-    }
-
-    return sections;
-  }, [weeklySummary, showAllDates]);
+  const ACTIVITIES_SECTIONS: TableSectionData[] = [
+    {
+      id: 'week-22',
+      label: 'WEEK 22',
+      subLabel: '19 - 22 Mar',
+      values: ['10,245', '71.5 KG', '2,100'],
+      rows: [
+        {
+          id: 'mon-19',
+          label: 'Mon',
+          subLabel: '19 Mar',
+          values: ['10,245', '71.5 KG', '2,100'],
+        },
+        {
+          id: 'sun-18',
+          label: 'Sun',
+          subLabel: '18 Mar',
+          values: ['10,245', '71.5 KG', '2,100'],
+        },
+      ],
+    },
+  ];
 
   const tabs = ['Overview', 'Tasks', 'Nutrition', 'Profile'];
 
@@ -149,6 +423,15 @@ export const ClientDetailScreen = ({
       clientId: clientId,
     });
   };
+
+  const handleUpdateFitnessPhase = (phase: FitnessPhase): void => {
+    if (userRelationshipDetail?._id && clientId) {
+      void dispatch(
+        updateFitnessPhaseThunk(userRelationshipDetail._id, clientId, phase),
+      );
+    }
+  };
+
   return (
     <View style={styles.container}>
       <PageHeader
@@ -186,7 +469,8 @@ export const ClientDetailScreen = ({
           sessionsInfo={
             userRelationshipDetail?.session_package?.total_sessions
               ? `Sessions: ${userRelationshipDetail.session_package.sessions_left}/${userRelationshipDetail.session_package.total_sessions} • ${userRelationshipDetail.mode} sessions`
-              : userRelationshipDetail?.subscription?.number_of_month
+              : userRelationshipDetail?.subscription?.number_of_month &&
+                userRelationshipDetail?.subscription?.start_date
               ? `Subscription: ${
                   userRelationshipDetail.subscription.number_of_month
                 } months • Starting ${format(
@@ -218,6 +502,64 @@ export const ClientDetailScreen = ({
           })}
         </View>
 
+        {activeTab === 'Overview' && (
+          <View style={styles.overviewContent}>
+            <View style={styles.complianceCardsRow}>
+              <ComplianceCard
+                title="Plan Compliance"
+                value="78%"
+                subMetrics={[
+                  {
+                    label: 'Steps',
+                    value: '82%',
+                    color: colors.MatrixMain,
+                  },
+                  { label: 'Food', value: '74%', color: colors.MatrixMain },
+                  {
+                    label: 'Data sync',
+                    value: '88%',
+                    color: colors.MatrixMain,
+                  },
+                ]}
+              />
+              <ComplianceCard
+                title="Goal Velocity"
+                value="74%"
+                warning="Needs review"
+              />
+            </View>
+
+            <View style={styles.tasksHeader}>
+              <Text style={styles.tasksTitle}>Activities</Text>
+              <View style={styles.tasksActions}>
+                <Pressable
+                  style={styles.manageButtonBox}
+                  onPress={() =>
+                    navigation.navigate('ManageData', { clientId, clientName })
+                  }
+                >
+                  <Text style={styles.manageButtonText}>Manage data</Text>
+                </Pressable>
+                <View style={styles.allDatesBox}>
+                  <Text style={styles.allDatesText}>All Dates</Text>
+                  <Switch
+                    on={showAllDates}
+                    onChange={setShowAllDates}
+                    size="small"
+                  />
+                </View>
+              </View>
+            </View>
+
+            <CollapsibleTableCard
+              columns={ACTIVITIES_COLUMNS}
+              sections={ACTIVITIES_SECTIONS}
+              onPressRow={handlePressRow}
+              isAllDatesSelected={showAllDates}
+            />
+          </View>
+        )}
+
         {activeTab === 'Tasks' && (
           <View style={styles.tasksContent}>
             <View style={styles.tasksHeader}>
@@ -243,6 +585,7 @@ export const ClientDetailScreen = ({
             </View>
 
             <CollapsibleTableCard
+              columns={TASK_COLUMNS}
               sections={tableSections}
               onPressValue={handlePressValue}
               isAllDatesSelected={showAllDates}
@@ -265,7 +608,7 @@ export const ClientDetailScreen = ({
       <QuickActionsBottomSheet
         isVisible={isQuickActionsVisible}
         onClose={() => setIsQuickActionsVisible(false)}
-        onChangeFitnessPhase={() => console.log('Change fitness phase')}
+        onChangeFitnessPhase={() => setIsFitnessPhaseVisible(true)}
         onChangeSessions={() => console.log('Change number of sessions')}
         onDeleteUser={() => console.log('Delete user')}
       />
@@ -273,6 +616,7 @@ export const ClientDetailScreen = ({
       <TaskDetailsBottomSheet
         isVisible={isTaskDetailsVisible}
         onClose={() => setIsTaskDetailsVisible(false)}
+        isLoading={isFetchingDateWiseTasks}
         date={selectedTaskDate}
         tasks={tasks}
         onToggleTask={handleToggleTask}
@@ -280,6 +624,24 @@ export const ClientDetailScreen = ({
           console.log('Nudge pressed');
           setIsTaskDetailsVisible(false);
         }}
+      />
+
+      <ChangeFitnessPhaseBottomSheet
+        isVisible={isFitnessPhaseVisible}
+        onClose={() => setIsFitnessPhaseVisible(false)}
+        currentPhase={userRelationshipDetail?.health_status as FitnessPhase}
+        onUpdate={handleUpdateFitnessPhase}
+      />
+
+      <OverviewDetailBottomSheet
+        isVisible={isDetailVisible}
+        onClose={() => setIsDetailVisible(false)}
+        date={selectedDetailDate}
+        initialTab={selectedDetailTab}
+        stepsData={DUMMY_STEPS_DATA}
+        weightData={DUMMY_WEIGHT_DATA}
+        caloriesData={DUMMY_KCAL_DATA}
+        onNudge={() => {}}
       />
     </View>
   );
@@ -367,6 +729,58 @@ const styles = StyleSheet.create({
   },
   allDatesText: {
     ...typography.bodySmall2Medium,
+    color: colors.TextSecondaryDefault,
+  },
+  complianceCard: {
+    flex: 1,
+    backgroundColor: colors.StatesWhite,
+    borderWidth: 1,
+    borderColor: colors.StatesOutline,
+    borderRadius: moderateScale(4),
+    padding: spacing['Spacing-xl'],
+    minHeight: moderateScale(110),
+  },
+  complianceTitle: {
+    ...typography.bodySmall2Medium,
+    color: colors.TextSecondaryDefault,
+    marginBottom: spacing['Spacing-xs'],
+  },
+  complianceValue: {
+    ...typography.h2SemiBold,
     color: colors.TextPrimaryDefault,
+    marginBottom: spacing['Spacing-m'],
+  },
+  subMetricsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing['Spacing-sm'],
+  },
+  subMetricItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing['Spacing-sm'],
+  },
+  subMetricLabel: {
+    ...typography.bodySmall3SemiBold,
+  },
+  subMetricValue: {
+    ...typography.bodySmall3SemiBold,
+    color: colors.TextSecondaryDefault,
+  },
+  complianceWarning: {
+    ...typography.bodySmall2Medium,
+    color: colors.AccentGoldenDark || '#D97706',
+  },
+  overviewContent: {
+    paddingTop: spacing['Spacing-xl'],
+  },
+  complianceCardsRow: {
+    flexDirection: 'row',
+    paddingHorizontal: spacing['Spacing-5xl'],
+    gap: spacing['Spacing-xl'],
+    marginBottom: spacing['Spacing-3xl'],
+  },
+  activitiesHeader: {
+    marginBottom: spacing['Spacing-xl'],
   },
 });

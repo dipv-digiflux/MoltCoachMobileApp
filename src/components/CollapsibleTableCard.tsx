@@ -3,9 +3,11 @@ import {
   LayoutAnimation,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   UIManager,
+  useWindowDimensions,
   View,
 } from 'react-native';
 
@@ -24,18 +26,21 @@ if (
 }
 
 const TableRow = ({
+  id,
   label,
   subLabel = '',
-  value,
+  values,
+  columns,
   isHeader = false,
   onPress,
   onPressValue,
+  onPressRow,
 }: TableRowProps): React.ReactElement => {
-  const RowComponent = isHeader ? Pressable : View;
+  const RowComponent = isHeader || onPressRow ? Pressable : View;
 
   return (
     <RowComponent
-      onPress={isHeader ? onPress : undefined}
+      onPress={isHeader ? onPress : () => onPressRow?.(id, label)}
       style={[styles.row, isHeader && styles.headerRow]}
     >
       <View style={styles.periodCol}>
@@ -51,41 +56,70 @@ const TableRow = ({
           </View>
         )}
       </View>
-      <View style={styles.verticalDivider} />
-      <Pressable
-        onPress={() => onPressValue?.(label, subLabel, value)}
-        disabled={isHeader}
-        style={styles.valueCol}
-      >
-        <Text style={isHeader ? styles.headerValueText : styles.dayValueText}>
-          {value}
-        </Text>
-      </Pressable>
+
+      {columns.slice(1).map((col, index) => (
+        <React.Fragment key={col.id}>
+          <View style={styles.verticalDivider} />
+          <Pressable
+            onPress={() => onPressValue?.(id, col.id, values[index], label)}
+            disabled={isHeader}
+            style={[
+              styles.valueCol,
+              col.width
+                ? { width: col.width }
+                : col.flex
+                ? { flex: col.flex }
+                : {},
+            ]}
+          >
+            <Text
+              style={isHeader ? styles.headerValueText : styles.dayValueText}
+            >
+              {values[index]}
+            </Text>
+          </Pressable>
+        </React.Fragment>
+      ))}
     </RowComponent>
   );
 };
 
 export const CollapsibleTableCard = ({
+  columns,
   sections,
   onPressValue,
+  onPressRow,
   isAllDatesSelected = false,
 }: CollapsibleTableCardProps): React.ReactElement => {
   const [expandedSections, setExpandedSections] = useState<
     Record<string, boolean>
   >({});
 
-  // Sync expansion state with All Dates toggle
+  // Sync expansion state with All Dates toggle and sections change
   React.useEffect(() => {
     if (sections.length > 0) {
       if (isAllDatesSelected) {
-        // Collapse all when All Dates is ON
-        setExpandedSections({});
+        // Expand ALL sections when All Dates is ON
+        const allExpanded: Record<string, boolean> = sections.reduce(
+          (acc: Record<string, boolean>, section) => {
+            acc[section.id] = true;
+            return acc;
+          },
+          {},
+        );
+        setExpandedSections(allExpanded);
       } else {
-        // Expand first section by default when All Dates is OFF
+        // Expand ONLY the first section by default
+        setExpandedSections({ [sections[0].id]: false }); // Default to collapsed if not specified?
+        // Wait, previous code expanded ONLY the first one.
+        // Let's keep it as is.
         setExpandedSections({ [sections[0].id]: true });
       }
     }
   }, [sections, isAllDatesSelected]);
+
+  const { width: screenWidth } = useWindowDimensions();
+  const tableMinWidth = screenWidth - spacing['Spacing-5xl'] * 2;
 
   const toggleSection = (id: string): void => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -98,44 +132,67 @@ export const CollapsibleTableCard = ({
 
   return (
     <View style={styles.card}>
-      <View style={styles.topHeader}>
-        <View style={styles.periodCol}>
-          <Text style={styles.topHeaderText}>PERIOD</Text>
-        </View>
-        <View style={styles.verticalDivider} />
-        <View style={styles.valueCol}>
-          <Text style={styles.topHeaderText}>TASK COMPLETED</Text>
-        </View>
-      </View>
-
-      {sections.map(section => {
-        const isExpanded = !!expandedSections[section.id];
-        return (
-          <View key={section.id} style={styles.sectionContainer}>
-            <TableRow
-              label={section.period}
-              subLabel={section.dateRange}
-              value={section.completion}
-              isHeader
-              onPress={() => toggleSection(section.id)}
-              onPressValue={onPressValue}
-            />
-            {isExpanded && (
-              <View style={styles.expandedContent}>
-                {section.rows.map(row => (
-                  <TableRow
-                    key={row.id}
-                    label={row.label}
-                    subLabel={row.subLabel}
-                    value={row.value}
-                    onPressValue={onPressValue}
-                  />
-                ))}
-              </View>
-            )}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={[styles.tableContainer, { minWidth: tableMinWidth }]}>
+          <View style={styles.topHeader}>
+            <View style={styles.periodCol}>
+              <Text style={styles.topHeaderText}>{columns[0].label}</Text>
+            </View>
+            {columns.slice(1).map(col => (
+              <React.Fragment key={col.id}>
+                <View style={styles.verticalDivider} />
+                <View
+                  style={[
+                    styles.valueCol,
+                    col.width
+                      ? { width: col.width }
+                      : col.flex
+                      ? { flex: col.flex }
+                      : {},
+                  ]}
+                >
+                  <Text style={styles.topHeaderText}>{col.label}</Text>
+                </View>
+              </React.Fragment>
+            ))}
           </View>
-        );
-      })}
+
+          {sections.map(section => {
+            const isExpanded = !!expandedSections[section.id];
+            return (
+              <View key={section.id} style={styles.sectionContainer}>
+                <TableRow
+                  id={section.id}
+                  label={section.label}
+                  subLabel={section.subLabel}
+                  values={section.values}
+                  columns={columns}
+                  isHeader
+                  onPress={() => toggleSection(section.id)}
+                  onPressValue={onPressValue}
+                  onPressRow={onPressRow}
+                />
+                {isExpanded && (
+                  <View style={styles.expandedContent}>
+                    {section.rows.map(row => (
+                      <TableRow
+                        key={row.id}
+                        id={row.id}
+                        label={row.label}
+                        subLabel={row.subLabel}
+                        values={row.values}
+                        columns={columns}
+                        onPressValue={onPressValue}
+                        onPressRow={onPressRow}
+                      />
+                    ))}
+                  </View>
+                )}
+              </View>
+            );
+          })}
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -148,6 +205,9 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(4),
     marginHorizontal: spacing['Spacing-5xl'],
     overflow: 'hidden',
+  },
+  tableContainer: {
+    flex: 1,
   },
   topHeader: {
     flexDirection: 'row',
@@ -175,6 +235,7 @@ const styles = StyleSheet.create({
   },
   periodCol: {
     flex: 1,
+    minWidth: moderateScale(140),
     justifyContent: 'center',
     paddingHorizontal: spacing['Spacing-xl'],
   },

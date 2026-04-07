@@ -7,6 +7,7 @@ import { AddedClientsScreen } from '@screens/clients/AddedClientsScreen';
 import { ClientDetailScreen } from '@screens/clients/ClientDetailScreen';
 import { GeneratingPlanScreen } from '@screens/clients/GeneratingPlanScreen';
 import { InviteSentScreen } from '@screens/clients/InviteSentScreen';
+import { ManageDataScreen } from '@screens/clients/ManageDataScreen';
 import { ManageTasksScreen } from '@screens/clients/ManageTasksScreen';
 import { NudgeSentScreen } from '@screens/clients/NudgeSentScreen';
 import { SelectContactScreen } from '@screens/clients/SelectContactScreen';
@@ -49,6 +50,7 @@ export const AppNavigator = (): ReactElement => (
     <Stack.Screen name="SuggestedPlan" component={SuggestedPlanScreen} />
     <Stack.Screen name="ClientDetail" component={ClientDetailScreen} />
     <Stack.Screen name="ManageTasks" component={ManageTasksScreen} />
+    <Stack.Screen name="ManageData" component={ManageDataScreen} />
     <Stack.Screen name="SendNudge" component={SendNudgeScreen} />
     <Stack.Screen name="NudgeSent" component={NudgeSentScreen} />
 
