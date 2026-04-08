@@ -3,18 +3,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import {
-  AdjustBodyMetricsModalProps,
+  AdjustBodyMetricsBottomSheetProps,
   BodyMetricsValues,
-} from '../AdjustBodyMetricsModal.types';
-import { bodyMetricsSchema } from '../AdjustBodyMetricsModal.utils';
+  UseAdjustBodyMetricsReturn,
+} from '../AdjustBodyMetricsBottomSheet.types';
+import { bodyMetricsSchema } from '../AdjustBodyMetricsBottomSheet.utils';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const useAdjustBodyMetrics = ({
   visible,
   initialValues,
   onUpdate,
   onClose,
-}: AdjustBodyMetricsModalProps) => {
+}: AdjustBodyMetricsBottomSheetProps): UseAdjustBodyMetricsReturn => {
   const {
     control,
     handleSubmit,

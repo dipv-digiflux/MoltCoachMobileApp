@@ -4,12 +4,12 @@ import { Controller } from 'react-hook-form';
 
 import { Input, BottomSheet, RecentActivityCard } from '@/components';
 
-import styles from './AdjustBodyMetricsModal.styles';
-import { AdjustBodyMetricsModalProps } from './AdjustBodyMetricsModal.types';
+import styles from './AdjustBodyMetricsBottomSheet.styles';
+import { AdjustBodyMetricsBottomSheetProps } from './AdjustBodyMetricsBottomSheet.types';
 import { useAdjustBodyMetrics } from './hooks/useAdjustBodyMetrics';
 
-export const AdjustBodyMetricsModal = (
-  props: AdjustBodyMetricsModalProps,
+export const AdjustBodyMetricsBottomSheet = (
+  props: AdjustBodyMetricsBottomSheetProps,
 ): ReactElement => {
   const { control, handleSubmit, errors, handleUpdate } =
     useAdjustBodyMetrics(props);

@@ -33,7 +33,10 @@ import {
   StatusChip,
   AddSessionsModal,
   AdjustGoalModal,
-  AdjustBodyMetricsModal,
+  AdjustBodyMetricsBottomSheet,
+  DailyNutritionTargetsBottomSheet,
+  AdjustBodyConditionsBottomSheet,
+  AdjustActivityTargetsBottomSheet,
 } from '@/components';
 import {
   TableColumn,
@@ -59,12 +62,9 @@ import {
   WeeklySummaryWeek,
 } from '@/types/api.types';
 
-
 import { MenuDotsIcon } from './ClientDetailScreen.icons';
 import { getStyles } from './ClientDetailScreen.styles';
-import {
-  NutritionDayLog,
-} from './ClientDetailScreen.types';
+import { NutritionDayLog } from './ClientDetailScreen.types';
 import { ClientDetailScreenProps, TaskData } from './ClientDetailScreen.types';
 import { ClientFloatingActions } from './components/ClientFloatingActions';
 
@@ -407,11 +407,17 @@ const ProfileTabContent = ({
   onEditSessions,
   onAdjustGoals,
   onAdjustMetrics,
+  onAdjustHealth,
+  onFineTuneNutrition,
+  onAdjustActivityTargets,
   styles,
 }: {
   onEditSessions: () => void;
   onAdjustGoals: () => void;
   onAdjustMetrics: () => void;
+  onAdjustHealth: () => void;
+  onFineTuneNutrition: () => void;
+  onAdjustActivityTargets: () => void;
   styles: ReturnType<typeof getStyles>;
 }): React.ReactElement => {
   return (
@@ -498,7 +504,7 @@ const ProfileTabContent = ({
       <CommonCard
         title="Nutrition Plan"
         actionText="Fine tune"
-        onActionPress={() => console.log('Fine tune nutrition')}
+        onActionPress={onFineTuneNutrition}
       >
         <View style={styles.nutritionPlanHeader}>
           <Text style={styles.nutritionPlanKcal}>
@@ -523,7 +529,7 @@ const ProfileTabContent = ({
       <CommonCard
         title="Activity Targets"
         actionText="Adjust"
-        onActionPress={() => console.log('Adjust activity targets')}
+        onActionPress={onAdjustActivityTargets}
       >
         <View style={styles.profileStatsGrid}>
           <ProfileStatItem
@@ -552,7 +558,7 @@ const ProfileTabContent = ({
       <CommonCard
         title="Health"
         actionText="Change"
-        onActionPress={() => console.log('Change health')}
+        onActionPress={onAdjustHealth}
       >
         <View style={styles.healthTagsRow}>
           {DUMMY_PROFILE_DATA.health.map((h, idx) => (
@@ -570,8 +576,10 @@ const ProfileTabContent = ({
 };
 
 const NutritionTabContent = ({
+  onFineTune,
   styles,
 }: {
+  onFineTune: () => void;
   styles: ReturnType<typeof getStyles>;
 }): React.ReactElement => {
   const [isWeekSummaryExpanded, setIsWeekSummaryExpanded] = useState(true);
@@ -611,8 +619,8 @@ const NutritionTabContent = ({
       <View style={styles.nutritionHeader}>
         <Text style={styles.nutritionTitle}>Nutrition</Text>
         <View style={styles.nutritionActions}>
-          <Pressable style={styles.fineTuneButton}>
-            <Text style={styles.fineTuneText}>Find tune</Text>
+          <Pressable style={styles.fineTuneButton} onPress={onFineTune}>
+            <Text style={styles.fineTuneText}>Fine tune</Text>
           </Pressable>
           <View style={styles.nutritionAllDatesBox}>
             <Text style={styles.nutritionAllDatesText}>All Dates</Text>
@@ -740,12 +748,20 @@ export const ClientDetailScreen = ({
   const [isSessionsModalVisible, setIsSessionsModalVisible] = useState(false);
   const [isAdjustGoalModalVisible, setIsAdjustGoalModalVisible] =
     useState(false);
-  const [isAdjustBodyMetricsModalVisible, setIsAdjustBodyMetricsModalVisible] =
+  const [
+    isAdjustBodyMetricsBottomSheetVisible,
+    setIsAdjustBodyMetricsBottomSheetVisible,
+  ] = useState(false);
+  const [isAdjustBodyConditionsVisible, setIsAdjustBodyConditionsVisible] =
     useState(false);
   const [showAllDates, setShowAllDates] = useState(false);
   const [isTaskDetailsVisible, setIsTaskDetailsVisible] = useState(false);
   const [isQuickActionsVisible, setIsQuickActionsVisible] = useState(false);
   const [isFitnessPhaseVisible, setIsFitnessPhaseVisible] = useState(false);
+  const [isNutritionTargetsVisible, setIsNutritionTargetsVisible] =
+    useState(false);
+  const [isAdjustActivityTargetsVisible, setIsAdjustActivityTargetsVisible] =
+    useState(false);
   const [selectedTaskDate, setSelectedTaskDate] = useState('');
   const [tasks, setTasks] = useState<TaskData[]>([]);
   const [isDetailVisible, setIsDetailVisible] = useState(false);
@@ -1237,12 +1253,24 @@ export const ClientDetailScreen = ({
           </View>
         )}
 
-        {activeTab === 'Nutrition' && <NutritionTabContent styles={styles} />}
+        {activeTab === 'Nutrition' && (
+          <NutritionTabContent
+            onFineTune={() => setIsNutritionTargetsVisible(true)}
+            styles={styles}
+          />
+        )}
         {activeTab === 'Profile' && (
           <ProfileTabContent
             onEditSessions={() => setIsSessionsModalVisible(true)}
             onAdjustGoals={() => setIsAdjustGoalModalVisible(true)}
-            onAdjustMetrics={() => setIsAdjustBodyMetricsModalVisible(true)}
+            onAdjustMetrics={() =>
+              setIsAdjustBodyMetricsBottomSheetVisible(true)
+            }
+            onAdjustActivityTargets={() =>
+              setIsAdjustActivityTargetsVisible(true)
+            }
+            onAdjustHealth={() => setIsAdjustBodyConditionsVisible(true)}
+            onFineTuneNutrition={() => setIsNutritionTargetsVisible(true)}
             styles={styles}
           />
         )}
@@ -1364,12 +1392,12 @@ export const ClientDetailScreen = ({
         }}
       />
 
-      <AdjustBodyMetricsModal
-        visible={isAdjustBodyMetricsModalVisible}
-        onClose={() => setIsAdjustBodyMetricsModalVisible(false)}
+      <AdjustBodyMetricsBottomSheet
+        visible={isAdjustBodyMetricsBottomSheetVisible}
+        onClose={() => setIsAdjustBodyMetricsBottomSheetVisible(false)}
         onUpdate={values => {
           console.log('Update body metrics:', values);
-          setIsAdjustBodyMetricsModalVisible(false);
+          setIsAdjustBodyMetricsBottomSheetVisible(false);
         }}
         initialValues={{
           height: DUMMY_PROFILE_DATA.metrics.height.replace(' cm', ''),
@@ -1378,6 +1406,57 @@ export const ClientDetailScreen = ({
           restingHR: DUMMY_PROFILE_DATA.metrics.restingHR.replace(' bpm', ''),
         }}
         recentActivity={RECENT_BODY_METRICS_ACTIVITY}
+      />
+
+      <DailyNutritionTargetsBottomSheet
+        visible={isNutritionTargetsVisible}
+        onClose={() => setIsNutritionTargetsVisible(false)}
+        onSaveChanges={data => {
+          console.log('Update nutrition targets:', data);
+          setIsNutritionTargetsVisible(false);
+        }}
+      />
+
+      <AdjustActivityTargetsBottomSheet
+        visible={isAdjustActivityTargetsVisible}
+        onClose={() => setIsAdjustActivityTargetsVisible(false)}
+        initialValues={{
+          dailySteps: DUMMY_PROFILE_DATA.activityTargets.steps,
+          workoutsPerWeek: DUMMY_PROFILE_DATA.activityTargets.workouts,
+          waterIntake: DUMMY_PROFILE_DATA.activityTargets.water,
+          sleepTarget: DUMMY_PROFILE_DATA.activityTargets.sleep,
+        }}
+        recentActivities={RECENT_ACTIVITY_DATA}
+        onSave={values => {
+          console.log('Saved Activity Targets:', values);
+          setIsAdjustActivityTargetsVisible(false);
+        }}
+      />
+
+      <AdjustBodyConditionsBottomSheet
+        visible={isAdjustBodyConditionsVisible}
+        onClose={() => setIsAdjustBodyConditionsVisible(false)}
+        currentConditions={[
+          { id: '1', name: 'Mild knee pain' },
+          { id: '2', name: 'Lactose Intolerant' },
+        ]}
+        recentActivities={[
+          {
+            id: '1',
+            type: 'Added',
+            conditionName: 'Mild knee pain',
+            timestamp: 'Today, 8:00 AM',
+          },
+          {
+            id: '2',
+            type: 'Remove',
+            conditionName: 'Breathing issue',
+            timestamp: 'Today, 8:00 AM',
+          },
+        ]}
+        onAddCondition={name => console.log('Add condition:', name)}
+        onRemoveCondition={id => console.log('Remove condition:', id)}
+        onSaveChanges={() => setIsAdjustBodyConditionsVisible(false)}
       />
     </View>
   );

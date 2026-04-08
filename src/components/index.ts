@@ -74,7 +74,7 @@ export type {
 } from './OverviewCard';
 
 export { Chip } from './Chip';
-export type { ChipProps } from './Chip';
+export type { ChipProps } from './Chip.types';
 
 export { FilterTabs } from './FilterTabs';
 export type { FilterTabsProps } from './FilterTabs';
@@ -94,7 +94,11 @@ export { ProfileStatItem } from './ProfileStatItem';
 export { StatusChip } from './StatusChip';
 export { RecentActivityCard } from './RecentActivityCard';
 export { AdjustGoalModal } from './AdjustGoalModal/AdjustGoalModal';
-export { AdjustBodyMetricsModal } from './AdjustBodyMetricsModal/AdjustBodyMetricsModal';
+export { AdjustBodyMetricsBottomSheet } from './AdjustBodyMetricsBottomSheet';
+export type {
+  AdjustBodyMetricsBottomSheetProps,
+  BodyMetricsValues,
+} from './AdjustBodyMetricsBottomSheet';
 export type {
   ClientCardProps,
   ClientTag,
@@ -114,12 +118,13 @@ export { RequestAccessStatus } from './RequestAccessStatus';
 
 export { StatusDot } from './StatusDot';
 export { StatusMessage } from './StatusMessage';
-export type { StatusMessageProps } from './StatusMessage';
+export type { StatusMessageProps } from './StatusMessage.types';
 export * from './SummaryItem';
+export type { SummaryItemProps } from './SummaryItem.types';
 export * from './ActivityItem';
 export * from './MacroItem';
 export * from './MealCard';
-export type { SummaryItemProps } from './SummaryItem';
+export type { MealStatusType } from './MealCard.types';
 export { BookingConfirmHeader } from './BookingConfirmHeader';
 export { ScreenHeader } from './ScreenHeader';
 export type { ScreenHeaderProps } from './ScreenHeader';
@@ -223,3 +228,11 @@ export type {
   ProgressTrackerStep,
   ProgressTrackerStatus,
 } from './ProgressTracker';
+
+export * from './AdjustBodyConditionsBottomSheet';
+
+export { AdjustActivityTargetsBottomSheet } from './AdjustActivityTargetsBottomSheet';
+export type { AdjustActivityTargetsBottomSheetProps } from './AdjustActivityTargetsBottomSheet';
+
+export { DailyNutritionTargetsBottomSheet } from './DailyNutritionTargetsBottomSheet';
+export type { DailyNutritionTargetsBottomSheetProps } from './DailyNutritionTargetsBottomSheet';
